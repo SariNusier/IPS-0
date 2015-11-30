@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2015.11.30)  30 NOV 2015 17:17
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2015.11.30)  30 NOV 2015 17:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -210,9 +210,8 @@ LaTeX Info: Redefining \cite on input line 694.
 ) (./report.aux
 (./Chapters/Background.aux) (./Chapters/Body.aux)
 (./Chapters/DesignSpecification.aux) (./Chapters/Implementation.aux)
-(./Chapters/ProfessionalIssues.aux) (./Chapters/Evaluation.aux)
-(./Chapters/Conclusion.aux) (./Appendices/appendix.aux)
-(./Appendices/UserGuide.aux) (./Appendices/SourceCode.aux))
+(./Appendices/appendix.aux) (./Appendices/UserGuide.aux)
+(./Appendices/SourceCode.aux))
 \openout1 = `report.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
@@ -228,8 +227,7 @@ LaTeX Font Info:    ... okay on input line 22.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
 LaTeX Font Info:    ... okay on input line 22.
 LaTeX Font Info:    Try loading font information for OT1+lmr on input line 22.
-
-(/usr/share/texmf/tex/latex/lm/ot1lmr.fd
+ (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
@@ -366,46 +364,45 @@ Package pdftex.def Info: FrontMatter/logo.png used on input line 23.
 
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./FrontMatter/logo.png (PN
-G copy)>] (./FrontMatter/abstract.tex) [1
+G copy)>] (./report.toc
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 4.
 
-]
-[0] (./report.toc
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 3.
- (/usr/share/texmf/tex/latex/lm/omllmm.fd
+(/usr/share/texmf/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 3.
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 4.
 
 (/usr/share/texmf/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 3.
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 4.
 
 (/usr/share/texmf/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 3.
+(Font)              <10> on input line 4.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 3.
+(Font)              <7> on input line 4.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 3.
+(Font)              <5> on input line 4.
 )
 \tf@toc=\write3
 \openout3 = `report.toc'.
 
- [1
+ [0
+
 
 ]
 Chapter 1.
-[2
+[1
 
 ]
 \openout2 = `Chapters/Background.aux'.
 
  (./Chapters/Background.tex
 Chapter 2.
-) [3
+) [2
 
 
 ]
@@ -413,7 +410,7 @@ Chapter 2.
 
  (./Chapters/Body.tex
 Chapter 3.
-) [4
+) [3
 
 
 
@@ -422,7 +419,7 @@ Chapter 3.
 
  (./Chapters/DesignSpecification.tex
 Chapter 4.
-) [5
+) [4
 
 
 
@@ -431,34 +428,7 @@ Chapter 4.
 
  (./Chapters/Implementation.tex
 Chapter 5.
-) [6
-
-
-
-]
-\openout2 = `Chapters/ProfessionalIssues.aux'.
-
- (./Chapters/ProfessionalIssues.tex
-Chapter 6.
-) [7
-
-
-
-]
-\openout2 = `Chapters/Evaluation.aux'.
-
- (./Chapters/Evaluation.tex
-Chapter 7.
-) [8
-
-
-
-]
-\openout2 = `Chapters/Conclusion.aux'.
-
- (./Chapters/Conclusion.tex
-Chapter 8.
-) [9
+) [5
 
 
 
@@ -471,7 +441,7 @@ No file Appendices/appendix.tex.
 
 (./Appendices/UserGuide.tex
 Appendix A.
-) [10
+) [6
 
 
 
@@ -482,33 +452,30 @@ Appendix A.
 
  (./Appendices/SourceCode.tex
 Appendix B.
-) [11
+) [7
 
 
 
 ] (./report.aux (./Chapters/Background.aux) (./Chapters/Body.aux)
 (./Chapters/DesignSpecification.aux) (./Chapters/Implementation.aux)
-(./Chapters/ProfessionalIssues.aux) (./Chapters/Evaluation.aux)
-(./Chapters/Conclusion.aux) (./Appendices/appendix.aux)
-(./Appendices/UserGuide.aux) (./Appendices/SourceCode.aux)) ) 
+(./Appendices/appendix.aux) (./Appendices/UserGuide.aux)
+(./Appendices/SourceCode.aux)) ) 
 Here is how much of TeX's memory you used:
- 3933 strings out of 495000
- 57431 string characters out of 6181168
- 125049 words of memory out of 5000000
- 7036 multiletter control sequences out of 15000+600000
+ 3907 strings out of 495000
+ 56789 string characters out of 6181168
+ 122587 words of memory out of 5000000
+ 7033 multiletter control sequences out of 15000+600000
  41202 words of font info for 33 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  38i,5n,34p,1103b,243s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/
-fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc
-}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/typ
-e1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></us
-r/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/pub
-lic/lm/lmr12.pfb>
-Output written on report.pdf (14 pages, 143970 bytes).
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}
+</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type
+1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/
+share/texmf/fonts/type1/public/lm/lmr12.pfb>
+Output written on report.pdf (9 pages, 133991 bytes).
 PDF statistics:
- 73 PDF objects out of 1000 (max. 8388607)
- 50 compressed objects within 1 object stream
+ 52 PDF objects out of 1000 (max. 8388607)
+ 35 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
