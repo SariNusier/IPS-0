@@ -1,5 +1,6 @@
 package com.example.sari.museumguide.activities;
 
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,11 +11,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
+    private Marker locationMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +44,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
         LatLng scienceMuseum = new LatLng(51.4972,-0.1767);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(scienceMuseum, 18));
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                Log.d("Bla", " " + mMap.getFocusedBuilding().getActiveLevelIndex());
-                //mMap.getFocusedBuilding().
-            }
-        });
+        locationMarker = mMap.addMarker(new MarkerOptions().position(scienceMuseum)
+                .title("You are here!"));
+
+        PolylineOptions options = new PolylineOptions().color(Color.BLUE).width(5).visible(true);
+        options.add(scienceMuseum);
+        options.add(new LatLng(51.4972531,-0.175478));
+        mMap.addPolyline(options);
+
+    }
+
+    public void updateLocationMarker(double latitude, double longitude){
+        locationMarker.setPosition(new LatLng(latitude,longitude));
+    }
+
+    public void updateLocationMarker(LatLng latLng){
+        locationMarker.setPosition(latLng);
     }
 }

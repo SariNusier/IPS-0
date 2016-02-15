@@ -9,33 +9,34 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.example.sari.museumguide.R;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
-    private Button button;
+    private ListView museumListView;
+    private ArrayAdapter museumListAdapter;
+    private String[] museumList = {"Science Museum", "Natural History Museum"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        museumListView = (ListView)findViewById(R.id.museumListView);
+        museumListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,
+                museumList);
+        museumListView.setAdapter(museumListAdapter);
+
+        museumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        button = (Button)findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startMapsActivity();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startMapsActivity(position);
             }
         });
     }
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void startMapsActivity(){
+    private void startMapsActivity(int position){
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
