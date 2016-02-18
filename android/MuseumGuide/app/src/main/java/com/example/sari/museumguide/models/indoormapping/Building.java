@@ -10,7 +10,7 @@ public class Building implements Serializable{
 
     public Building(Floor[] floors)
     {
-        floors = floors;
+        this.floors = floors;
     }
 
     public Floor[] getFloors() {

@@ -10,8 +10,16 @@ public class Room implements Serializable{
     private String roomDescription;
 
 
-    public Room(){
+    public Room(String roomName, String roomDescription, Rectangle roomRectangle){
+        this.roomName = roomName;
+        this.roomDescription = roomDescription;
+        this.roomRectangle = roomRectangle;
+    }
 
+    public Room(Rectangle r){
+        this.roomRectangle = r;
+        roomName = "";
+        roomDescription = "";
     }
 
     public String getRoomName() {
@@ -43,14 +51,14 @@ public class Room implements Serializable{
         if(this == room)
             return false;
 
-        //we check only to the right and bottom, so we need this.
-        if(room.isNeighbour(this))
-            return true;
-
         if(this.getRoomRectangle().getCoordinates().getX() + this.getRoomRectangle().getWidth()
                 == room.getRoomRectangle().getCoordinates().getX()
                 || this.getRoomRectangle().getCoordinates().getY() + this.getRoomRectangle().getHeight()
-                == room.getRoomRectangle().getCoordinates().getY())
+                == room.getRoomRectangle().getCoordinates().getY()
+                || room.getRoomRectangle().getCoordinates().getX() + room.getRoomRectangle().getWidth()
+                == this.getRoomRectangle().getCoordinates().getX()
+                || room.getRoomRectangle().getCoordinates().getY() + room.getRoomRectangle().getHeight()
+                == this.getRoomRectangle().getCoordinates().getY())
             return true;
 
         return false;

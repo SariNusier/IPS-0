@@ -13,7 +13,7 @@ public class Floor implements Serializable{
 
     public Floor(Room[] rooms)
     {
-        rooms = rooms;
+        this.rooms = rooms;
     }
 
     public Room[] getRooms() {
