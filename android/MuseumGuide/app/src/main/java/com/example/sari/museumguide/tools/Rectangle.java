@@ -40,4 +40,5 @@ public class Rectangle {
     public Point getCenter(){
         return new Point((width+coordinates.getX())/2,(height+coordinates.getY())/2);
     }
+
 }
