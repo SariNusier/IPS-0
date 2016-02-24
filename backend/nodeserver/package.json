@@ -1,0 +1,12 @@
+{
+  "name": "node-server",
+  "description": "Server for api",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "3.x",
+    "mongodb": "^2.1.7",
+    "mongoose": "^4.4.5"
+  }
+}
