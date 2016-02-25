@@ -1,6 +1,6 @@
 var db = require('../db');
-var buildings = db.model('building', {
+var room = db.model('room', {
 	name: {type: String, required: true},
 	id: {type: String, required: true},
 });
-module.exports = buildings;
+module.exports = room;

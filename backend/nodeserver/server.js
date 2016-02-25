@@ -1,134 +1,100 @@
-
-var MongoClient = require('mongodb').MongoClient;
-var assert = require('assert');
-
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-
-var ObjectId = require('mongodb').ObjectId;
-var dbURL = 'mongodb://localhost:27017/test';
-
-
-   var found = [];
-
+var express     =   require("express");
+var app         =   express();
+var bodyParser  =   require("body-parser");
+var router      =   express.Router();
+var Building    =   require('./models/building');
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({"extended" : false}));
 
-app.get('/api/posts', function(req, res) {
-
+router.get("/",function(req,res){
+    res.json({"error" : false,"message" : "Hello World"});
 });
+ app.use('/', router);
+//route() will allow you to use same path for different HTTP operation.
+//So if you have same URL but with different HTTP OP such as POST,GET etc
+//Then use route() to remove redundant code.
 
-var Building = require('./models/building');
+router.route("/users")
+    .get(function(req,res){
+        var response = {};
+        Building.find({},function(err,data){
+        // Mongo command to fetch all data from collection.
+            if(err) {
+                response = {"error" : true,"message" : "Error fetching data"};
+            } else {
+                response = {"error" : false,"message" : data};
+            }
+            res.json(response);
+        });
+    }).post(function(req,res){
+        var db = new Building({name: req.body.name, id: req.body.id});
+        var response = {};
+        console.log(req.body.name);
+        // fetch email and password from REST request.
+        // Add strict validation when you use this in Production.
+        //db.name = req.body.name; 
+        // Hash the password using SHA1 algorithm.
+        //db.id =  req.body.id;
+        db.save(function(err){
+        // save() will run insert() command of MongoDB.
+        // it will add new data in collection.
+            if(err) {
+                response = {"error" : true,"message" : "Failed!"};
+                console.log(err);
+            } else {
+                response = {"error" : false,"message" : "Data added"};
+            }
+            res.json(response);
+        });
+    });
 
-app.get('/db/buildings/:id', function(req, res) {
-	var newBuilding = new Building({name:'FirstBuilding', id:'1'});
-	newBuilding.save(function (err){
-		if(err){console.log('error adding building')}
-		console.log('Added building');
-	})
-	res.send('Added building'+newBuilding);
-});
+    router.route("/users/:id")
+    .get(function(req,res){
+        var response = {};
+        Building.findById(req.params.id,function(err,data){
+        // This will run Mongo Query to fetch data based on ID.
+            if(err) {
+                response = {"error" : true,"message" : "Error fetching data"};
+            } else {
+                response = {"error" : false,"message" : data};
+            }
+            res.json(response);
+        });
+    })
+    .put(function(req,res){
+        var response = {};
+        // first find out record exists or not
+        // if it does then update the record
+        mongoOp.findById(req.params.id,function(err,data){
+            if(err) {
+                response = {"error" : true,"message" : "Error fetching data"};
+            } else {
+            // we got data from Mongo.
+            // change it accordingly.
+                if(req.body.userEmail !== undefined) {
+                    // case where email needs to be updated.
+                    data.userEmail = req.body.userEmail;
+                }
+                if(req.body.userPassword !== undefined) {
+                    // case where password needs to be updated
+                    data.userPassword = req.body.userPassword;
+                }
+                // save the data
+                data.save(function(err){
+                    if(err) {
+                        response = {"error" : true,"message" : "Error updating data"};
+                    } else {
+                        response = {"error" : false,"message" : "Data is updated for "+req.params.id};
+                    }
+                    res.json(response);
+                })
+            }
+        });
+    })
 
-app.get('/db/buildings', function(req, res) {
-	MongoClient.connect(dbURL, function(err, db) {
-		res.send(findRestaurants(db, function(){}, 'a'));
-	});
-});
 
-app.get('/wines/:id', function(req, res) {
-    res.send({id:req.params.id, name: "The Name", description: "description"});
-});
 
+app.use('/',router);
 app.listen(3000);
-console.log('Listening on port 3000...');
-
-
-
-function connectDB(id){
-
-	MongoClient.connect(dbURL, function(err, db) {
-	assert.equal(null,err);
-	console.log("Connected!");
-	return findRestaurants(db, function() {
-      db.close();
-  }, id);
-});
-
-}
-
-var insertDocument = function(db, callback) {
-   db.collection('restaurants').insertOne( {
-      "address" : {
-         "street" : "2 Avenue",
-         "zipcode" : "10075",
-         "building" : "1480",
-         "coord" : [ -73.9557413, 40.7720266 ]
-      },
-      "borough" : "Manhattan",
-      "cuisine" : "Italian",
-      "grades" : [
-         {
-            "date" : new Date("2014-10-01T00:00:00Z"),
-            "grade" : "A",
-            "score" : 11
-         },
-         {
-            "date" : new Date("2014-01-16T00:00:00Z"),
-            "grade" : "B",
-            "score" : 17
-         }
-      ],
-      "name" : "Vella",
-      "restaurant_id" : "41704620"
-   }, function(err, result) {
-    assert.equal(err, null);
-    console.log("Inserted a document into the restaurants collection.");
-    callback();
-  });
-};
-
-var findRestaurants = function(db, callback, id) {
-
-   var cursor = db.collection('restaurants').find({name: 'Subway'});
-
-   cursor.rewind();
-   cursor.each(function(err, doc) {
-      assert.equal(err, null);
-      if (doc != null) {
-         //console.log(doc);
-         found.push(doc);
-         //found.push(doc);
-      } else {
-       //  callback();
-      }
-   });
-   console.log(found);
-   return found;
-};
-
-var updateRestaurants = function(db, callback) {
-   db.collection('restaurants').updateOne(
-      { "name" : "Juni" },
-      {
-        $set: { "cuisine": "American (New)" },
-        $currentDate: { "lastModified": true }
-      }, function(err, results) {
-      console.log(results);
-      callback();
-   });
-};
-
-var removeRestaurants = function(db, callback) {
-   db.collection('restaurants').deleteMany(
-      { "borough": "Manhattan" },
-      function(err, results) {
-         console.log(results);
-         callback();
-      }
-   );
-};
-
-var insertIntoDatabase = function() {
-
-};
+console.log("Listening to PORT 3000");
