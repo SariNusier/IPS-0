@@ -3,6 +3,8 @@ var app         =   express();
 var bodyParser  =   require("body-parser");
 var router      =   express.Router();
 var Building    =   require('./models/building');
+var Room        =   require('./models/room');
+var RP          =   require('./models/RP');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({"extended" : false}));
@@ -15,7 +17,7 @@ router.get("/",function(req,res){
 //So if you have same URL but with different HTTP OP such as POST,GET etc
 //Then use route() to remove redundant code.
 
-router.route("/users")
+router.route("/buildings")
     .get(function(req,res){
         var response = {};
         Building.find({},function(err,data){
@@ -23,17 +25,23 @@ router.route("/users")
             if(err) {
                 response = {"error" : true,"message" : "Error fetching data"};
             } else {
-                response = {"error" : false,"message" : data};
+                response = data;
             }
             res.json(response);
         });
     }).post(function(req,res){
-        var db = new Building({name: req.body.name, id: req.body.id});
+        var db = new Building();
         var response = {};
         console.log(req.body.name);
         // fetch email and password from REST request.
         // Add strict validation when you use this in Production.
-        //db.name = req.body.name; 
+        db.rectangle.lt = req.body.rectangle.lt;
+        db.rectangle.rt = req.body.rectangle.rt;
+        db.rectangle.lb = req.body.rectangle.lb;
+        db.rectangle.rb = req.body.rectangle.rb;
+        db.name = req.body.name;
+        db.width = req.body.width;
+        db.height = req.body.height; 
         // Hash the password using SHA1 algorithm.
         //db.id =  req.body.id;
         db.save(function(err){
@@ -49,7 +57,7 @@ router.route("/users")
         });
     });
 
-    router.route("/users/:id")
+    router.route("/buildings/:id")
     .get(function(req,res){
         var response = {};
         Building.findById(req.params.id,function(err,data){
@@ -57,40 +65,51 @@ router.route("/users")
             if(err) {
                 response = {"error" : true,"message" : "Error fetching data"};
             } else {
-                response = {"error" : false,"message" : data};
+                response = data;
             }
             res.json(response);
         });
     })
-    .put(function(req,res){
+
+    router.route("/rooms/:id")
+    .get(function(req,res){
         var response = {};
-        // first find out record exists or not
-        // if it does then update the record
-        mongoOp.findById(req.params.id,function(err,data){
-            if(err) {
-                response = {"error" : true,"message" : "Error fetching data"};
+        Room.find({'building_id': req.params.id}, function(err,data){
+            if(err){
+                response = {"error" : true,"message" : "Error!"};
             } else {
-            // we got data from Mongo.
-            // change it accordingly.
-                if(req.body.userEmail !== undefined) {
-                    // case where email needs to be updated.
-                    data.userEmail = req.body.userEmail;
-                }
-                if(req.body.userPassword !== undefined) {
-                    // case where password needs to be updated
-                    data.userPassword = req.body.userPassword;
-                }
-                // save the data
-                data.save(function(err){
-                    if(err) {
-                        response = {"error" : true,"message" : "Error updating data"};
-                    } else {
-                        response = {"error" : false,"message" : "Data is updated for "+req.params.id};
-                    }
-                    res.json(response);
-                })
+                response = data;
             }
+            res.json(response);
         });
+    })
+
+    router.route("/rooms/:id")
+    .post(function(req,res){
+        var response = {};
+        var db = new Room();
+        db.rectangle.lt = req.body.rectangle.lt;
+        db.rectangle.rt = req.body.rectangle.rt;
+        db.rectangle.lb = req.body.rectangle.lb;
+        db.rectangle.rb = req.body.rectangle.rb;
+        db.name = req.body.name;
+        db.width = req.body.width;
+        db.height = req.body.height;
+        db.building_id = req.params.id; 
+        // Hash the password using SHA1 algorithm.
+        //db.id =  req.body.id;
+        db.save(function(err){
+        // save() will run insert() command of MongoDB.
+        // it will add new data in collection.
+            if(err) {
+                response = {"error" : true,"message" : "Failed!"};
+                console.log(err);
+            } else {
+                response = {"error" : false,"message" : "Data added"};
+            }
+            res.json(response);
+        });
+
     })
 
 
