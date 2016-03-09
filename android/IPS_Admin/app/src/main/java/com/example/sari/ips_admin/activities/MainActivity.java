@@ -3,6 +3,7 @@ package com.example.sari.ips_admin.activities;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,17 +13,20 @@ import android.view.MenuItem;
 
 import com.example.sari.ips_admin.R;
 import com.example.sari.ips_admin.database.Database;
+import com.example.sari.ips_admin.models.indoormapping.Building;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-
+    Building[] buildings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //Database.getBuildings();
-        new GetData().execute();
 
     }
 
@@ -53,11 +57,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private static class GetData extends AsyncTask<Void, Void, Void>{
+    private static class GetData extends AsyncTask<Void, Void, ArrayList<Building>>{
+
         @Override
-        protected Void doInBackground(Void... params) {
-            Database.getBuildings();
-            return null;
+        protected ArrayList<Building> doInBackground(Void... params) {
+
+            return new ArrayList<>(Arrays.asList(Database.getBuildings()));
         }
     }
 }

@@ -31,7 +31,7 @@ public class Database {
     public static Building[] getBuildings(){
         String StringData = getData("buildings");
         ArrayList<Building> toReturn = new ArrayList<>();
-        Log.d("BUILDINGS: ",StringData);
+        Log.d("BUILDINGS: ", StringData);
         try {
             JSONArray JSONData = new JSONArray(StringData);
             for(int i = 0; i<JSONData.length();++i){
@@ -54,9 +54,7 @@ public class Database {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.d("Room", "" + toReturn.get(0).getRooms()[0].getRoomName() + " " + toReturn.get(0).getRooms()[1].getRoomName()+
-                toReturn.get(0).getRooms()[2].getRoomName());
-        return null;
+        return toReturn.toArray(new Building[toReturn.size()]);
     }
 
     public static Building getBuilding(String id){
