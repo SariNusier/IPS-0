@@ -32,7 +32,7 @@ router.route("/buildings")
     }).post(function(req,res){
         var db = new Building();
         var response = {};
-        console.log(req.body.name);
+        console.log(req);
         // fetch email and password from REST request.
         // Add strict validation when you use this in Production.
         db.rectangle.lt = req.body.rectangle.lt;
