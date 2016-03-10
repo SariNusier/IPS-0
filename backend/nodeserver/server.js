@@ -70,6 +70,45 @@ router.route("/buildings")
             res.json(response);
         });
     })
+    .put(function(req,res){
+        var response = {};
+        // first find out record exists or not
+        // if it does then update the record
+        Building.findById(req.params.id,function(err,data){
+            if(err) {
+                response = {"error" : true,"message" : "Error fetching data"};
+            } else {
+            // we got data from Mongo.
+            // change it accordingly.
+                if(req.body.rectangle !== undefined){
+                    data.rectangle.lt = req.body.rectangle.lt;
+                    data.rectangle.rt = req.body.rectangle.rt;
+                    data.rectangle.lb = req.body.rectangle.lb;
+                    data.rectangle.rb = req.body.rectangle.rb;
+                }
+                if(req.body.name !== undefined){
+                    data.name = req.body.name;
+                }
+                if(req.body.width !== undefined){
+                    data.width = req.body.width;
+                }
+                if(req.body.height !== undefined){
+                    data.height = req.body.height;
+                }
+                
+                // save the data
+                data.save(function(err){
+                    if(err) {
+                        response = {"error" : true,"message" : "Error updating data"};
+                        console.log(err);
+                    } else {
+                        response = {"error" : false,"message" : "Data is updated for "+req.params.id};
+                    }
+                    res.json(response);
+                })
+            }
+        });
+    })
 
     router.route("/rooms/:id")
     .get(function(req,res){
