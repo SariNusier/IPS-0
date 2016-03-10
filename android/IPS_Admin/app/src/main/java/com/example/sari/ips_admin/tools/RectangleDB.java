@@ -1,9 +1,11 @@
 package com.example.sari.ips_admin.tools;
 
+import java.io.Serializable;
+
 /**
  * Created by sari on 09/03/16.
  */
-public class RectangleDB {
+public class RectangleDB implements Serializable{
     private Point lt,rt,lb,rb;
 
     public RectangleDB(Point lt, Point rt, Point lb, Point rb) {
