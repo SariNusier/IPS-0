@@ -16,8 +16,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -55,6 +59,31 @@ public class Database {
             e.printStackTrace();
         }
         return toReturn.toArray(new Building[toReturn.size()]);
+    }
+
+    public static boolean addBuilding(Building building){
+        JSONObject buildingToAdd = new JSONObject();
+        try {
+            buildingToAdd.put("name",building.getName());
+            buildingToAdd.put("width", building.getWidth());
+            buildingToAdd.put("height",building.getHeight());
+            JSONObject rectangle = new JSONObject();
+            rectangle.put("lt", new JSONObject().put("x", building.getRectangle().getLt().getX())
+                                                .put("y", building.getRectangle().getLt().getY()))
+                     .put("rt", new JSONObject().put("x", building.getRectangle().getRt().getX())
+                                                .put("y", building.getRectangle().getRt().getY()))
+                     .put("lb", new JSONObject().put("x", building.getRectangle().getLb().getX())
+                                                .put("y", building.getRectangle().getLb().getY()))
+                     .put("rb", new JSONObject().put("x", building.getRectangle().getRb().getX())
+                                                .put("y", building.getRectangle().getRb().getY()));
+
+            buildingToAdd.put("rectangle", rectangle);
+            postData("buildings","",buildingToAdd.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return true;
     }
 
     public static Building getBuilding(String id){
@@ -109,10 +138,52 @@ public class Database {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             inputStream = new BufferedInputStream(connection.getInputStream());
             data = IOUtils.toString(inputStream,"UTF-8");
+            connection.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return data;
 
+    }
+
+    public static String postData(String... params){
+        String API_URL = "http://178.62.127.39:3000/";
+        String data = params[2];
+        Log.d("Data to send", data);
+        String building_id = "";
+        String request = params[0];
+
+
+        if (params.length == 2){
+            building_id = params[1];
+        }
+
+        try {
+            URL url = new URL(API_URL+request+"/"+building_id);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            Log.d("Error", "Ex " + url.toString());
+            //connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+            connection.setChunkedStreamingMode(0);
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Content-Length", "" + Integer.toString(data.getBytes().length));
+            OutputStream os = new BufferedOutputStream(connection.getOutputStream());
+            //BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
+
+            os.write(data.getBytes());
+            os.flush();
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + connection.getResponseCode());
+            }
+            os.close();
+            connection.disconnect();
+            //connection.connect();
+        } catch (Exception e) {
+            Log.d("Error","Ex "+e);
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
