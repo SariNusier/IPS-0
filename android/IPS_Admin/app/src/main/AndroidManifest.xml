@@ -38,6 +38,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.sari.ips_admin.activities.BuildingsActivity" />
         </activity>
+        <activity
+            android:name=".activities.AddBuildingActivity"
+            android:label="@string/title_activity_add_building"
+            android:parentActivityName=".activities.BuildingsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.sari.ips_admin.activities.BuildingsActivity" />
+        </activity>
     </application>
 
 </manifest>

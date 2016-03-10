@@ -27,6 +27,14 @@ public class Building implements Serializable{
         this.rooms = rooms;
     }
 
+    public Building(RectangleDB rectangle, String name, double width, double height) {
+        this.rectangle = rectangle;
+        this.id = "";
+        this.name = name;
+        this.width = width;
+        this.height = height;
+    }
+
     public void setRectangle(RectangleDB rectangle) {
         this.rectangle = rectangle;
     }

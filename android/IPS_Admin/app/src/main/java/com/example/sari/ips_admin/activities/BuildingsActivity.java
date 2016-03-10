@@ -69,7 +69,9 @@ public class BuildingsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        if(item.getItemId() == R.id.action_addBuilding){
+            startActivity(new Intent(this, AddBuildingActivity.class));
+        }
         return super.onOptionsItemSelected(item);
     }
 
