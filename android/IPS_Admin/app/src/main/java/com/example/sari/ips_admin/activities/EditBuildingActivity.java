@@ -32,15 +32,23 @@ public class EditBuildingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         b =(Building) getIntent().getSerializableExtra("building");
+        museumListView = (ListView)findViewById(R.id.room_list_edit_building);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         ArrayList roomNames = new ArrayList<String>();
+        b = Database.getBuilding(b.getId());
         for(Room r: b.getRooms()){
             roomNames.add(r.getRoomName());
         }
-        museumListView = (ListView)findViewById(R.id.room_list_edit_building);
         museumListAdapter = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,
                 roomNames);
         museumListView.setAdapter(museumListAdapter);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
@@ -55,6 +63,12 @@ public class EditBuildingActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.action_deleteBuilding){
             Database.deleteData("buildings",b.getId());
             this.finish();
+        }
+
+        if(item.getItemId() == R.id.action_addRoom){
+            Intent intent = new Intent(this,AddRoomActivity.class);
+            intent.putExtra("building_id",b.getId());
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -87,7 +87,27 @@ public class Database {
     }
 
     public static Building getBuilding(String id){
-        return null;
+        String StringData = getData("buildings",id);
+        Building toReturn = null;
+        try {
+            JSONObject building = new JSONObject(StringData);
+            Point lt = new Point(building.getJSONObject("rectangle").getJSONObject("lt").getDouble("x"),
+                                 building.getJSONObject("rectangle").getJSONObject("lt").getDouble("y"));
+            Point rt = new Point(building.getJSONObject("rectangle").getJSONObject("rt").getDouble("x"),
+                        building.getJSONObject("rectangle").getJSONObject("rt").getDouble("y"));
+            Point lb = new Point(building.getJSONObject("rectangle").getJSONObject("lb").getDouble("x"),
+                        building.getJSONObject("rectangle").getJSONObject("lb").getDouble("y"));
+            Point rb = new Point(building.getJSONObject("rectangle").getJSONObject("rb").getDouble("x"),
+                       building.getJSONObject("rectangle").getJSONObject("rb").getDouble("y"));
+            RectangleDB r = new RectangleDB(lt,rt,lb,rb);
+            toReturn = new Building(building.getString("_id"),r,building.getString("name"),
+                        building.getDouble("width"),building.getDouble("height"),
+                        getRooms(building.getString("_id")));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return toReturn;
     }
 
     public static Floor[] getFloors(String building_id){
@@ -111,14 +131,40 @@ public class Database {
                 Point rb = new Point(room.getJSONObject("rectangle").getJSONObject("rb").getDouble("x"),
                                      room.getJSONObject("rectangle").getJSONObject("rb").getDouble("y"));
                 RectangleDB r = new RectangleDB(lt,rt,lb,rb);
-                Room toAdd = new Room(room.getString("_id"),room.getString("name"),
-                        "nothing",r,room.getDouble("width"),room.getDouble("height"));
+                Room toAdd = new Room(room.getString("_id"),room.getString("name"),r,room.getDouble("width"),room.getDouble("height"));
                 toReturn.add(toAdd);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return toReturn.toArray(new Room[toReturn.size()]);
+    }
+
+    public static boolean addRoom(String building_id, Room room){
+        JSONObject roomToAdd = new JSONObject();
+        try {
+            roomToAdd.put("name", room.getRoomName());
+            roomToAdd.put("width", room.getWidth());
+            roomToAdd.put("height", room.getHeight());
+            JSONObject rectangle = new JSONObject();
+            rectangle.put("lt", new JSONObject().put("x", room.getRectangleDB().getLt().getX())
+                    .put("y", room.getRectangleDB().getLt().getY()))
+                    .put("rt", new JSONObject().put("x", room.getRectangleDB().getRt().getX())
+                            .put("y", room.getRectangleDB().getRt().getY()))
+                    .put("lb", new JSONObject().put("x", room.getRectangleDB().getLb().getX())
+                            .put("y", room.getRectangleDB().getLb().getY()))
+                    .put("rb", new JSONObject().put("x", room.getRectangleDB().getRb().getX())
+                            .put("y", room.getRectangleDB().getRb().getY()));
+
+            roomToAdd.put("rectangle", rectangle);
+            postData("rooms", building_id, roomToAdd.toString());
+            //building.setRooms(getRooms(building.getId()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return true;
     }
 
 
@@ -129,7 +175,7 @@ public class Database {
         String request = params[0];
         InputStream inputStream = null;
 
-        if (params.length == 2){
+        if (params.length >= 2){
             building_id = params[1];
         }
 
@@ -154,7 +200,7 @@ public class Database {
         String request = params[0];
 
 
-        if (params.length == 2){
+        if (params.length >= 2){
             building_id = params[1];
         }
 

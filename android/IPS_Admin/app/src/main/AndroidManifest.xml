@@ -47,6 +47,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.sari.ips_admin.activities.BuildingsActivity" />
         </activity>
+        <activity
+            android:name=".activities.AddRoomActivity"
+            android:label="@string/title_activity_add_room"
+            android:parentActivityName=".activities.EditBuildingActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.sari.ips_admin.activities.EditBuildingActivity" />
+        </activity>
     </application>
 
 </manifest>
