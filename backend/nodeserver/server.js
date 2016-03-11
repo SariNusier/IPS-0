@@ -110,6 +110,25 @@ router.route("/buildings")
             }
         });
     })
+    .delete(function(req,res){
+        var response = {};
+        // find the data
+        Building.findById(req.params.id,function(err,data){
+            if(err) {
+                response = {"error" : true,"message" : "Error fetching data"};
+            } else {
+                // data exists, remove it.
+                Building.remove({_id : req.params.id},function(err){
+                    if(err) {
+                        response = {"error" : true,"message" : "Error deleting data"};
+                    } else {
+                        response = {"error" : true,"message" : "Data associated with "+req.params.id+"is deleted"};
+                    }
+                    res.json(response);
+                });
+            }
+        });
+    })
 
     router.route("/rooms/:id")
     .get(function(req,res){
