@@ -4,6 +4,7 @@
     <item
         android:id="@+id/action_addBuilding"
         android:title="Add building"
+        android:icon="@drawable/ic_action_new"
         app:showAsAction="ifRoom"/>
 
     <!-- Settings, should always be in the overflow -->
