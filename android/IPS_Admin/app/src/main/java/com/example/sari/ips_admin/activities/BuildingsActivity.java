@@ -41,15 +41,7 @@ public class BuildingsActivity extends AppCompatActivity {
          */
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        buildings = Database.getBuildings();
-        ArrayList buildingNames = new ArrayList<String>();
-        for(Building b: buildings){
-           buildingNames.add(b.getName());
-        }
         museumListView = (ListView)findViewById(R.id.museumListView);
-        museumListAdapter = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,
-                buildingNames);
-        museumListView.setAdapter(museumListAdapter);
         museumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -65,6 +57,19 @@ public class BuildingsActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_buildings, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        buildings = Database.getBuildings();
+        ArrayList buildingNames = new ArrayList<String>();
+        for(Building b: buildings){
+            buildingNames.add(b.getName());
+        }
+        museumListAdapter = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,
+                buildingNames);
+        museumListView.setAdapter(museumListAdapter);
     }
 
     @Override

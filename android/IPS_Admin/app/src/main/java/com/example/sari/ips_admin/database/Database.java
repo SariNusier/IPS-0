@@ -186,4 +186,29 @@ public class Database {
 
         return null;
     }
+
+    public static void deleteData(String... params){
+        String API_URL = "http://178.62.127.39:3000/";
+        String building_id = "";
+        String request = params[0];
+
+
+        if (params.length == 2){
+            building_id = params[1];
+        }
+
+        try {
+            URL url = new URL(API_URL+request+"/"+building_id);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoOutput(true);
+            connection.setRequestMethod("DELETE");
+            connection.getContent();
+            connection.disconnect();
+            //connection.connect();
+        } catch (Exception e) {
+            Log.d("Error","Ex "+e);
+            e.printStackTrace();
+        }
+    }
+
 }
