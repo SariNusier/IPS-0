@@ -118,6 +118,13 @@ router.route("/buildings")
                 response = {"error" : true,"message" : "Error fetching data"};
             } else {
                 // data exists, remove it.
+                Room.remove({'building_id' : req.params.id},function(err){
+                    if(err) {
+                        response = {"error" : true,"message" : "Error deleting data"};
+                    } else {
+                        response = {"error" : true,"message" : "Data associated with "+req.params.id+"is deleted"};
+                    }
+                });
                 Building.remove({_id : req.params.id},function(err){
                     if(err) {
                         response = {"error" : true,"message" : "Error deleting data"};
