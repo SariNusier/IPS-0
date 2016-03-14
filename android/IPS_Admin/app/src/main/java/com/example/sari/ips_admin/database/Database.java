@@ -131,7 +131,7 @@ public class Database {
                 Point rb = new Point(room.getJSONObject("rectangle").getJSONObject("rb").getDouble("x"),
                                      room.getJSONObject("rectangle").getJSONObject("rb").getDouble("y"));
                 RectangleDB r = new RectangleDB(lt,rt,lb,rb);
-                Room toAdd = new Room(room.getString("_id"),room.getString("name"),r,room.getDouble("width"),room.getDouble("height"));
+                Room toAdd = new Room(room.getString("_id"),building_id,room.getString("name"),r,room.getDouble("width"),room.getDouble("height"));
                 toReturn.add(toAdd);
             }
         } catch (Exception e) {

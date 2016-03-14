@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -33,7 +34,12 @@ public class EditBuildingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         b =(Building) getIntent().getSerializableExtra("building");
         museumListView = (ListView)findViewById(R.id.room_list_edit_building);
+        museumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+            }
+        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -48,6 +54,7 @@ public class EditBuildingActivity extends AppCompatActivity {
         museumListAdapter = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,
                 roomNames);
         museumListView.setAdapter(museumListAdapter);
+        Log.d("Room:", b.getRooms()[1].getId());
 
     }
 
@@ -71,6 +78,12 @@ public class EditBuildingActivity extends AppCompatActivity {
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startEditRoomActivity(int position){
+        Intent intent = new Intent(this, EditRoomActivity.class);
+        intent.putExtra("room_id",b.getRooms()[position].getId());
+        startActivity(intent);
     }
 
 }

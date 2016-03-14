@@ -16,12 +16,12 @@ public class Room implements Serializable{
     private double width,height;
 
 
-    public Room(String id, String roomName, String roomDescription, RectangleDB rectangleDB,double width, double height, String building_id){
+    public Room(String id, String building_id, String roomName, RectangleDB rectangleDB, double width, double height){
         this.roomName = roomName;
         this.id = id;
         this.width = width;
         this.height = height;
-        this.roomDescription = roomDescription;
+        //this.roomDescription = roomDescription;
         this.rectangleDB = rectangleDB;
         this.building_id = building_id;
         this.roomRectangle = new Rectangle(new Point(0,0),0,0); //for testing!!!
