@@ -11,10 +11,18 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.sari.ips_admin.activities.EditRoomActivity"
     tools:showIn="@layout/activity_edit_room">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Measure"
         android:id="@+id/room_measure_button"/>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_room_results_textview"/>
+    </LinearLayout>
 </RelativeLayout>

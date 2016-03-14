@@ -37,7 +37,7 @@ public class EditBuildingActivity extends AppCompatActivity {
         museumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                startEditRoomActivity(position);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -54,7 +54,6 @@ public class EditBuildingActivity extends AppCompatActivity {
         museumListAdapter = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,
                 roomNames);
         museumListView.setAdapter(museumListAdapter);
-        Log.d("Room:", b.getRooms()[1].getId());
 
     }
 
