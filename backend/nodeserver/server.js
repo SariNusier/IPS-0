@@ -5,6 +5,7 @@ var router      =   express.Router();
 var Building    =   require('./models/building');
 var Room        =   require('./models/room');
 var RP          =   require('./models/RP');
+var RPMeasurement = require('./models/RPMeasurement');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({"extended" : false}));
@@ -167,6 +168,36 @@ router.route("/buildings")
         db.save(function(err){
         // save() will run insert() command of MongoDB.
         // it will add new data in collection.
+            if(err) {
+                response = {"error" : true,"message" : "Failed!"};
+                console.log(err);
+            } else {
+                response = {"error" : false,"message" : "Data added"};
+            }
+            res.json(response);
+        });
+
+    })
+
+    router.route("/measurements/:id")
+    .get(function(req,res){
+        var response = {};
+        RPMeasurement.find({'room_id': req.params.id}, function(err,data){
+            if(err){
+                response = {"error" : true,"message" : "Error!"};
+            } else {
+                response = data;
+            }
+            res.json(response);
+        });
+    })
+    .post(function(req,res){
+        var response = {};
+        var db = new RPMeasurement();
+        db.RPID = req.body.RPID;
+        db.value = req.body.value;
+        db.room_id = req.params.id;
+        db.save(function(err){
             if(err) {
                 response = {"error" : true,"message" : "Failed!"};
                 console.log(err);
