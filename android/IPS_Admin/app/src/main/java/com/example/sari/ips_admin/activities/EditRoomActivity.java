@@ -32,15 +32,7 @@ public class EditRoomActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         resultsTextview = (TextView) findViewById(R.id.edit_room_results_textview);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         Intent intent = getIntent();
         currentRoom = intent.getStringExtra("room_id");
         Button measureButton = (Button) findViewById(R.id.room_measure_button);
@@ -55,10 +47,17 @@ public class EditRoomActivity extends AppCompatActivity {
         wifiManager.startScan();
         registerReceiver(broadcastReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 
+
     }
 
     private void measureRoom(){
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
     }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {

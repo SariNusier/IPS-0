@@ -23,7 +23,7 @@ public class AddRoomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_room);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         building_id = getIntent().getStringExtra("building_id");
     }
 

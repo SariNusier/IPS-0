@@ -26,13 +26,16 @@ public class EditBuildingActivity extends AppCompatActivity {
     private ListView museumListView;
     private ArrayAdapter museumListAdapter;
     private Building b;
+    private String building_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_building);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Log.d("ON CREATE","EDIT BUILDING");
         b =(Building) getIntent().getSerializableExtra("building");
+        building_id = b.getId();
         museumListView = (ListView)findViewById(R.id.room_list_edit_building);
         museumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -40,14 +43,14 @@ public class EditBuildingActivity extends AppCompatActivity {
                 startEditRoomActivity(position);
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         ArrayList roomNames = new ArrayList<String>();
-        b = Database.getBuilding(b.getId());
+        b = Database.getBuilding(building_id);
         for(Room r: b.getRooms()){
             roomNames.add(r.getRoomName());
         }
@@ -67,13 +70,13 @@ public class EditBuildingActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_deleteBuilding){
-            Database.deleteData("buildings",b.getId());
+            Database.deleteData("buildings",building_id);
             this.finish();
         }
 
         if(item.getItemId() == R.id.action_addRoom){
             Intent intent = new Intent(this,AddRoomActivity.class);
-            intent.putExtra("building_id",b.getId());
+            intent.putExtra("building_id",building_id);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
