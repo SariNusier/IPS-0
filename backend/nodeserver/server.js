@@ -179,6 +179,19 @@ router.route("/buildings")
 
     })
 
+    router.route("/measurements/")
+    .get(function(req,res){
+        var response = {};
+        RPMeasurement.find({}, function(err,data){
+            if(err){
+                response = {"error" : true,"message" : "Error!"};
+            } else {
+                response = data;
+            }
+            res.json(response);
+        });
+    })
+
     router.route("/measurements/:id")
     .get(function(req,res){
         var response = {};
