@@ -191,6 +191,18 @@ router.route("/buildings")
             res.json(response);
         });
     })
+    .delete(function(req,res){
+        var response = {};
+        // find the data
+        RPMeasurement.remove({},function(err){
+                    if(err) {
+                        response = {"error" : true,"message" : "Error deleting data"};
+                    } else {
+                        response = {"error" : true,"message" : "Data associated with "+req.params.id+"is deleted"};
+                    }
+                    res.json(response);
+        });
+    })
 
     router.route("/measurements/:id")
     .get(function(req,res){
