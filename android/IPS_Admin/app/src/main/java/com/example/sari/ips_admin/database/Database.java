@@ -6,6 +6,7 @@ import android.util.Log;
 import com.example.sari.ips_admin.models.indoormapping.Building;
 import com.example.sari.ips_admin.models.indoormapping.Floor;
 import com.example.sari.ips_admin.models.indoormapping.Room;
+import com.example.sari.ips_admin.models.positioning.RPMeasurement;
 import com.example.sari.ips_admin.tools.Point;
 import com.example.sari.ips_admin.tools.Rectangle;
 import com.example.sari.ips_admin.tools.RectangleDB;
@@ -82,6 +83,21 @@ public class Database {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return true;
+    }
+
+    public static boolean postMeasurement(RPMeasurement measurement){
+
+        JSONObject JSONmeasurement = new JSONObject();
+
+        try {
+            JSONmeasurement.put("RPID",measurement.getRPID());
+            JSONmeasurement.put("value",measurement.getValue());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        postData("measurements", measurement.getRoom_id(), JSONmeasurement.toString());
 
         return true;
     }

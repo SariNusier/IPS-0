@@ -18,6 +18,8 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.example.sari.ips_admin.R;
+import com.example.sari.ips_admin.database.Database;
+import com.example.sari.ips_admin.models.positioning.RPMeasurement;
 
 import java.util.List;
 
@@ -67,7 +69,8 @@ public class EditRoomActivity extends AppCompatActivity {
             resultsTextview.setText("");
             for(ScanResult sr : found){
                 Log.d("FOUND: ", ""+sr.BSSID+": "+sr.level);
-                resultsTextview.append(sr.BSSID+" = "+sr.level+"\n");
+                resultsTextview.append(sr.BSSID + " = " + sr.level + "\n");
+                Database.postMeasurement(new RPMeasurement(sr.BSSID,currentRoom,sr.level));
             }
             wifiManager.startScan();
         }
