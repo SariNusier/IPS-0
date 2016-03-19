@@ -1,0 +1,407 @@
+[
+  {
+    "_id": "56edaf6ea0d900737fa32588",
+    "room_id": "56edad71a0d900737fa324fb",
+    "__v": 0,
+    "rpv_pair": [
+      {
+        "RPID": "aa:a6:68:bd:b4:9d",
+        "value": -38,
+        "_id": "56edaf6ea0d900737fa3258c"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:6c",
+        "value": -45,
+        "_id": "56edaf6ea0d900737fa3258b"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:70",
+        "value": -61,
+        "_id": "56edaf6ea0d900737fa3258a"
+      },
+      {
+        "RPID": "64:70:02:7f:0b:a0",
+        "value": -85,
+        "_id": "56edaf6ea0d900737fa32589"
+      }
+    ]
+  },
+  {
+    "_id": "56edaf74a0d900737fa3258d",
+    "room_id": "56edad71a0d900737fa324fb",
+    "__v": 0,
+    "rpv_pair": [
+      {
+        "RPID": "aa:a6:68:bd:b4:9d",
+        "value": -38,
+        "_id": "56edaf74a0d900737fa32591"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:6c",
+        "value": -41,
+        "_id": "56edaf74a0d900737fa32590"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:70",
+        "value": -62,
+        "_id": "56edaf74a0d900737fa3258f"
+      },
+      {
+        "RPID": "64:70:02:7f:0b:a0",
+        "value": -85,
+        "_id": "56edaf74a0d900737fa3258e"
+      }
+    ]
+  },
+  {
+    "_id": "56edaf7aa0d900737fa32592",
+    "room_id": "56edad71a0d900737fa324fb",
+    "__v": 0,
+    "rpv_pair": [
+      {
+        "RPID": "aa:a6:68:bd:b4:9d",
+        "value": -40,
+        "_id": "56edaf7aa0d900737fa32595"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:6c",
+        "value": -38,
+        "_id": "56edaf7aa0d900737fa32594"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:70",
+        "value": -62,
+        "_id": "56edaf7aa0d900737fa32593"
+      }
+    ]
+  },
+  {
+    "_id": "56edaf7ea0d900737fa32596",
+    "room_id": "56edad71a0d900737fa324fb",
+    "__v": 0,
+    "rpv_pair": [
+      {
+        "RPID": "aa:a6:68:bd:b4:9d",
+        "value": -41,
+        "_id": "56edaf7ea0d900737fa32599"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:6c",
+        "value": -45,
+        "_id": "56edaf7ea0d900737fa32598"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:70",
+        "value": -60,
+        "_id": "56edaf7ea0d900737fa32597"
+      }
+    ]
+  },
+  {
+    "_id": "56edaf83a0d900737fa3259a",
+    "room_id": "56edad71a0d900737fa324fb",
+    "__v": 0,
+    "rpv_pair": [
+      {
+        "RPID": "aa:a6:68:bd:b4:9d",
+        "value": -43,
+        "_id": "56edaf83a0d900737fa3259d"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:6c",
+        "value": -44,
+        "_id": "56edaf83a0d900737fa3259c"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:70",
+        "value": -58,
+        "_id": "56edaf83a0d900737fa3259b"
+      }
+    ]
+  },
+  {
+    "_id": "56edaf99a0d900737fa3259e",
+    "room_id": "56edad58a0d900737fa324f9",
+    "__v": 0,
+    "rpv_pair": [
+      {
+        "RPID": "aa:a6:68:bd:b4:9d",
+        "value": -77,
+        "_id": "56edaf99a0d900737fa325a3"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:6c",
+        "value": -57,
+        "_id": "56edaf99a0d900737fa325a2"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:70",
+        "value": -71,
+        "_id": "56edaf99a0d900737fa325a1"
+      },
+      {
+        "RPID": "64:70:02:7f:0b:a0",
+        "value": -84,
+        "_id": "56edaf99a0d900737fa325a0"
+      },
+      {
+        "RPID": "00:21:04:1a:d2:5c",
+        "value": -72,
+        "_id": "56edaf99a0d900737fa3259f"
+      }
+    ]
+  },
+  {
+    "_id": "56edaf9ea0d900737fa325a4",
+    "room_id": "56edad58a0d900737fa324f9",
+    "__v": 0,
+    "rpv_pair": [
+      {
+        "RPID": "aa:a6:68:bd:b4:9d",
+        "value": -67,
+        "_id": "56edaf9ea0d900737fa325a9"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:6c",
+        "value": -55,
+        "_id": "56edaf9ea0d900737fa325a8"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:70",
+        "value": -69,
+        "_id": "56edaf9ea0d900737fa325a7"
+      },
+      {
+        "RPID": "64:70:02:7f:0b:a0",
+        "value": -84,
+        "_id": "56edaf9ea0d900737fa325a6"
+      },
+      {
+        "RPID": "00:21:04:1a:d2:5c",
+        "value": -68,
+        "_id": "56edaf9ea0d900737fa325a5"
+      }
+    ]
+  },
+  {
+    "_id": "56edafa3a0d900737fa325aa",
+    "room_id": "56edad58a0d900737fa324f9",
+    "__v": 0,
+    "rpv_pair": [
+      {
+        "RPID": "aa:a6:68:bd:b4:9d",
+        "value": -77,
+        "_id": "56edafa3a0d900737fa325af"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:6c",
+        "value": -51,
+        "_id": "56edafa3a0d900737fa325ae"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:70",
+        "value": -67,
+        "_id": "56edafa3a0d900737fa325ad"
+      },
+      {
+        "RPID": "64:70:02:7f:0b:a0",
+        "value": -84,
+        "_id": "56edafa3a0d900737fa325ac"
+      },
+      {
+        "RPID": "00:21:04:1a:d2:5c",
+        "value": -68,
+        "_id": "56edafa3a0d900737fa325ab"
+      }
+    ]
+  },
+  {
+    "_id": "56edafa8a0d900737fa325b0",
+    "room_id": "56edad58a0d900737fa324f9",
+    "__v": 0,
+    "rpv_pair": [
+      {
+        "RPID": "aa:a6:68:bd:b4:9d",
+        "value": -78,
+        "_id": "56edafa8a0d900737fa325b5"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:6c",
+        "value": -46,
+        "_id": "56edafa8a0d900737fa325b4"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:70",
+        "value": -65,
+        "_id": "56edafa8a0d900737fa325b3"
+      },
+      {
+        "RPID": "64:70:02:7f:0b:a0",
+        "value": -87,
+        "_id": "56edafa8a0d900737fa325b2"
+      },
+      {
+        "RPID": "00:21:04:1a:d2:5c",
+        "value": -71,
+        "_id": "56edafa8a0d900737fa325b1"
+      }
+    ]
+  },
+  {
+    "_id": "56edafada0d900737fa325b6",
+    "room_id": "56edad58a0d900737fa324f9",
+    "__v": 0,
+    "rpv_pair": [
+      {
+        "RPID": "aa:a6:68:bd:b4:9d",
+        "value": -80,
+        "_id": "56edafada0d900737fa325bb"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:6c",
+        "value": -58,
+        "_id": "56edafada0d900737fa325ba"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:70",
+        "value": -78,
+        "_id": "56edafada0d900737fa325b9"
+      },
+      {
+        "RPID": "64:70:02:7f:0b:a0",
+        "value": -87,
+        "_id": "56edafada0d900737fa325b8"
+      },
+      {
+        "RPID": "00:21:04:1a:d2:5c",
+        "value": -78,
+        "_id": "56edafada0d900737fa325b7"
+      }
+    ]
+  },
+  {
+    "_id": "56edafb9a0d900737fa325bc",
+    "room_id": "56edad68a0d900737fa324fa",
+    "__v": 0,
+    "rpv_pair": [
+      {
+        "RPID": "aa:a6:68:bd:b4:9d",
+        "value": -46,
+        "_id": "56edafb9a0d900737fa325bf"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:6c",
+        "value": -39,
+        "_id": "56edafb9a0d900737fa325be"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:70",
+        "value": -42,
+        "_id": "56edafb9a0d900737fa325bd"
+      }
+    ]
+  },
+  {
+    "_id": "56edafbda0d900737fa325c0",
+    "room_id": "56edad68a0d900737fa324fa",
+    "__v": 0,
+    "rpv_pair": [
+      {
+        "RPID": "aa:a6:68:bd:b4:9d",
+        "value": -48,
+        "_id": "56edafbda0d900737fa325c4"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:6c",
+        "value": -42,
+        "_id": "56edafbda0d900737fa325c3"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:70",
+        "value": -46,
+        "_id": "56edafbda0d900737fa325c2"
+      },
+      {
+        "RPID": "64:70:02:7f:0b:a0",
+        "value": -91,
+        "_id": "56edafbda0d900737fa325c1"
+      }
+    ]
+  },
+  {
+    "_id": "56edafc2a0d900737fa325c5",
+    "room_id": "56edad68a0d900737fa324fa",
+    "__v": 0,
+    "rpv_pair": [
+      {
+        "RPID": "aa:a6:68:bd:b4:9d",
+        "value": -54,
+        "_id": "56edafc2a0d900737fa325c9"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:6c",
+        "value": -39,
+        "_id": "56edafc2a0d900737fa325c8"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:70",
+        "value": -52,
+        "_id": "56edafc2a0d900737fa325c7"
+      },
+      {
+        "RPID": "64:70:02:7f:0b:a0",
+        "value": -87,
+        "_id": "56edafc2a0d900737fa325c6"
+      }
+    ]
+  },
+  {
+    "_id": "56edafc6a0d900737fa325ca",
+    "room_id": "56edad68a0d900737fa324fa",
+    "__v": 0,
+    "rpv_pair": [
+      {
+        "RPID": "aa:a6:68:bd:b4:9d",
+        "value": -59,
+        "_id": "56edafc6a0d900737fa325ce"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:6c",
+        "value": -34,
+        "_id": "56edafc6a0d900737fa325cd"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:70",
+        "value": -46,
+        "_id": "56edafc6a0d900737fa325cc"
+      },
+      {
+        "RPID": "64:70:02:7f:0b:a0",
+        "value": -87,
+        "_id": "56edafc6a0d900737fa325cb"
+      }
+    ]
+  },
+  {
+    "_id": "56edafcba0d900737fa325cf",
+    "room_id": "56edad68a0d900737fa324fa",
+    "__v": 0,
+    "rpv_pair": [
+      {
+        "RPID": "aa:a6:68:bd:b4:9d",
+        "value": -52,
+        "_id": "56edafcba0d900737fa325d2"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:6c",
+        "value": -36,
+        "_id": "56edafcba0d900737fa325d1"
+      },
+      {
+        "RPID": "ec:cb:30:f6:6d:70",
+        "value": -42,
+        "_id": "56edafcba0d900737fa325d0"
+      }
+    ]
+  }
+]
