@@ -1,8 +1,8 @@
 var db = require('../db');
 
+
 var schema = new db.Schema({
-	RPID:  {type: String, required: true},
-	value: {type: Number, required: true},
+	rpv_pair: [{ RPID: String, value: Number }],
 	room_id: {type: String, required: true}
 });
 

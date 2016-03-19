@@ -219,8 +219,7 @@ router.route("/buildings")
     .post(function(req,res){
         var response = {};
         var db = new RPMeasurement();
-        db.RPID = req.body.RPID;
-        db.value = req.body.value;
+        db.rpv_pair = req.body.rpv_pair;
         db.room_id = req.params.id;
         db.save(function(err){
             if(err) {
