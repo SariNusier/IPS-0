@@ -12,6 +12,8 @@ app.use(bodyParser.urlencoded({"extended" : false}));
 
 router.get("/",function(req,res){
     res.json({"error" : false,"message" : "Hello World"});
+
+
 });
  app.use('/', router);
 //route() will allow you to use same path for different HTTP operation.
@@ -71,6 +73,7 @@ router.route("/buildings")
             }
             res.json(response);
         });
+        
     })
     .put(function(req,res){
         var response = {};
@@ -207,14 +210,16 @@ router.route("/buildings")
     router.route("/measurements/:id")
     .get(function(req,res){
         var response = {};
-        RPMeasurement.find({'room_id': req.params.id}, function(err,data){
-            if(err){
-                response = {"error" : true,"message" : "Error!"};
-            } else {
-                response = data;
+        var RPMeasurements = [];
+        Room.find({'building_id': req.params.id}, function(err,data){
+            for(var r in data){
+                RPMeasurement.find({'room_id': r._id}, function(err,data){
+                    RPMeasurements.push(data);
+                }); 
             }
-            res.json(response);
         });
+        response.measurements = RPMeasurements;
+        res.json(response);
     })
     .post(function(req,res){
         var response = {};
@@ -232,6 +237,87 @@ router.route("/buildings")
         });
 
     })
+
+    router.route("/learn/:id")
+    .get(function(req,res){
+        var response = {};
+        var net = require('net');
+        var client = net.connect(5000, 'localhost');
+        var request = {};
+        request.command = 'classify';
+        request.building_id = req.params.id;
+        request.learning_set = [];
+        RPMeasurement.find({}, function(err,data){
+            response = data;
+            request.learning_set = response;
+        });
+        client.write(JSON.stringify(request));
+        client.on('data', (data) => {
+            console.log(data.toString());
+            client.end();
+            res.send(data.toString());
+        });
+        client.end;
+    })
+    .post(function(req,res){
+        var response = {};
+        var net = require('net');
+        var client = net.connect(5000, 'localhost');
+        var request = {};
+        request.command = 'learn';
+        request.building_id = req.params.id;
+        request.learning_set = req.body;
+        //RPMeasurement.find({}, function(err,data){
+        //    response = data;
+        //    request.learning_set.push(response.rpv_pair);
+        //});
+        client.write(JSON.stringify(request));
+        client.on('data', (data) => {
+            console.log(data.toString());
+            client.end();
+            res.send(data.toString());
+        });
+        //res.json(response);
+        });
+
+    router.route("/locate/:id")
+    .get(function(req,res){
+        var response = {};
+        var net = require('net');
+        var client = net.connect(5000, 'localhost');
+        var request = {};
+        request.command = 'classify';
+        request.building_id = req.params.id;
+        request.learning_set = [];
+        RPMeasurement.find({}, function(err,data){
+            response = data;
+            request.learning_set = response;
+        });
+        client.write(JSON.stringify(request));
+        client.on('data', (data) => {
+            console.log(data.toString());
+            //client.end();
+            res.send(data.toString());
+        });
+        client.end;
+    })
+    .post(function(req,res){
+        var response = {};
+        var net = require('net');
+        var client = net.connect(5000, 'localhost');
+        var request = {};
+        request.command = 'classify';
+        request.building_id = req.params.id;
+        request.learning_set = req.body;
+        client.write(JSON.stringify(request));
+        client.on('data', (data) => {
+            console.log(data.toString());
+            client.end();
+            res.send(data.toString());
+        });
+        client.end;
+        //res.json(response);
+        });
 
 
 
