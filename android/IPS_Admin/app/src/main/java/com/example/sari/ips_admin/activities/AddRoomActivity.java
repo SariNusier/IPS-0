@@ -28,7 +28,7 @@ public class AddRoomActivity extends AppCompatActivity {
     }
 
     public void submitRoom(View v){
-        String lbx    = ((EditText) findViewById(R.id.addroom_text_lbx)).getText().toString();
+      /*  String lbx    = ((EditText) findViewById(R.id.addroom_text_lbx)).getText().toString();
         String lby    = ((EditText) findViewById(R.id.addroom_text_lby)).getText().toString();
         String rbx    = ((EditText) findViewById(R.id.addroom_text_rbx)).getText().toString();
         String rby    = ((EditText) findViewById(R.id.addroom_text_rby)).getText().toString();
@@ -39,7 +39,11 @@ public class AddRoomActivity extends AppCompatActivity {
         String name   = ((EditText) findViewById(R.id.addroom_text_name)).getText().toString();
         String width  = ((EditText) findViewById(R.id.addroom_text_width)).getText().toString();
         String height = ((EditText) findViewById(R.id.addroom_text_height)).getText().toString();
-
+      */
+        String def_val = "0";
+        String name   = ((EditText) findViewById(R.id.addroom_text_name)).getText().toString();
+       //TODO: Make default better.
+        /*
         if(!lbx.equals("") && !lby.equals("") && !rbx.equals("") &&
                 !rby.equals("") && !ltx.equals("") && !lty.equals("") &&
                 !rtx.equals("") && !rty.equals("") && !name.equals("") &&
@@ -53,5 +57,12 @@ public class AddRoomActivity extends AppCompatActivity {
             Database.addRoom(building_id,r);
             this.finish();
         }
+        */
+        Point p = new Point(Double.parseDouble(def_val),Double.parseDouble(def_val));
+        Room r = new Room(building_id, name, new RectangleDB(p,p,p,p),Double.parseDouble(def_val),
+                Double.parseDouble(def_val));
+        Database.addRoom(building_id,r);
+        this.finish();
+
     }
 }
