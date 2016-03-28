@@ -18,9 +18,12 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -33,6 +36,8 @@ import java.util.ArrayList;
  */
 public class Database {
 
+    //public final static String API_URL = "http://178.62.127.39:3000/";
+    public final static String API_URL = "http://192.168.1.106:3000/";
     public static Building[] getBuildings(){
         String StringData = getData("buildings");
         ArrayList<Building> toReturn = new ArrayList<>();
@@ -79,7 +84,7 @@ public class Database {
                                                 .put("y", building.getRectangle().getRb().getY()));
 
             buildingToAdd.put("rectangle", rectangle);
-            postData("buildings","",buildingToAdd.toString());
+            postData("buildings", "", buildingToAdd.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -89,15 +94,19 @@ public class Database {
 
     public static boolean postMeasurement(RPMeasurement measurement){
 
-        JSONObject JSONmeasurement = new JSONObject();
-
+        JSONArray JSONAllM= new JSONArray();
+        JSONObject toSend = new JSONObject();
         try {
-            JSONmeasurement.put("RPID",measurement.getRPID());
-            JSONmeasurement.put("value",measurement.getValue());
+            for(int i = 0; i<measurement.getReadings().size(); ++i){
+                JSONAllM.put(new JSONObject().put("RPID",measurement.getReadings().get(i).first)
+                        .put("value",measurement.getReadings().get(i).second));
+            }
+
+            toSend.put("rpv_pair", JSONAllM);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        postData("measurements", measurement.getRoom_id(), JSONmeasurement.toString());
+        postData("measurements", measurement.getRoom_id(), toSend.toString());
 
         return true;
     }
@@ -184,8 +193,7 @@ public class Database {
     }
 
 
-    private static String getData(String... params) {
-        String API_URL = "http://178.62.127.39:3000/";
+    public static String getData(String... params) {
         String data = "";
         String building_id = "";
         String request = params[0];
@@ -209,13 +217,12 @@ public class Database {
     }
 
     public static String postData(String... params){
-        String API_URL = "http://178.62.127.39:3000/";
         String data = params[2];
         Log.d("Data to send", data);
         String building_id = "";
         String request = params[0];
-
-
+        InputStream is = null;
+        String dataRec = "";
         if (params.length >= 2){
             building_id = params[1];
         }
@@ -228,12 +235,15 @@ public class Database {
             connection.setDoOutput(true);
             connection.setChunkedStreamingMode(0);
             connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Content-Length", "" + Integer.toString(data.getBytes().length));
+            //connection.setRequestProperty("Content-Length", "" + Integer.toString(data.getBytes().length));
             OutputStream os = new BufferedOutputStream(connection.getOutputStream());
             //BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
 
             os.write(data.getBytes());
             os.flush();
+            is = new BufferedInputStream(connection.getInputStream());
+            dataRec = IOUtils.toString(is,"UTF-8");
+            Log.d("Found:", "Room:"+dataRec);
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
                 throw new RuntimeException("Failed : HTTP error code : "
                         + connection.getResponseCode());
@@ -246,11 +256,10 @@ public class Database {
             e.printStackTrace();
         }
 
-        return null;
+        return dataRec;
     }
 
     public static void deleteData(String... params){
-        String API_URL = "http://178.62.127.39:3000/";
         String building_id = "";
         String request = params[0];
 
@@ -271,6 +280,25 @@ public class Database {
             Log.d("Error","Ex "+e);
             e.printStackTrace();
         }
+    }
+
+    public static String classify(RPMeasurement measurement, String building_id){
+        JSONArray JSONAllM= new JSONArray();
+        JSONObject toSend = new JSONObject();
+        JSONArray toSendArray = new JSONArray();
+        try {
+            for(int i = 0; i<measurement.getReadings().size(); ++i){
+                JSONAllM.put(new JSONObject().put("RPID",measurement.getReadings().get(i).first)
+                        .put("value",measurement.getReadings().get(i).second));
+            }
+
+            toSend.put("rpv_pair", JSONAllM);
+            toSend.put("room_id","?");
+            toSendArray.put(toSend);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return postData("locate", building_id, toSend.toString());
     }
 
 }

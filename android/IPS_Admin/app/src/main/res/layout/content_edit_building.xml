@@ -262,7 +262,27 @@
 
         </LinearLayout>
     </LinearLayout>
-
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LEARN"
+        android:id="@+id/building_learn_button"
+        android:onClick="learnBuilding"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LOCATE"
+        android:id="@+id/building_locate_button"
+        android:onClick="locateInBuidling"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/building_located_room"/>
+    </LinearLayout>
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
