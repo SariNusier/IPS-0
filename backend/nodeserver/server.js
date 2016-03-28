@@ -210,16 +210,14 @@ router.route("/buildings")
     router.route("/measurements/:id")
     .get(function(req,res){
         var response = {};
-        var RPMeasurements = [];
-        Room.find({'building_id': req.params.id}, function(err,data){
-            for(var r in data){
-                RPMeasurement.find({'room_id': r._id}, function(err,data){
-                    RPMeasurements.push(data);
-                }); 
+        RPMeasurement.find({'room_id': req.params.id}, function(err,data){
+            if(err){
+                response = {"error" : true,"message" : "Error!"};
+            } else {
+                response = data;
             }
+            res.json(response);
         });
-        response.measurements = RPMeasurements;
-        res.json(response);
     })
     .post(function(req,res){
         var response = {};
@@ -244,51 +242,74 @@ router.route("/buildings")
         var net = require('net');
         var client = net.connect(5000, 'localhost');
         var request = {};
-        request.command = 'classify';
+        var count = 0
+        request.command = 'learn';
         request.building_id = req.params.id;
         request.learning_set = [];
-        RPMeasurement.find({}, function(err,data){
-            response = data;
-            request.learning_set = response;
+        var rooms;
+        Room.find({'building_id': req.params.id}, function(err,data){
+            rooms = data.map(function(data) {return data._id;});
+            //console.log(rooms);
+
+            RPMeasurement.find({room_id: {$in: rooms}}, function(err,data){
+                request.learning_set = data;
+                console.log(JSON.stringify(request));
+                client.write(JSON.stringify(request));
+                client.end();
+                count ++;   
+            });
         });
-        client.write(JSON.stringify(request));
+    
         client.on('data', (data) => {
             console.log(data.toString());
-            client.end();
             res.send(data.toString());
+            count++;
         });
-        client.end;
-    })
+        //res.json(response);
+        })
     .post(function(req,res){
         var response = {};
         var net = require('net');
         var client = net.connect(5000, 'localhost');
         var request = {};
+        var count = 0
         request.command = 'learn';
         request.building_id = req.params.id;
-        request.learning_set = req.body;
-        //RPMeasurement.find({}, function(err,data){
-        //    response = data;
-        //    request.learning_set.push(response.rpv_pair);
-        //});
-        client.write(JSON.stringify(request));
+        request.learning_set = [];
+        var rooms;
+        Room.find({'building_id': req.params.id}, function(err,data){
+            rooms = data.map(function(data) {return data._id;});
+            console.log(rooms);
+
+            RPMeasurement.find({room_id: {$in: rooms}}, function(err,data){
+                request.learning_set = data;
+                console.log(JSON.stringify(request));
+                client.write(JSON.stringify(request));
+                count ++;
+                if(count == 2)
+                    client.end();
+            });
+        });
+
         client.on('data', (data) => {
             console.log(data.toString());
-            client.end();
             res.send(data.toString());
+            count++;
+            if(count == 2)
+                client.end();
         });
         //res.json(response);
         });
 
     router.route("/locate/:id")
     .get(function(req,res){
-        var response = {};
+        var response = "NOTHING";
         var net = require('net');
         var client = net.connect(5000, 'localhost');
         var request = {};
         request.command = 'classify';
         request.building_id = req.params.id;
-        request.learning_set = [];
+        request.learning_set = [];  
         RPMeasurement.find({}, function(err,data){
             response = data;
             request.learning_set = response;
@@ -297,9 +318,10 @@ router.route("/buildings")
         client.on('data', (data) => {
             console.log(data.toString());
             //client.end();
-            res.send(data.toString());
+            response = data;
         });
         client.end;
+        res.send(response);
     })
     .post(function(req,res){
         var response = {};
@@ -308,14 +330,16 @@ router.route("/buildings")
         var request = {};
         request.command = 'classify';
         request.building_id = req.params.id;
-        request.learning_set = req.body;
+        request.learning_set = [];
+        request.learning_set.push(req.body);
         client.write(JSON.stringify(request));
         client.on('data', (data) => {
             console.log(data.toString());
             client.end();
-            res.send(data.toString());
+            response = data;
+            res.send(response);
         });
-        client.end;
+        client.end();
         //res.json(response);
         });
 
