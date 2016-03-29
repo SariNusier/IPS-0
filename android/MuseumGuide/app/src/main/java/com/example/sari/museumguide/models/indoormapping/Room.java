@@ -1,19 +1,45 @@
 package com.example.sari.museumguide.models.indoormapping;
 
+import com.example.sari.museumguide.tools.Point;
 import com.example.sari.museumguide.tools.Rectangle;
+import com.example.sari.museumguide.tools.RectangleDB;
 
 import java.io.Serializable;
 
 public class Room implements Serializable{
     private String roomName;
+    private String id;
+    private String building_id;
     private Rectangle roomRectangle;
+    private RectangleDB rectangleDB;
     private String roomDescription;
+    private double width,height;
 
 
-    public Room(String roomName, String roomDescription, Rectangle roomRectangle){
+    public Room(String id, String building_id, String roomName, RectangleDB rectangleDB, double width, double height){
         this.roomName = roomName;
-        this.roomDescription = roomDescription;
-        this.roomRectangle = roomRectangle;
+        this.id = id;
+        this.width = width;
+        this.height = height;
+        //this.roomDescription = roomDescription;
+        this.rectangleDB = rectangleDB;
+        this.building_id = building_id;
+        this.roomRectangle = new Rectangle(new Point(0,0),0,0); //for testing!!!
+    }
+
+    public String getBuilding_id() {
+        return building_id;
+    }
+
+    public Room(String building_id, String roomName, RectangleDB rectangleDB, double width, double height){
+        this.building_id = building_id;
+
+        this.roomName = roomName;
+        this.width = width;
+        this.height = height;
+        this.roomDescription = "";
+        this.rectangleDB = rectangleDB;
+        this.roomRectangle = new Rectangle(new Point(0,0),0,0); //for testing!!!
     }
 
     public Room(Rectangle r){
@@ -63,5 +89,21 @@ public class Room implements Serializable{
 
         return false;
 
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public RectangleDB getRectangleDB() {
+        return rectangleDB;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public double getHeight() {
+        return height;
     }
 }
