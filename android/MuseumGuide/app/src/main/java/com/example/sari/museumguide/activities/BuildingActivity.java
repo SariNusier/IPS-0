@@ -1,6 +1,7 @@
 package com.example.sari.museumguide.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -103,6 +104,12 @@ public class BuildingActivity extends AppCompatActivity {
             }
         }
         return toReturn;
+    }
+
+    public void startGuideActivity(View v){
+        Intent intent = new Intent(this, GuideActivity.class);
+        intent.putExtra("building",b);
+        startActivity(intent);
     }
 
 }

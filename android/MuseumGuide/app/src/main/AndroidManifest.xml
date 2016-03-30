@@ -8,6 +8,8 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -48,10 +50,20 @@
             android:name=".activities.BuildingActivity"
             android:label="@string/title_activity_building"
             android:parentActivityName=".activities.MainActivity"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.sari.museumguide.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.GuideActivity"
+            android:label="@string/title_activity_guide"
+            android:parentActivityName=".activities.BuildingActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.sari.museumguide.activities.BuildingActivity" />
         </activity>
     </application>
 
