@@ -2,6 +2,7 @@ package com.example.sari.museumguide.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,28 +16,27 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.sari.museumguide.R;
+import com.example.sari.museumguide.database.Database;
+import com.example.sari.museumguide.models.indoormapping.Building;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    Building[] buildings;
     private ListView museumListView;
     private ArrayAdapter museumListAdapter;
-    private String[] museumList = {"Science Museum", "Natural History Museum"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         museumListView = (ListView)findViewById(R.id.museumListView);
-        museumListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,
-                museumList);
-        museumListView.setAdapter(museumListAdapter);
-
         museumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startMapsActivity(position);
+                startBuildingActivity(position);
             }
         });
     }
@@ -46,6 +46,19 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        buildings = Database.getBuildings();
+        ArrayList buildingNames = new ArrayList<String>();
+        for(Building b: buildings){
+            buildingNames.add(b.getName());
+        }
+        museumListAdapter = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,
+                buildingNames);
+        museumListView.setAdapter(museumListAdapter);
     }
 
     @Override
@@ -67,4 +80,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
+
+    private void startBuildingActivity(int position){
+        Intent intent = new Intent(this, BuildingActivity.class);
+        intent.putExtra("building",buildings[position]);
+        startActivity(intent);
+    }
+
 }

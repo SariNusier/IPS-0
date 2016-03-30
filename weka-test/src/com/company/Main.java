@@ -18,87 +18,50 @@ import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 
 public class Main {
-    static final String inputFile = "/home/sari/Development/weka-test/src/com/company/in.txt" ;
-    static final String outputFilee = "/home/sari/Development/weka-test/out.arff" ;
-    static final String outputFile = "/home/sari/Development/weka-test/src/com/company/out.txt";
+    static final String SETTINGS_FILE_PATH = "settings" ;
+    static final String TRAINING_ARFF_PATH= "training.arff" ;
+    static final String TRAINING_JSON_PATH = "trainingJSON.data";
+    static final String INPUT_JSON_PATH = "inputJSON.data";
+    static final String INPUT_ARFF_PATH = "input.arff";
     public static void main(String[] args) throws Exception {
-        String inData = "";
-        System.out.print("Aha");
-        try {
-            inData = new String(Files.readAllBytes(Paths.get(inputFile)), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        JSONArray dataSetArray = new JSONArray(inData);
+        NaiveBayes nb = new NaiveBayes();
+        if(args[0].equals("--help") || args[0].equals("-h")){
+            System.out.println("--train or -t");
+            System.out.println("--classify or -c");
+        } else
+        if(args[0].equals("--train") || args[0].equals("-t")){
+            buildTrainingARFFfromJSON(new File(TRAINING_JSON_PATH));
+            Instances training = new Instances(new BufferedReader(new FileReader(TRAINING_ARFF_PATH)));
+            training.setClassIndex(training.numAttributes()-1);
+            nb.buildClassifier(training);
+        } else
+        if(args[0].equals("--classify") || args[0].equals("-c")){
+            buildTestARFFfromJSON();
+            Instances training = new Instances(new BufferedReader(new FileReader(TRAINING_ARFF_PATH)));
+            training.setClassIndex(training.numAttributes()-1);
+            nb.buildClassifier(training);
+            Instances unlabeled = new Instances(new BufferedReader(new FileReader(INPUT_ARFF_PATH)));
+            unlabeled.setClassIndex(unlabeled.numAttributes()-1);
+            Instances labeled = new Instances(unlabeled);
+            for (int i = 0; i < unlabeled.numInstances(); i++) {
+                double clsLabel = nb.classifyInstance(unlabeled.instance(i));
+                labeled.instance(i).setClassValue(clsLabel);
+                System.out.println(labeled.instance(0).classAttribute().value((int)clsLabel));
 
-        FileWriter fw = null;
-        try {
-            fw = new FileWriter(outputFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        BufferedWriter bw = new BufferedWriter(fw);
-        bw.write("@relation room");
-        bw.newLine();
-        bw.newLine();
-        ArrayList<String> rooms = new ArrayList<>();
-        ArrayList<String> referencePoints = extractRPIDList(dataSetArray);
-        for(Object item:dataSetArray){
-            rooms.add(((JSONObject) item).getString("room_id"));
-        }
-        Set<String> noDuplicates = new LinkedHashSet<String>(rooms);
-        rooms.clear();
-        rooms.addAll(noDuplicates);
-
-        //bw.write(referencePoints.toString());
-        //bw.newLine();
-        for(String rp:referencePoints){
-            bw.write("@attribute "+rp+" "
-                    +"NUMERIC");
-            bw.newLine();
-        }
-        bw.write("@attribute class {");
-        for(String room:rooms){
-            bw.write(room+",");
-        }
-        bw.write("test_room");
-        bw.write("}");
-        bw.newLine();bw.newLine();
-        bw.write("@data");
-        bw.newLine();
-
-        for(Object reading: dataSetArray){
-            for(String RP: referencePoints)
-            {
-                bw.write(Double.toString(getValueByRPID((JSONObject)reading,RP))+",");
             }
-            bw.write(((JSONObject) reading).getString("room_id"));
-            bw.newLine();
+
         }
 
 
-        bw.close();
+
+
         //ArffLoader loader = new ArffLoader();
         //loader.setFile(new File(outputFilee));
         //Instances structure = loader.getStructure();
         //structure.setClassIndex(structure.numAttributes()-1);
 
-        Instances training = new Instances(new BufferedReader(new FileReader(outputFilee)));
-        training.setClassIndex(training.numAttributes()-1);
-        NaiveBayes nb = new NaiveBayes();
-        nb.buildClassifier(training);
-        String test="/home/sari/Development/weka-test/test-full.arff";
-        Instances unlabeled = new Instances(new BufferedReader(new FileReader(test)));
-        unlabeled.setClassIndex(unlabeled.numAttributes()-1);
-        Instances labeled = new Instances(unlabeled);
 
-        for (int i = 0; i < unlabeled.numInstances(); i++) {
-            double clsLabel = nb.classifyInstance(unlabeled.instance(i));
-            labeled.instance(i).setClassValue(clsLabel);
-            System.out.println(clsLabel);
-        }
-        System.out.print(labeled);
     }
 
     public static ArrayList<String> extractRPIDList(JSONArray data)
@@ -124,6 +87,99 @@ public class Main {
         }
 
         return 0;
+    }
+    public static void buildTestARFFfromJSON(){
+        try {
+            File settings = new File(SETTINGS_FILE_PATH);
+            File arffFile = new File(INPUT_ARFF_PATH);
+            File jsonFile = new File(INPUT_JSON_PATH);
+            File trainingJson = new File(TRAINING_JSON_PATH);
+            Files.copy(settings.toPath(),arffFile.toPath());
+            FileWriter fw = new FileWriter(INPUT_ARFF_PATH, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write("@data");
+            bw.newLine();
+            JSONObject reading = new JSONObject(new String(Files.readAllBytes(Paths.get(jsonFile.getPath())), StandardCharsets.UTF_8));
+            JSONArray dataSetArray = new JSONArray(new String(Files.readAllBytes(Paths.get(trainingJson.getPath())), StandardCharsets.UTF_8));
+            ArrayList<String> referencePoints = new ArrayList<>();
+                referencePoints = extractRPIDList(dataSetArray);
+            for(String RP: referencePoints)
+                {
+                    bw.write(Double.toString(getValueByRPID(reading,RP))+",");
+                }
+            bw.write("?");
+            bw.newLine();
+
+            bw.close();
+            System.out.println("ARFF build!");
+        } catch (IOException e) {
+            System.out.println("Failed to build ARFF: "+e);
+        }
+    }
+    public static void buildTrainingARFFfromJSON(File inputFile){
+        String inData = "";
+        System.out.println("Building settings ...");
+        try {
+            inData = new String(Files.readAllBytes(Paths.get(inputFile.getPath())), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        JSONArray dataSetArray = new JSONArray(inData);
+        ArrayList<String> referencePoints = new ArrayList<>();
+        FileWriter fw = null;
+        try {
+        fw = new FileWriter(SETTINGS_FILE_PATH);
+        BufferedWriter bw = new BufferedWriter(fw);
+        bw.write("@relation room\n\n");
+        ArrayList<String> rooms = new ArrayList<>();
+        referencePoints = extractRPIDList(dataSetArray);
+        for(Object item:dataSetArray){
+            rooms.add(((JSONObject) item).getString("room_id"));
+        }
+        Set<String> noDuplicates = new LinkedHashSet<String>(rooms);
+        rooms.clear();
+        rooms.addAll(noDuplicates);
+        for(String rp:referencePoints){
+            bw.write("@attribute "+rp+" "
+                    +"NUMERIC");
+            bw.newLine();
+        }
+        bw.write("@attribute class {");
+        for(String room:rooms){
+            bw.write(room+",");
+        }
+        bw.write("test_room");
+        bw.write("}");
+        bw.newLine();bw.newLine();
+        bw.close();
+        System.out.println("Settings built!");
+        } catch (IOException e) {
+            System.out.println("Failed to build settings: "+e);
+        }
+
+        System.out.println("Building ARFF from JSON ...");
+        try {
+            File settings = new File(SETTINGS_FILE_PATH);
+            File arffFile = new File(TRAINING_ARFF_PATH);
+            Files.copy(settings.toPath(),arffFile.toPath());
+
+            fw = new FileWriter(TRAINING_ARFF_PATH, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write("@data");
+            bw.newLine();
+            for(Object reading: dataSetArray){
+                for(String RP: referencePoints)
+                {
+                    bw.write(Double.toString(getValueByRPID((JSONObject)reading,RP))+",");
+                }
+                bw.write(((JSONObject) reading).getString("room_id"));
+                bw.newLine();
+            }
+            bw.close();
+            System.out.println("ARFF build!");
+        } catch (IOException e) {
+            System.out.println("Failed to build ARFF: "+e);
+        }
     }
 
 }

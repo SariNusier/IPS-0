@@ -1,9 +1,11 @@
 package com.example.sari.museumguide.tools;
 
+import java.io.Serializable;
+
 /**
  * Created by sari on 15/02/16.
  */
-public class Point {
+public class Point implements Serializable {
     private double x, y;
 
     public Point(double x, double y)

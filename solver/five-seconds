@@ -1,0 +1,4 @@
+#!/bin/bash
+ulimit -t 5
+
+./planner --optimise domain.pddl pfile01.pddl

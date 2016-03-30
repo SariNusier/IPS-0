@@ -12,4 +12,24 @@
     tools:context="com.example.sari.museumguide.activities.BuildingActivity"
     tools:showIn="@layout/activity_building">
 
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:id="@+id/room_list_building"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/room_list_building">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/estimated_time_textview"
+                android:text="Estimated Time:"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GO"/>
+        </LinearLayout>
+
 </RelativeLayout>
