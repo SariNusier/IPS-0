@@ -24,6 +24,7 @@ var schema = new db.Schema({
 	width: {type: Number, required: true},
 	height:{type: Number, required: true},
 	floor: Number,
+	est_time: Number,
 	building_id: {type: String, required: true}
 });
 

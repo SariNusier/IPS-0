@@ -165,6 +165,7 @@ router.route("/buildings")
         db.name = req.body.name;
         db.width = req.body.width;
         db.height = req.body.height;
+        db.est_time = req.body.est_time;
         db.building_id = req.params.id; 
         // Hash the password using SHA1 algorithm.
         //db.id =  req.body.id;

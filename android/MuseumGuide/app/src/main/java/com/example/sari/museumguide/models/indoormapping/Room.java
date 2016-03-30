@@ -14,9 +14,10 @@ public class Room implements Serializable{
     private RectangleDB rectangleDB;
     private String roomDescription;
     private double width,height;
+    private double est_time;
 
 
-    public Room(String id, String building_id, String roomName, RectangleDB rectangleDB, double width, double height){
+    public Room(String id, String building_id, String roomName, RectangleDB rectangleDB, double width, double height, double est_time){
         this.roomName = roomName;
         this.id = id;
         this.width = width;
@@ -25,6 +26,7 @@ public class Room implements Serializable{
         this.rectangleDB = rectangleDB;
         this.building_id = building_id;
         this.roomRectangle = new Rectangle(new Point(0,0),0,0); //for testing!!!
+        this.est_time = est_time;
     }
 
     public String getBuilding_id() {
@@ -106,4 +108,14 @@ public class Room implements Serializable{
     public double getHeight() {
         return height;
     }
+
+    public void setEst_time(double est_time) {
+        this.est_time = est_time;
+    }
+
+    public double getEst_time() {
+
+        return est_time;
+    }
+
 }
