@@ -62,6 +62,32 @@ public class Learner {
         return bn;
     }
 
+    public static BayesNet getClassifierBN(String building_id){
+        BayesNet bn = new BayesNet();
+        try {
+            Instances instances = new Instances(new BufferedReader(new FileReader(building_id+".arff")));
+            instances.setClassIndex(instances.numAttributes()-1);
+            bn.buildClassifier(instances);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return bn;
+    }
+
+    public static NaiveBayes getClassifierNB(String building_id){
+        NaiveBayes nb = new NaiveBayes();
+        try {
+            Instances instances = new Instances(new BufferedReader(new FileReader(building_id+".arff")));
+            instances.setClassIndex(instances.numAttributes()-1);
+            nb.buildClassifier(instances);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return nb;
+    }
+
     public static String classify_NB(String building_id, JSONArray JSONdata, NaiveBayes nb){
         makeClassifierARFF(building_id,JSONdata);
         Instances unlabeled;

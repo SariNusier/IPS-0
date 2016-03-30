@@ -26,6 +26,7 @@ import java.util.List;
 public class GuideActivity extends AppCompatActivity {
     private Building b;
     WifiManager wifiManager;
+    Room currentRoom;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +38,7 @@ public class GuideActivity extends AppCompatActivity {
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         registerReceiver(broadcastReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         b =(Building) getIntent().getSerializableExtra("building");
+        currentRoom = b.getRooms()[0]; //Entrance room?
         wifiManager.startScan();
     }
 
@@ -71,7 +73,12 @@ public class GuideActivity extends AppCompatActivity {
                     }
                 }
             }
+            //currentRoomView.setText(currentRoomView.getText()+currentRoom.getRoomName());
             wifiManager.startScan();
         }
     };
+
+    public boolean shouldChangeRoom(Room r){
+        return true;
+    }
 }

@@ -1,5 +1,6 @@
 package com.company;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import weka.classifiers.bayes.BayesNet;
@@ -16,9 +17,14 @@ public class Server
     NaiveBayes globalNB;
     BayesNet globalBN;
     String currentBID;
+    ArrayList<Pair<String,BayesNet>> classifiersBN;
+    ArrayList<Pair<String,NaiveBayes>> classifiersNB;
     boolean nbinit;
     public Server()
     {
+        classifiersBN = new ArrayList<>();
+        classifiersNB = new ArrayList<>();
+
         try {
             ServerSocket sSocket = new ServerSocket(5000);
             System.out.println("Server started!");
@@ -63,19 +69,48 @@ public class Server
                 System.out.println(rec);
                 JSONObject recJSON = new JSONObject(rec);
                 if(recJSON.getString("command").equals("learn")){
-                    globalNB = Learner.learnFromJSON_NB(recJSON.getString("building_id"),recJSON.getJSONArray("learning_set"));
-                    globalBN = Learner.learnFromJSON_BN(recJSON.getString("building_id"),recJSON.getJSONArray("learning_set"));
-                    nbinit = true;
-                    currentBID = recJSON.getString("building_id");
+                    //globalNB = Learner.learnFromJSON_NB(recJSON.getString("building_id"),recJSON.getJSONArray("learning_set"));
+                    //globalBN = Learner.learnFromJSON_BN(recJSON.getString("building_id"),recJSON.getJSONArray("learning_set"));
+                    BayesNet bn = Learner.learnFromJSON_BN(recJSON.getString("building_id"),recJSON.getJSONArray("learning_set"));
+                    NaiveBayes nb = Learner.learnFromJSON_NB(recJSON.getString("building_id"),recJSON.getJSONArray("learning_set"));
+                    int i = buildingClassifierBNInitialised(recJSON.getString("building_id"));
+                    int j = buildingClassifierNBInitialised(recJSON.getString("building_id"));
+                    if(i>-1){
+                        classifiersBN.set(i,Pair.of(recJSON.getString("building_id"),bn));
+                    } else {
+                        classifiersBN.add(Pair.of(recJSON.getString("building_id"),bn));
+                    }
+
+                    if(i>-1){
+                        classifiersNB.set(i,Pair.of(recJSON.getString("building_id"),nb));
+                    } else {
+                        classifiersNB.add(Pair.of(recJSON.getString("building_id"),nb));
+                    }
                     pw.write("Done!");
                 } else if(recJSON.getString("command").equals("classify")){
-                    if(nbinit && recJSON.getString("building_id").equals(currentBID)){
-                        String res ="Naive:"+Learner.classify_NB(recJSON.getString("building_id"),recJSON.getJSONArray("learning_set"),globalNB);
-                        res +=",BN:"+Learner.classify_BN(recJSON.getString("building_id"),recJSON.getJSONArray("learning_set"),globalBN);
+                    int i = buildingClassifierBNInitialised(recJSON.getString("building_id"));
+                    int j = buildingClassifierNBInitialised(recJSON.getString("building_id"));
+
+                    if(i>-1){
+                        String res ="BN:"+Learner.classify_BN(recJSON.getString("building_id"),
+                                recJSON.getJSONArray("learning_set"),classifiersBN.get(i).getRight());
+                        res += ",NB:"+Learner.classify_NB(recJSON.getString("building_id"),
+                                recJSON.getJSONArray("learning_set"),classifiersNB.get(j).getRight());
                         pw.write(res);
                         System.out.println(res);
                     } else if(Files.exists(Paths.get(recJSON.getString("building_id")+".arff"))){
+                        BayesNet bn = Learner.getClassifierBN(recJSON.getString("building_id"));
+                        NaiveBayes nb = Learner.getClassifierNB(recJSON.getString("building_id"));
+                        classifiersBN.add(Pair.of(recJSON.getString("building_id"),bn));
+                        classifiersNB.add(Pair.of(recJSON.getString("building_id"),nb));
 
+                        i = buildingClassifierBNInitialised(recJSON.getString("building_id"));
+                        j = buildingClassifierNBInitialised(recJSON.getString("building_id"));
+                        String res ="BN:"+Learner.classify_BN(recJSON.getString("building_id"),
+                                recJSON.getJSONArray("learning_set"),classifiersBN.get(i).getRight());
+                        res += ",NB:"+Learner.classify_NB(recJSON.getString("building_id"),
+                                recJSON.getJSONArray("learning_set"),classifiersNB.get(j).getRight());
+                        pw.write(res);
                     } else {
                         pw.write("Weird classify request!");
                     }
@@ -85,5 +120,21 @@ public class Server
                 System.out.println("Error: " + exception);
             }
         }
+    }
+
+    public int buildingClassifierBNInitialised(String building_id){
+        for(Pair<String,BayesNet> p:classifiersBN){
+            if(p.getLeft().equals(building_id))
+                return classifiersBN.indexOf(p);
+        }
+        return -1;
+    }
+
+    public int buildingClassifierNBInitialised(String building_id){
+        for(Pair<String,NaiveBayes> p:classifiersNB){
+            if(p.getLeft().equals(building_id))
+                return classifiersNB.indexOf(p);
+        }
+        return -1;
     }
 }
