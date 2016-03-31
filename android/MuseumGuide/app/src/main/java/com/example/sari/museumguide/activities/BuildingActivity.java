@@ -90,7 +90,7 @@ public class BuildingActivity extends AppCompatActivity {
                     result += "," + bool;
                 }
                 Log.d("Selected", result);
-                estTimeView.setText("Estimated time: " + Double.toString(getEstTime()));
+                estTimeView.setText("Estimated time: " +(int) getEstTime());
             }
         });
 

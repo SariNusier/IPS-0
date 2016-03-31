@@ -22,11 +22,14 @@ import com.example.sari.museumguide.models.indoormapping.Room;
 import com.example.sari.museumguide.models.positioning.RPMeasurement;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class GuideActivity extends AppCompatActivity {
     private Building b;
     WifiManager wifiManager;
     Room currentRoom;
+    long timeOfChange = System.currentTimeMillis();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +41,7 @@ public class GuideActivity extends AppCompatActivity {
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         registerReceiver(broadcastReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         b =(Building) getIntent().getSerializableExtra("building");
-        currentRoom = b.getRooms()[0]; //Entrance room?
+        currentRoom = null; //Entrance room?
         wifiManager.startScan();
     }
 
@@ -69,16 +72,33 @@ public class GuideActivity extends AppCompatActivity {
                 for(Room room:b.getRooms()){
                     if(room.getId().equals(result.split(":")[1])){
                         currentRoomView.setText(currentRoomView.getText()+result.split(":")[0]+":"+room.getRoomName()+"\n");
+                        shouldChangeRoom(room);
                         break;
                     }
                 }
             }
             //currentRoomView.setText(currentRoomView.getText()+currentRoom.getRoomName());
+            shouldChangeRoom(currentRoom);
             wifiManager.startScan();
         }
     };
 
     public boolean shouldChangeRoom(Room r){
+        boolean shouldChange = false;
+        if(currentRoom == null){
+            shouldChange = true;
+            currentRoom = r;
+        }
+        if(!currentRoom.equals(r)){
+            currentRoom = r;
+            shouldChange = true;
+        }
+        if(shouldChange){
+            long curTime = System.currentTimeMillis();
+            long duration = curTime-timeOfChange;
+            timeOfChange = curTime;
+            Database.postLocationData(currentRoom.getId(), TimeUnit.MILLISECONDS.toSeconds(duration));
+        }
         return true;
     }
 }

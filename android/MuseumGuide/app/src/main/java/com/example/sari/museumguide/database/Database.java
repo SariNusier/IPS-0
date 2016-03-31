@@ -11,6 +11,7 @@ import com.example.sari.museumguide.tools.RectangleDB;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -101,6 +102,23 @@ public class Database {
         return true;
     }
 
+    /**Only storing duration so far
+     *
+     * @param room_id
+     * @param duration
+     * @return
+     */
+    public static boolean postLocationData(String room_id, long duration){
+       JSONObject toSend = new JSONObject();
+        try {
+            toSend.put("duration",duration);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        postData("locationdata",room_id,toSend.toString());
+        return true;
+    }
+
     public static Building getBuilding(String id){
         String StringData = getData("buildings",id);
         Building toReturn = null;
@@ -146,7 +164,7 @@ public class Database {
                 Point rb = new Point(room.getJSONObject("rectangle").getJSONObject("rb").getDouble("x"),
                                      room.getJSONObject("rectangle").getJSONObject("rb").getDouble("y"));
                 RectangleDB r = new RectangleDB(lt,rt,lb,rb);
-                Room toAdd = new Room(room.getString("_id"),building_id,room.getString("name"),r,room.getDouble("width"),room.getDouble("height"),0);
+                Room toAdd = new Room(room.getString("_id"),building_id,room.getString("name"),r,room.getDouble("width"),room.getDouble("height"),room.getDouble("est_time"));
                 toReturn.add(toAdd);
             }
         } catch (Exception e) {

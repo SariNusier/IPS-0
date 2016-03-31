@@ -166,6 +166,7 @@ router.route("/buildings")
         db.width = req.body.width;
         db.height = req.body.height;
         db.est_time = req.body.est_time;
+        db.N_avg = 0;
         db.building_id = req.params.id; 
         // Hash the password using SHA1 algorithm.
         //db.id =  req.body.id;
@@ -343,6 +344,46 @@ router.route("/buildings")
         client.end();
         //res.json(response);
         });
+
+    router.route("/locationdata/:id")
+    .post(function(req,res){
+        var response = {};        
+        console.log(req.body);
+        var duration = req.body.duration;
+        Room.findById(req.params.id,function(err,data){
+            if(err) {
+                response = {"error" : true,"message" : "Error fetching data"};
+            } else {
+                var est_time;
+                var N_avg;
+                if(!isFinite(data.est_time)){
+                    data.est_time = 0;
+                    est_time = 0;
+                } else {
+                    est_time = data.est_time;
+                }
+                if(!isFinite(data.N_avg)){
+                    data.N_avg = 0;
+                    N_avg = 0;
+                } else {
+                    N_avg = data.N_avg;
+                }
+                data.est_time = (est_time*N_avg+duration)/N_avg+1;
+                data.N_avg++;
+                data.save(function(err){
+                    if(err) {
+                        response = {"error" : true,"message" : "Error updating data"};
+                        console.log(err);
+                    } else {
+                        response = {"error" : false,"message" : "Data is updated for "+req.params.id};
+                        console.log("Updated:"+data.name+" "+data.est_time);
+                    }
+                    res.json(response);
+                })
+            }
+        });
+    })
+    
 
 
 
