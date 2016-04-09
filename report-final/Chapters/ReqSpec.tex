@@ -1,6 +1,98 @@
 \chapter{Requirements and Specifiations}
-The central part of the report usually consists of three or four chapters detailing the technical work undertaken during the project. {\bf{\textcolor{red}{The structure of these chapters is highly project dependent}}}. They can reflect the chronological development of the project, e.g. design, implementation, experimentation, optimisation, evaluation, etc (although this is not always the best approach). However you choose to structure this part of the report, you should make it clear how you arrived at your chosen approach in preference to other alternatives. In terms of the software that you produce, you should describe and justify the design of your programs at some high level, e.g. using OMT, Z, VDL, etc., and you should document any interesting problems with, or features of, your implementation. Integration and testing are also important to discuss in some cases. You may include fragments of your source code in the main body of the report to illustrate points; the full source code is included in an appendix to your written report.
+HOST represents the management of the building implementing the positioning system.\\ 
+VISITOR is any user of the positioning app, independent of the building they are visiting.
+Both users will require Wi-Fi enabled Android Devices and a stable internet connection. 
 
-\section{Section Heading}
+\section{Requirements}
+The requirements are split in four categories. The first two are concerned with user requirements from both HOST and VISITOR perspective. The positioning system is the software that handles data analysis and machine learning to provide the position of the VISITOR.
 
-\subsection{Subsection Heading}
+\subsection{Host requirements}
+	\begin{itemize}
+		\item H1 - Host must be able to create, edit, remove or view buildings.
+		\item H2 - Host must be able to create, edit, remove or view rooms from specific buildings.
+		\item H3 - Host must be able to measure WiFi APs signal strength for a specific room.
+		\item H4 - Host must be able to update the positioning system with new measurements.
+		\item H5 - Host must be able to reset the positioning system when needed.
+	\end{itemize}
+
+\subsection{Visitor requirements}
+	\begin{itemize}
+		\item V1 - Manually select a building to visit.
+		\item V2 - Receive a suggestion regarding the building they are in.
+		\item V3 - Choose the rooms/exhibits they would like to visit inside a building.
+		\item V4 - See an estimated time of visit based on selected rooms/exhibits.
+		\item V5 - Rate the degree of importance for visiting a specific room/exhibit.
+		\item V6 - See a suggested visit path based on selected rooms/exhibits.
+		\item V7 - See its current location within the building.
+		\item V8 - See a visit path based on his current location and the selected rooms/exhibits.
+	\end{itemize}
+
+\subsection{Positioning requirements}
+	\begin{itemize}
+		\item PS1 - Receive a learning set in JSON containing AP signal strength measurements and the 			location they were taken in.
+		\item PS2 - Create classifiers from learning set.
+		\item PS3 - Receive unclassified data in JSON containing AP signal strength measurements.
+		\item PS4 - Classify received data using one or more previously built classifiers.
+		\item PS5 - Return classified data in a format that is easily parsable by the user
+	\end{itemize}
+
+\subsection{Backend requirements}
+	\begin{itemize}
+		\item B1 - Database should store buildings and the rooms within each building. 
+		\item B2. Database should store learning set for each building.
+		\item B3. Server should maintain a RESTful API to interface with the database and positioning 			system.
+	\end{itemize}
+
+
+\section{Specification}
+The specifications show what should be implemented in order to meet the requirements of the software.
+
+\subsection{Host}
+For requirements H1 to H5 an android application will be developed for the administration of the buildings created for a HOST. The app should contain:
+	\begin{itemize}
+		\item Activity to view all the buildings available (H1)
+		\item Activity to add a new building (H1)
+		\item Activity for the management of a specific building (H - 1, 2, 4, 5)
+		\item Activity for the management of a specific room (H - 2, 3)
+		\item Make HTTP requests to the Backend Server
+	\end{itemize}
+
+\subsection{Visitor}
+For requirements V1 to V8 an android application will be developed and should contain:
+	\begin{itemize}
+		\item Activity to vie all the buildings available (V1)
+		\item Search through the building list by name (V1)
+		\item Move the current building, if detected, to the top of the list (V2)
+		\item An activity containing a list of exhibits/rooms inside a building (V3)
+		\item Compute the sum of the estimated visit time of all the selected rooms (V4)
+		\item Implement a slider for each selected exhibit (V5)
+		\item Display as a text or as a path on the map (V6)
+		\item Current location should be displayed as a text or on the map (V7)
+		\item Update the suggested path based on current location (V8).
+	\end{itemize}
+
+\subsection{Positioning system}
+For requirements PS1 to PS5 a Java application will be developed and should contain:
+	\begin{itemize}
+		\item Accept TCP connections to send and receive JSON data. (PS - 1, 5)
+		\item Implement machine learning and JSON parsing libraries. (PS - 1, 2, 3, 4, 5)
+	\end{itemize}
+
+\subsection{Backend}
+The backend should implement a database and an HTTP server to:
+	\begin{itemize}
+		\item Accept HTTP requests for the REST API
+		\item Store data in JSON format.
+	\end{itemize}
+
+\subsection{Limitations}
+When developing the system, security was not a main consideration. The system does not implement any form of authentication or access control. It does not distinguish between multiple users, all data being commonly accessible and anonymous. 
+The data is available only through the REST API, and any request which is not formatted accordingly will be ignored. Arbitrary code execution and any type of code injection has been considered and security measures implemented.
+The design of the backend is made to be extendable and any additional security measures can be easily implement.
+The user interface was not a priority, therefore the design is simple, but usable. Outputs are usually plain text, and visual cues are rarely given. 
+The visual indoor maps and all the visual cues (location pin, walk path, etc.) are implemented using the Google Maps API, therefore, are available only for the buildings that have implemented Google Indoor Maps.
+
+
+
+
+
