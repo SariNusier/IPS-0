@@ -2,7 +2,7 @@
 \section{Architectural design}
 In this section we will define the architecture of the entire system, showing the dependencies between its components.
 \\
-\includegraphics[scale=0.5]{ArchitectureDiagram.png}
+\includegraphics[scale=0.4]{SYST.png}
 \\
 The architecture of the system is comprised of three subsystems. The top subsystem is concerned with interfacing the end users (HOST and VISITOR) to the lower subsystems. The middle subsystem offers an API to the bottom subsystems. The bottom subsystems manage and provide the information required for the entire system to run. To continue, we will review each subsystem in more detail, from top to bottom.
 
@@ -159,7 +159,20 @@ $$\frac{\displaystyle\sum_{i=1}^{M} \frac{1}{S(RP_i, R_x)}}{N(R_x)}$$
 where $M$ is the number of measurements in the set.
 The result is the probability for the measurements to have been taken in room $R_x$.
 We can then compare the probability for all rooms and choose the one which is most likely.
+\\
+\textit{\textbf{Machine Learning approach}}
+\\
+Machine Learning algorithms can be applied to this application in order to predict the room in which a device is located. We first define a learning set of all measurements taken and the rooms that the measurements were taken in.\\
+There are five classifiers considered:
+Naive Bayes, Bayes Networks, KStar, Decorate and NB Trees. The classifiers are implemented using the Weka Machine Learning Library. The result of each classifier is returned to the backend, therefore, the decision of which predicted value to be used is moved higher up in the system.
+Due to a higher level of precision, the Machine Learning approach will have the priority in implementation.
 
+\subsection{DATA FLOW and STATE MACHINE}
+Because of the vast amount of data that must be transferred between the subsystems, it is important to visualise and understand what data must be inputted in each subsystem, what data is outputted by each subsystem and how this data moves around in the entire system.\\
+
+The initial input is in the HOST android application. Here, the user inputs the details of a new building to be created. The data is then converted into JSON and sent to the Backend through a POST request to "/buildings". The backend parses the data and creates a new Building object, storing it in the database. The HOST then can select the building created and begin adding new room. For each new room, the details are entered and submitted. After submitting each room, the data, in JSON format, is sent to the Backend using a POST request to "/rooms/building\_id". The backend then created a new Room object, setting its building id to the specified id and storing it in the database. After the required rooms are added, the HOST must then take the RSS measurements for each room, in order for the classifier to be built. In the room activity, the HOST starts the measurements, and a list of all measurements taken at a point in time is then sent to the backend through a POST method to "measurements/room\_id", where the backend stores it in the database.
+After enough measurements were taken for all the rooms, the host can then press the "learn" button from the building activity, which will send a GET request to "/locate/building\_id". On receipt of this request, the backend queries the database for all the measurements taken in the building and sends it through a TCP connection to the Positioning system, as a "learn" request. The positioning system processes the request and data, parsing it and storing the data locally. It will then initialise a classifier using the data stored, the system is then in standby again. \\
+The next trigger is by the VISITOR app, which, on start, will request a list of buildings from the backend using GET "/buildings/". The backend the queries and returns all the buildings stored. The user can then press on a building and see the list of rooms available. When the user starts a visit, the app starts collecting RSS measurements. For every scan, the list of measurements is sent to the backend using a POST request to "/locate/building\_id". This triggers the backend to send a "classify" request to the backend server, which returns a list of predicted locations. The backend the forwards the information back to the user.
 
 
 

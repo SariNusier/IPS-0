@@ -32,6 +32,8 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//CHECK IF GETTING BUILDINGS HERE IS ACTUALLY NEEDED!
 public class EditBuildingActivity extends AppCompatActivity {
     private ListView museumListView;
     private ArrayAdapter museumListAdapter;

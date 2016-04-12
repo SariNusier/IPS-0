@@ -1,3 +1,55 @@
 \chapter{Implementation}
+This chapter will go through the development process of the project. It will look into how the design was implemented, what changes have been made, what problems were faced along the way and how these problems were remediated.
+\section{Development approach}
+The project has taken a lean software development approach. The main goal was to achieve a prototype system, in order to test its feasibility. Therefore, some features were dropped or disregarded, as they were not crucial to the production of a testable system. Second principle of lean was also applied, analysing the value of the software based on its fitness to be used, rather than on the conformance to requirements. Therefore, focus from documentation or planning was moved towards coding, so that different ideas can be tried out and dropped if they proved unfeasible, or if they did not increase the quality of the software. Another lean principle applied was giving the system, as a whole, priority when developing each subsystem. Even though one of the objectives of this software is to create somewhat independent subsystems, so that they can be reused or changed easily later on, some compromises were made to ensure that the system as a whole was developed as soon as possible and was available for testing.\\
+The following list shows, in order, the modules developed and the requirements targeted.
 
-\section{Section Heading}
+\begin{enumerate}
+	\item Even though not a priority, the Visitor app was the first software created. The initial android application was used to check whether the tools available through Google Indoor Maps API were usable for this project (V6, V7, V8).
+	\item Data models classes were created in Java, adding some of the basic attributes and functionality (H1, H2, B1).
+	\item Later on, more models were added and the classes became serializable, to allow the to be sent (H1, H2, B1).
+	\item Data models for the positioning system were added (B2, H4).
+	\item Work on backend started. A MySQL database was created and java class to connect and query the database was implemented (B1, B2).
+	\item Tables were created in MySQL and Spatial Data Types were tested (B1, B2).
+	\item NodeJS server, MongoDB and basic data models were created for experimentation (B1, B2, B3).
+	\item MySQL database was dropped and data models were developed for MongoDB. REST API was also developed to allow manipulation of the newly created database (B1, B2, B3).
+	\item  Administration app was created (H1- H5).
+	\item Java class for integrating with the API was implemented and added to the Administration app (H1-H5).
+	\item Buildings Activity was implemented to show the list of all the buildings available (H1).
+	\item Added building creation capability in the backend and in the Applications’ Database helper class (B1, H1).
+	\item Building creating activity implemented in the Admin app (H1).
+	\item Delete buildings and add rooms capabilities implemented in the Admin app (H1, H2).
+	\item Positioning models implemented in the Backend and Database (B2).
+	\item Wi-Fi scanning and posting measurements to server functionality implemented (H3, H4). 
+	\item Positioning models changed for better intersystem compatibility.
+	\item Basic Machine Learning functionality using Weka implemented and tested (PS2, PS4, PS5).
+	\item Positioning server implemented after successful tests (PS1 - PS5).
+	\item Added the Java Database helper class to the Visitor app (V1 - V8).
+	\item Implemented Buildings, Room activities and started displaying current location of the device in Visitor App (V1, V3, V4, V7).	
+\end{enumerate}
+The beginning of the implementation focused more on Backend, in order to analyse the feasibility of different approaches. Once a basic version of the backend was implemented, the administration app was the next step in the implementation process. This allowed for data to be inputted easier so that the rest of the system can be tested faster, when needed. The Backend and Database were tested using PostMan tool. Having Wi-Fi scanning capability early on helped understand the nature of the measurements, contributing to the design of the positioning system. The positioning system was implemented separately, as a Java program, and data was parsed and fed into the system manually, for testing. Once the Positioning system proved feasible, data inputtin became automated and the implementation moved its focus towards the Visitor app.
+
+\section{Backend}
+Implementation of the backend started using a MySQL database. For easier administration MySQL Workbench software was used. A test database was created with two Tables. The first table, Building, contained five attributes: Name (VARCHAR), Width (INT), Length (INT), ID (INT) and Rectangle of type Geometry. The Geometry type is part of the Spatial Data Types offered in MySQL and it helps model and manage geometrical shapes [1].
+\\
+Due to compatibility issues, the implementation of the backend moved to using a NodeJS server with a MongoDB database, which is the current implementation.
+To ease implementation, Mongoose object modeling library was issued when creating the Database models [2]. The four models implemented and their corresponding schemas are shown below. 
+\\
+\textbf{INSERT CODE!!!}
+\\
+\begin{lstlisting}
+{
+    "rectangle": {
+        "lt":{"x":0, "y":0},
+        "rt":{"x":0, "y":0},
+        "lb":{"x":0, "y":0},
+        "rb":{"x":0, "y":0}
+    },
+    "name": "Room 3",
+    "width": 21,
+    "height": 21,
+    "floor": 0
+}
+\end{lstlisting}
+
+

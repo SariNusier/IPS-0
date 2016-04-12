@@ -37,7 +37,7 @@ public class BuildingsActivity extends AppCompatActivity {
         /*
         WARNING!!!
         Should not stay like this forever, fetching data must be done outside the UI thread.
-        It is implemented like this only for debugging purposes.
+        It is implemented like this only because of my laziness.
          */
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);

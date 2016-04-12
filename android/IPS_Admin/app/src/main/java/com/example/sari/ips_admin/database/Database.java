@@ -84,7 +84,7 @@ public class Database {
                                                 .put("y", building.getRectangle().getRb().getY()));
 
             buildingToAdd.put("rectangle", rectangle);
-            postData("buildings", "", buildingToAdd.toString());
+            postData("buildings", buildingToAdd.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -106,7 +106,7 @@ public class Database {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        postData("measurements", measurement.getRoom_id(), toSend.toString());
+        postData("measurements", toSend.toString(), measurement.getRoom_id());
 
         return true;
     }
@@ -182,7 +182,7 @@ public class Database {
                             .put("y", room.getRectangleDB().getRb().getY()));
 
             roomToAdd.put("rectangle", rectangle);
-            postData("rooms", building_id, roomToAdd.toString());
+            postData("rooms", roomToAdd.toString(), building_id);
             //building.setRooms(getRooms(building.getId()));
 
         } catch (Exception e) {
@@ -217,18 +217,17 @@ public class Database {
     }
 
     public static String postData(String... params){
-        String data = params[2];
-        Log.d("Data to send", data);
-        String building_id = "";
+        String id = "";
         String request = params[0];
+        String data = params[1];
         InputStream is = null;
         String dataRec = "";
-        if (params.length >= 2){
-            building_id = params[1];
+        if (params.length > 2){
+            id = params[2];
         }
 
         try {
-            URL url = new URL(API_URL+request+"/"+building_id);
+            URL url = new URL(API_URL+request+"/"+id);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             Log.d("Error", "Ex " + url.toString());
             //connection.setRequestMethod("POST");
@@ -245,7 +244,7 @@ public class Database {
             dataRec = IOUtils.toString(is,"UTF-8");
             Log.d("Found:", "Room:"+dataRec);
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
-                throw new RuntimeException("Failed : HTTP error code : "
+                throw new RuntimeException("HTTP code : "
                         + connection.getResponseCode());
             }
             os.close();
