@@ -1,55 +1,280 @@
 \chapter{Implementation}
-This chapter will go through the development process of the project. It will look into how the design was implemented, what changes have been made, what problems were faced along the way and how these problems were remediated.
+This chapter will go through the development process of the project. It will look into how the design was implemented, what changes have been made, some problems  faced along the way and how these problems were remediated.
 \section{Development approach}
-The project has taken a lean software development approach. The main goal was to achieve a prototype system, in order to test its feasibility. Therefore, some features were dropped or disregarded, as they were not crucial to the production of a testable system. Second principle of lean was also applied, analysing the value of the software based on its fitness to be used, rather than on the conformance to requirements. Therefore, focus from documentation or planning was moved towards coding, so that different ideas can be tried out and dropped if they proved unfeasible, or if they did not increase the quality of the software. Another lean principle applied was giving the system, as a whole, priority when developing each subsystem. Even though one of the objectives of this software is to create somewhat independent subsystems, so that they can be reused or changed easily later on, some compromises were made to ensure that the system as a whole was developed as soon as possible and was available for testing.\\
-The following list shows, in order, the modules developed and the requirements targeted.
+The project has taken a lean software development approach. The main goal was to achieve a prototype system, in order to test its feasibility. Therefore, some features were dropped or disregarded, as they were not crucial to the production of a testable system. Second principle of lean was also applied, analysing the value of the software based on its fitness to be used, rather than on the conformance to requirements. Therefore, focus from documentation or planning was moved towards coding, so that different ideas can be tried out and dropped if they proved infeasible, or if they did not increase the quality of the software. Another lean principle applied was giving the functionality of the system as a whole priority when developing each subsystem. Even though one of the objectives of the project is to create the subsystems as independent as possible, increasing reusability and flexibility to later changes, some compromises were made to ensure that the system as a whole was developed as soon as possible and was available for testing.
+
+\noindent The following list shows, in order, the modules developed and the requirements targeted.
 
 \begin{enumerate}
 	\item Even though not a priority, the Visitor app was the first software created. The initial android application was used to check whether the tools available through Google Indoor Maps API were usable for this project (V6, V7, V8).
-	\item Data models classes were created in Java, adding some of the basic attributes and functionality (H1, H2, B1).
-	\item Later on, more models were added and the classes became serializable, to allow the to be sent (H1, H2, B1).
+	\item Data modelling classes were created in Java with some of the basic attributes and functionality (H1, H2, B1).
+	\item Later on, more models were added and the classes became serializable, to enable transmission of the objects.(H1, H2, B1).
 	\item Data models for the positioning system were added (B2, H4).
-	\item Work on backend started. A MySQL database was created and java class to connect and query the database was implemented (B1, B2).
+	\item Work on backend started. A MySQL database was created and a Java class to connect and query the database was implemented (B1, B2).
 	\item Tables were created in MySQL and Spatial Data Types were tested (B1, B2).
 	\item NodeJS server, MongoDB and basic data models were created for experimentation (B1, B2, B3).
-	\item MySQL database was dropped and data models were developed for MongoDB. REST API was also developed to allow manipulation of the newly created database (B1, B2, B3).
+	\item The MySQL approach to the database was abandoned and data models were developed for MongoDB. The REST API was also developed to allow manipulation of the newly created database (B1, B2, B3).
 	\item  Administration app was created (H1- H5).
 	\item Java class for integrating with the API was implemented and added to the Administration app (H1-H5).
 	\item Buildings Activity was implemented to show the list of all the buildings available (H1).
-	\item Added building creation capability in the backend and in the Applications’ Database helper class (B1, H1).
-	\item Building creating activity implemented in the Admin app (H1).
+	\item Added building creation capability in the backend and in the Application's Database helper class (B1, H1).
+	\item Building creation activity implemented in the Admin app (H1).
 	\item Delete buildings and add rooms capabilities implemented in the Admin app (H1, H2).
 	\item Positioning models implemented in the Backend and Database (B2).
 	\item Wi-Fi scanning and posting measurements to server functionality implemented (H3, H4). 
-	\item Positioning models changed for better intersystem compatibility.
+	\item Positioning models changed for better inter-system compatibility.
 	\item Basic Machine Learning functionality using Weka implemented and tested (PS2, PS4, PS5).
 	\item Positioning server implemented after successful tests (PS1 - PS5).
 	\item Added the Java Database helper class to the Visitor app (V1 - V8).
 	\item Implemented Buildings, Room activities and started displaying current location of the device in Visitor App (V1, V3, V4, V7).	
 \end{enumerate}
-The beginning of the implementation focused more on Backend, in order to analyse the feasibility of different approaches. Once a basic version of the backend was implemented, the administration app was the next step in the implementation process. This allowed for data to be inputted easier so that the rest of the system can be tested faster, when needed. The Backend and Database were tested using PostMan tool. Having Wi-Fi scanning capability early on helped understand the nature of the measurements, contributing to the design of the positioning system. The positioning system was implemented separately, as a Java program, and data was parsed and fed into the system manually, for testing. Once the Positioning system proved feasible, data inputtin became automated and the implementation moved its focus towards the Visitor app.
+The beginning of the implementation focused more on the Backend, in order to analyse the feasibility of different approaches. Once a basic version of the backend was implemented, the administration app was the next step in the implementation process. This allowed for data to be inputted easier so that the rest of the system can be tested faster, when needed. The Backend and Database were tested using PostMan. Having Wi-Fi scanning capability early on helped understand the nature of the measurements, contributing to the design of the positioning system. The positioning system was implemented separately, as a Java program, and data was parsed and fed into the system manually, for testing. Once the Positioning system proved feasible, data inputting became automated and the implementation moved its focus towards the Visitor app.
 
 \section{Backend}
-Implementation of the backend started using a MySQL database. For easier administration MySQL Workbench software was used. A test database was created with two Tables. The first table, Building, contained five attributes: Name (VARCHAR), Width (INT), Length (INT), ID (INT) and Rectangle of type Geometry. The Geometry type is part of the Spatial Data Types offered in MySQL and it helps model and manage geometrical shapes [1].
+Implementation of the backend started by using a MySQL database. For easier administration MySQL Workbench software was used. A test database was created with two Tables. The first table, Building, contained five attributes: Name (VARCHAR), Width (INT), Length (INT), ID (INT) and Rectangle of type Geometry. The Geometry type is part of the Spatial Data Types offered in MySQL and it helps model and manage geometrical shapes [1].
 \\
 Due to compatibility issues, the implementation of the backend moved to using a NodeJS server with a MongoDB database, which is the current implementation.
-To ease implementation, Mongoose object modeling library was issued when creating the Database models [2]. The four models implemented and their corresponding schemas are shown below. 
+To ease implementation, Mongoose object modelling library was used when creating the Database models [2]. The four models implemented and their corresponding schemas are shown below. 
 \\
-\textbf{INSERT CODE!!!}
-\\
+\textbf{Rectangle:}
+This is a helper model to be used inside the other models, not to be instantiated on its own.
 \begin{lstlisting}
-{
-    "rectangle": {
-        "lt":{"x":0, "y":0},
-        "rt":{"x":0, "y":0},
-        "lb":{"x":0, "y":0},
-        "rb":{"x":0, "y":0}
-    },
-    "name": "Room 3",
-    "width": 21,
-    "height": 21,
-    "floor": 0
+{ lt:{x: Number, y: Number}, rt:{x: Number, y: Number}, 
+lb:{x: Number, y: Number}, rb:{x: Number, y: Number} }	
+\end{lstlisting}
+
+\noindent
+\textbf{Building:}
+The building follows the model defined in the Design. 
+\begin{lstlisting}
+{ rectangle: Rectangle, name: {type: String, required: true},
+width: {type: Number, required: true}, height:{type: Number, required: true} }
+\end{lstlisting}
+
+\noindent
+\textbf{Room:}
+Changes from the design were added here in order to implement the average visit time. The est\_time is given by calculating the average visit durations. For the average to be calculated, N\_avg stores the numbers of visits that the room has had.
+\begin{lstlisting}
+{ rectangle: Rectangle, name: {type: String, required: true},
+width: {type: Number, required: true}, height:{type: Number, required: true},
+floor: Number, est_time: {type: Number, default: 0}, N_avg: {type: Number,default:0},
+building_id: {type: String, required: true} }
+\end{lstlisting}
+
+\noindent
+\textbf{RP:}
+The reference point model follows the definition in the Design. The rpid is stored as a string, and is usually the MAC Address of the Wi-Fi access point.
+\begin{lstlisting}
+{ rpid: {type: String, required: true}, building_id: {type: String, required: true},
+coordinate: {x: Number, y: Number} }
+\end{lstlisting}
+
+\noindent
+\textbf{RPMeasurement:}
+The rpv\_pair is an array that stores a list of RPID and the value measured. An array is needed because multiple access points can be detected in one scan. 
+\begin{lstlisting}
+{ rpv_pair: [{ RPID: String, value: Number }], 
+room_id: {type: String, required: true} }
+\end{lstlisting}
+
+The RESTful API was implemented using NodeJS and the ExpressJS Web Application framework, for handling HTTP requests. The endpoints implemented followed the Design.
+
+\section{Positioning System}
+
+\subsection{Server}
+This class deals with receiving and sending data through a TCP connection to the Node Server. 
+It contains an inner class, ClientThread, implementing Runnable, so that each request from the database is ran on a separate thread. The server waits for connections in a while(true) loop. When it receives a connection, it starts a new thread, instantiating a ClientThread object. A Buffered reader is used to read the data received from the node server. The data is in JSON format, therefore parsing must be done. The org.json[4] library is used in order to parse the data. 
+\begin{lstlisting} 
+{"command":"learn","building_id":"id","learning_set":[]}
+\end{lstlisting}
+The first attribute looked at from the JSONObject received is "command", which can be either "learn" or " classify". 
+When a "learn" command is detected, the program will instantiate a classifier object for each classifier used. These objects are provided by weka and include NaiveBayes, for the naive bayes classifier, or BayesNet, for the Bayes Network classifier. 
+The classifiers are not instantiated by using new, but they are returned by a static function call to Learner.learnFromJSON. This method takes as arguments the building id for which the learn command was called, and a JSONArray containing the list of readings which will be used as the learning set. 
+\begin{lstlisting} 
+public static BayesNet learnFromJSON_BN(String building_id, JSONArray JSONData)
+\end{lstlisting}
+ A global ArrayList storing Pairs [5] of building id and classifier object is maintained. The list is used to minimise the number of times a classifier must be initialised. If the returned classifier from Learner.learnFromJSON has been previously initialised, the new object returned is introduced in the list using set, overwriting the previous object. If the classifier has not been previously initialised, it is added to the list, using the add method. 
+\begin{lstlisting}
+//Check if a BayesNet classifier has been initialised.	
+public int buildingClassifierBNInitialised(String building_id){
+	for(Pair<String,BayesNet> p:classifiersBN){
+		if(p.getLeft().equals(building_id))
+        		return classifiersBN.indexOf(p);
+        }
+    return -1;
+}    
+\end{lstlisting}
+
+\begin{lstlisting}
+if(buildingClassifierBNInitialised(recJSON.getString("building_id")) > -1){
+	classifiersBN.set(i,Pair.of(recJSON.getString("building_id"),bn));
+} else {
+	classifiersBN.add(Pair.of(recJSON.getString("building_id"),bn));
 }
 \end{lstlisting}
 
+When a "classify" command is detected, the program will check whether any classifier has been initialised for the requested building. If none is found, it will check whether there is a learning set available for the specified building. If none is available, an error message will be returned. If a learning set is found, a classifier is then initialised through the same method as seen above, for the "learn" command. Once the classifiers are available, they are passed, together with the unclassified data, to the static method Learner.classify. The method will return the classified room id, which in turn will be sent back to the Node server. Because the current system supports multiple types of classifiers, an array list must be declared for each type. The final value which is sent back to the Node server is formatted in such a way so as to allow the inclusion of all results. The format used is "CLASSIFIER:RESULT,CLASSIFIER:RESULT".
+\begin{lstlisting}
+String res ="BN:"+Learner.classify_BN(recJSON.getString("building_id"),
+                  	recJSON.getJSONArray("learning_set"),classifiersBN.get(i).getRight());
+res += ",NB:"+Learner.classify_NB(recJSON.getString("building_id"),
+              	recJSON.getJSONArray("learning_set"),classifiersNB.get(j).getRight());
+pw.write(res);
+\end{lstlisting} 
 
+\subsection{Learner}
+As seen above, the Server class makes calls to static methods concerning the machine learning implementation. Those methods, and other helper methods are implemented in the Learner class. In order for a classifier to be built and data to be classified, the weka library requires data to be provided in an Attribute-Relation File Format (ARFF) file. Thus, the software must be able to parse the data from JSON and create an ARFF file to provide to the machine learning algorithm.
+
+\noindent
+The static method learnFromJSON takes as arguments the building id for which the classifier will be built and the learning set as a JSONArray. Each element in the JSONArray is a Reading. A Reading contains two attributes, a String: "room\_id and a JSONArray:"rpv\_pair". The RPV Pair is a pair of Reference Point ID and Value. 
+\begin{lstlisting}
+//the learning set
+"learning_set":[{"room_id":"room1408","rpv_pair":[The pairs go here]},{"room_id":"room237","rpv_pair":[Other pairs go here]}]
+
+//Two rpv_pairs example
+"rpv_pair":[{"RPID":"gr8:m8","value":-43},{"RPID":"n0:h8","value":-55}]
+\end{lstlisting}
+
+\noindent
+The program will create a list of all the RP IDs and Room IDs found in the data. Those lists will be stored in a file named "BuildingID\_RPs.data" for the RP IDs and in "BuildingID\_rooms.data" for the Rooms IDs. 
+
+\noindent
+Once the files are created and saved, the program will start building the ARFF file. For each Reference Point, an attribute of NUMERIC Type is created: "@attribute RPID NUMERIC". Finally, an attribute of type NOMINAL for the class is added. "@attribute class \{RoomIDs\}. An attribute of nominal type can take one value from a finite set of possibilities. In our case, the possibilities are the RoomIDs. 
+
+\noindent
+After defining the attributes needed, the data section must be inserted. The beginning of this section is marked by "@data". The data is inserted line by line. Each line is a list of comma separated measurement values, strictly in the order of the RPIDs defined in the attribute list, ending with the room id in which the reading was taken. After the ARFF file has been created, the classifier is initialised and returned to the caller.
+\begin{lstlisting}
+% ARFF file example
+
+@relation room
+
+@attribute gr8:m8 NUMERIC
+@attribute n0:h8 NUMERIC
+@attribute class {room1408, room237}
+
+@data 
+-43,-55,room1408
+\end{lstlisting}
+
+\noindent
+The static method classify has the same arguments as learnFromJSON, with the addition of the classifier object. 
+\begin{lstlisting} 
+public static String classify_BN(String building_id, JSONArray JSONdata, BayesNet bn)
+\end{lstlisting}
+The list of attributes is kept the same as in the previous method, with the difference being in the data. The data is only one line, because we are trying to classify based on one reading. Another difference is that, at the end of the line, instead of a room id, a question mark is inserted. This file is saved with the name "buildingID\_temp.arff" and used to predict the RoomID, which is then returned to the caller. In order to facilitate concurrent calls to classify, temporary files must be created with different names, such as an index. After the method has finished, the program must delete the file so that the index gets freed.
+
+\noindent
+The methods mentioned above must be able to apply different classifiers. Therefore, more than one method has been created for both learning and classifying, such as: learnFromJSON\_BN, learnFomJSON\_NB, classify\_NB and classify\_BN. 
+
+
+\section{Administration App}
+This is the main entry point to the system. The user can create buildings, add rooms and take measurements for the positioning system. In this part, we will look at the components of this app and their implementation. The classes included in the database, models and tools packages are used in both the administration and visitor app. Their implementations will be described in this section.
+
+\subsection{Models and Tools Packages}
+Following the design of the software, the data models are implemented in Java, using the same attributes as the Backend models. One addition is the introduction of a Floor class, which can be later used for separating the building in floors. The current implementation does not use this model. The classes implement Serializable, to facilitate the transfer of data across activities. 
+\subsection{Database}
+The Database class offers a number of static methods that are used to connect to the Backend API. It handles HTTP connections, post and get requests, and data parsing.
+
+\noindent
+The main HTTP functionality comes from two static methods:
+
+\begin{lstlisting}
+public static String getData(String... params)
+\end{lstlisting}
+This method builds a connection url using the parameters. The first parameter specifies the endpoint targeted (e.g.: buildings, rooms, etc.). The second parameter is optional and is used to specify the id, where needed. The request is sent to the server and the response is read using an InputStream. The method closes the connection and returns the data in JSON format, as a String.
+
+\begin{lstlisting}
+public static String postData(String... params)
+\end{lstlisting}
+In this method, the URL of the request is mostly built in the same way as in getData. The difference is that the first two parameters are obligatory. The first one is, like before, the request endpoint. The second parameter is the data to be sent. The third one is optional and specifies an id. 
+In order for the data to be sent, we call
+\begin{lstlisting}
+connection.setDoOutput(true);
+connection.setRequestProperty("Content-Type", "application/json");
+\end{lstlisting}
+The data is then converted to a byte array by calling getBytes() on the data String and written to the server using an OutputStream.
+Because there is rarely any need for a call to these methods inside the android activities,they are used mainly locally, inside the class. The following methods are mainly used in both apps as the main way of interacting with the API.
+\begin{lstlisting}
+public static Building[] getBuildings();
+public static Building getBuilding(String id);
+public static boolean addBuilding(Building building);
+public static Room[] getRooms(String building_id);
+public static boolean addRoom(String building_id, Room room);
+public static boolean postMeasurement(RPMeasurement measurement);
+public static String classify(RPMeasurement measurement, String building_id);
+\end{lstlisting}
+They parse received data from JSON instantiating Java Objects to be used inside the Activities or create JSON Objects from Java objects, in order for the data to be sent.
+
+\subsection{MainActivity}
+This is the entry activity to the app. It does not contain any important code, except a button which leads to the BuildingActivity. It was created as a way to access any activities that might branch out or that might not be accessible once the user is in BuildingActivity.
+
+\subsection{BuildingsActivity}
+In the current version of the app, this is the actual main activity, even though the app does not start from it.
+The interface of this activity consists of a ListView and an Action Bar button with a "+" icon. 
+The onResume activity has been overridden to fetch the buildings from the Database and add them to the ListView to be displayed and interacted with. The ListView has an OnItemClickListener attached, which reacts by starting the EditBuildingActivity. It is important to note that the building selected is passed to the next activity through intent.putExtra method. This is one of the uses of serializing the data models. When the user presses the action bar button, the AddBuildingActivity is started.
+
+\subsection{EditBuildingActivity}
+This activity consists of a form containing all the attributes found in the Building model and an action bar button for adding a new room. The form in this activity is not functional, because editing a building was not a high priority requirement. 
+One use of the activity comes through the list of rooms. The list is implemented in the same way as the list of buildings in BuildingsActivity. The difference is that onClick starts EditRoomActivity. Another difference is that, instead of passing the entire room object, the call passes only the RoomID. A feature implemented, but not mentioned in the design, is the ability to request the current location, a feature which is present in the Visitor App. This was implemented for testing purposes.
+The "Learn" button located above the ListView, makes a call to Database.getData("learn", building\_id), sending a request to the positioning server to build a classifier for the building.
+When the user presses the add button, AddRoomActivity is started.
+
+\subsection{EditRoomActivity}
+This activity was initially meant to serve as a way of editing the details of a building. After more considerations, the activity serves the purpose of collecting, displaying and sending to the server the Signal Strength measurements. 
+
+\noindent
+In order for the measurements to be taken, the instance of WifiManager is accessed and a BroadcastReceiver is registered to handle the results of a WiFi scan.
+\begin{lstlisting}
+wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+registerReceiver(broadcastReceiver, 
+	new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+\end{lstlisting}
+The Receiver takes the list of results and posts them to the Server. The control button, changes its text based on its current function. At the start of the activity, it is seen as "START". On click, it changes to "STOP" and so on. When the start function is called,  the boolean flag toMeasure is set to true and wifiManager.startScan() is called. After each scan has completed and the results posted, another call to wifiManager.startScan() is made, in order to continue scanning. When the stop function is called, toMeasure is set to false and the next scan will not be explicitly called to start. Because the Android system issues scans without being explicitly asked, the activity will not post those measurements to the server, as they might have been taken in a different room than the one selected. 
+\subsection{AddBuildingActivity}
+This activity consists of a form and a submit button. The user completes the form with the details of the new building and, on submit, the format of the data is checked and the building is then sent to the Backend to be saved, with a call to Database.addBuilding(). After the data has been submitted, the activity terminates. 
+
+\subsection{AddRoomActivity}
+Similar to the AddBuildingActivity. The difference consists in that, for faster testing, default values for the fields have been added. Another difference is that the data is posted to the server through a call to Database.addRoom(). 
+
+\section{Visitor App (Museum Guide)}
+This is the android application used by the visitors. It offers the ability to view the buildings available and locate themselves once in one of the available buildings. As mentioned above, the Database and Models packages used in the Administration app are reused here, with an identical implementation.
+
+\subsection{MainActivity}
+This is the application's entry point. It consists of a list of all the available buildings. The current building, if available, is shown at the top of the list and highlighted.  
+When the user selects a building, the BuildingActivity is started, similar to the behaviour of BuildingsActivity in the Administration App.
+\subsection{BuildingActivity}
+This activity consists of a list of rooms. The user can select a number of rooms and an estimated time of the visit is shown below. In order for the time estimation to be made available, the attribute was added to the models in both the Backend and Java. The average time for each room is calculated in the Backend. Once the user is happy with their selection, the visit can be started by pressing the "GO" button. This button will then start and pass the required parameters to the GuideActivity.
+\subsection{GuideActivity and MapsActivity}
+As mentioned in the requirements, a visual aid must be given to the user concerning their current location and the suggested path. The current implementation of GuideActivty focuses on displaying this data as text, even though it is not the most user friendly approach. The models and system was built in such a way so that the buildings and rooms can be mapped on the global coordinates system. In order to enable visual informations using Google Indoor Maps, the administration must enter the correct data of the buildings and rooms, such as Rectangle, in geographical coordinates. If this data is available, the MapsActivity should be started instead of GuideActivity. This will center the map to the requested building. The current location will be displayed as a marker on the center of the room.
+
+\noindent
+Collecting signal strength measurements is implemented the same way as in the EditRoomActivity in the Admin App. The difference comes in that the user does not have the ability to stop the scans. After each scan has finished, the scan data is sent to the Backend to be classified, by calling Database.classify(). The result given is a list of multiple predictions. Here, a decision must be made on when to change the location, and what location will be chosen if the predictions are different. Testing has been made using different approaches. To assure precision, one approach is to not change the room at the exact moment a prediction shows a change. If the prediction shows that the room has been changed, the software can wait for 2 more predictions. If these predictions show the same room, then the position should be updated. The issue here is that the delay might be too long. The android operating system does not allow for an explicit call to start a scan, but rather hints the system to start scanning, when possible. Therefore, a delay can be quite long and the location can be changed multiple times while the app is still deciding whether the change is legitimate. This can lead to the system getting stuck indicating an outdated location. To fix this, updates can happen without making such checks. In the testing and evaluation section we will determine which approach is statistically the best, considering both precision and speed.
+\section{Implementation issues}
+In order to determine the number and magnitude of the issues experienced during the development of an application, I usually look at how many keys and/or keyboards stopped working during the implementation phase. I am glad to say that, for this particular project, no keyboards were harmed. That is not to say that problems did no emerge along the way, nevertheless solutions were found quickly and pain-free. Below are some of the problems and solutions found, as far as I can remember, as most of the problems tend to arise in the middle of the night, when memory functions are not at their peak.
+
+\subsection{Going back to previous Activity}
+As seen before, when the users clicks on a building, the Building object selected is passed to the next activity, which uses the object as a global variable. The problem is that, when going back from the RoomActivity to the Building activity, by default, Android instantiates another activity. Therefore, the global variable holding the Building passed from the list is going to be null, and when accessed a NullPointerException is thrown. The solution was to set the launch mode of the BuildingAcitivty to "singleTask" in the Manifest file [6]. By doing so, the application can hold only one instance of that activity, which will always be on top of the activity stack, therefore, saving all the local instances too.
+
+\subsection{JavaScript callbacks} 
+When the user chooses to press the Learn button in the Admin app, a request is sent to the Node server. The node server must then query and prepare the data to be sent to the Positioning server. Because MonogoDB is a NoSql database, joins are not as straight forward. Therefore, in order to get all the RPMeasurements held for each Room inside a specific building, some form of nested loops are required. In this case, the first query returns all the rooms in one Building. For each room returned, a query is then made for all the RPMeasurements associated to that room. After writing the straightforward code, to my surprise, the data sent to the server was always empty. As this was my first time programming using JavaScript and NodeJS, I did not know that the queries are executed, by default, concurrently. This lead to the subsequent queries to by executed before the previous queries finished. Because I was lacking experience, solving this problem took me quite some time, until I understood how to use callback functions. The end solution looks something like this:
+\begin{lstlisting}
+var rooms;
+Room.find({'building_id': req.params.id}, function(err,data){
+	rooms = data.map(function(data) {return data._id;});
+    RPMeasurement.find({room_id: {$in: rooms}}, function(err,data){
+    		request.learning_set = data;
+        client.write(JSON.stringify(request));
+        client.end();
+    });
+});
+\end{lstlisting}
+
+    
+
+ 
+
+
+
+
+
+ 
