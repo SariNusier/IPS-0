@@ -3,56 +3,60 @@
 \contentsline {chapter}{\numberline {2}Background}{4}
 \contentsline {section}{\numberline {2.1}Global Positioning System}{4}
 \contentsline {section}{\numberline {2.2}Indoor Positioning System}{5}
+\contentsline {subsection}{\numberline {2.2.1}General}{5}
+\contentsline {subsection}{\numberline {2.2.2}Fingerprinting}{6}
 \contentsline {section}{\numberline {2.3}Machine Learning}{6}
-\contentsline {chapter}{\numberline {3}Requirements and Specifiations}{7}
-\contentsline {section}{\numberline {3.1}Requirements}{7}
-\contentsline {subsection}{\numberline {3.1.1}Host requirements}{7}
-\contentsline {subsection}{\numberline {3.1.2}Visitor requirements}{7}
-\contentsline {subsection}{\numberline {3.1.3}Positioning requirements}{8}
-\contentsline {subsection}{\numberline {3.1.4}Backend requirements}{8}
-\contentsline {section}{\numberline {3.2}Specification}{8}
-\contentsline {subsection}{\numberline {3.2.1}Host}{9}
-\contentsline {subsection}{\numberline {3.2.2}Visitor}{9}
-\contentsline {subsection}{\numberline {3.2.3}Positioning system}{9}
-\contentsline {subsection}{\numberline {3.2.4}Backend}{10}
-\contentsline {subsection}{\numberline {3.2.5}Limitations}{10}
-\contentsline {chapter}{\numberline {4}Design}{11}
-\contentsline {section}{\numberline {4.1}Architectural design}{11}
-\contentsline {subsection}{\numberline {4.1.1}User Space}{13}
-\contentsline {subsection}{\numberline {4.1.2}Backend}{14}
-\contentsline {subsection}{\numberline {4.1.3}Positioning System}{15}
-\contentsline {subsection}{\numberline {4.1.4}Data Store}{19}
-\contentsline {section}{\numberline {4.2}DATA FLOW and STATE MACHINE}{20}
-\contentsline {chapter}{\numberline {5}Implementation}{23}
-\contentsline {section}{\numberline {5.1}Development approach}{23}
-\contentsline {section}{\numberline {5.2}Backend}{25}
-\contentsline {section}{\numberline {5.3}Positioning System}{26}
-\contentsline {subsection}{\numberline {5.3.1}Server}{26}
-\contentsline {subsection}{\numberline {5.3.2}Learner}{28}
-\contentsline {section}{\numberline {5.4}Administration App}{30}
-\contentsline {subsection}{\numberline {5.4.1}Models and Tools Packages}{30}
-\contentsline {subsection}{\numberline {5.4.2}Database}{30}
-\contentsline {subsection}{\numberline {5.4.3}MainActivity}{31}
-\contentsline {subsection}{\numberline {5.4.4}BuildingsActivity}{31}
-\contentsline {subsection}{\numberline {5.4.5}EditBuildingActivity}{32}
-\contentsline {subsection}{\numberline {5.4.6}EditRoomActivity}{32}
-\contentsline {subsection}{\numberline {5.4.7}AddBuildingActivity}{33}
-\contentsline {subsection}{\numberline {5.4.8}AddRoomActivity}{33}
-\contentsline {section}{\numberline {5.5}Visitor App (Museum Guide)}{33}
-\contentsline {subsection}{\numberline {5.5.1}MainActivity}{33}
-\contentsline {subsection}{\numberline {5.5.2}BuildingActivity}{33}
-\contentsline {subsection}{\numberline {5.5.3}GuideActivity and MapsActivity}{34}
-\contentsline {section}{\numberline {5.6}Implementation issues}{34}
-\contentsline {subsection}{\numberline {5.6.1}Going back to previous Activity}{35}
-\contentsline {subsection}{\numberline {5.6.2}JavaScript callbacks}{35}
-\contentsline {chapter}{\numberline {6}Professional and Ethical Issues}{37}
-\contentsline {section}{\numberline {6.1}Section Heading}{37}
-\contentsline {chapter}{\numberline {7}Results/Evaluation}{38}
-\contentsline {section}{\numberline {7.1}Software Testing}{38}
-\contentsline {section}{\numberline {7.2}Section Heading}{38}
-\contentsline {chapter}{\numberline {8}Conclusion and Future Work}{39}
-\contentsline {chapter}{\numberline {A}User Guide}{40}
-\contentsline {section}{\numberline {A.1}Instructions}{40}
-\contentsline {section}{Bibliography}{40}
-\contentsline {chapter}{\numberline {B}Source Code}{41}
-\contentsline {section}{\numberline {B.1}Instructions}{41}
+\contentsline {subsection}{\numberline {2.3.1}Naive Bayes classifiers}{7}
+\contentsline {subsection}{\numberline {2.3.2}Bayesian Networks}{7}
+\contentsline {chapter}{\numberline {3}Requirements and Specifiations}{8}
+\contentsline {section}{\numberline {3.1}Requirements}{8}
+\contentsline {subsection}{\numberline {3.1.1}Host requirements}{8}
+\contentsline {subsection}{\numberline {3.1.2}Visitor requirements}{8}
+\contentsline {subsection}{\numberline {3.1.3}Positioning requirements}{9}
+\contentsline {subsection}{\numberline {3.1.4}Backend requirements}{9}
+\contentsline {section}{\numberline {3.2}Specification}{9}
+\contentsline {subsection}{\numberline {3.2.1}Host}{10}
+\contentsline {subsection}{\numberline {3.2.2}Visitor}{10}
+\contentsline {subsection}{\numberline {3.2.3}Positioning system}{10}
+\contentsline {subsection}{\numberline {3.2.4}Backend}{11}
+\contentsline {subsection}{\numberline {3.2.5}Limitations}{11}
+\contentsline {chapter}{\numberline {4}Design}{12}
+\contentsline {section}{\numberline {4.1}Architectural design}{12}
+\contentsline {subsection}{\numberline {4.1.1}User Space}{14}
+\contentsline {subsection}{\numberline {4.1.2}Backend}{15}
+\contentsline {subsection}{\numberline {4.1.3}Positioning System}{16}
+\contentsline {subsection}{\numberline {4.1.4}Data Store}{20}
+\contentsline {section}{\numberline {4.2}DATA FLOW and STATE MACHINE}{21}
+\contentsline {chapter}{\numberline {5}Implementation}{24}
+\contentsline {section}{\numberline {5.1}Development approach}{24}
+\contentsline {section}{\numberline {5.2}Backend}{26}
+\contentsline {section}{\numberline {5.3}Positioning System}{27}
+\contentsline {subsection}{\numberline {5.3.1}Server}{27}
+\contentsline {subsection}{\numberline {5.3.2}Learner}{29}
+\contentsline {section}{\numberline {5.4}Administration App}{31}
+\contentsline {subsection}{\numberline {5.4.1}Models and Tools Packages}{31}
+\contentsline {subsection}{\numberline {5.4.2}Database}{31}
+\contentsline {subsection}{\numberline {5.4.3}MainActivity}{32}
+\contentsline {subsection}{\numberline {5.4.4}BuildingsActivity}{32}
+\contentsline {subsection}{\numberline {5.4.5}EditBuildingActivity}{33}
+\contentsline {subsection}{\numberline {5.4.6}EditRoomActivity}{33}
+\contentsline {subsection}{\numberline {5.4.7}AddBuildingActivity}{34}
+\contentsline {subsection}{\numberline {5.4.8}AddRoomActivity}{34}
+\contentsline {section}{\numberline {5.5}Visitor App (Museum Guide)}{34}
+\contentsline {subsection}{\numberline {5.5.1}MainActivity}{34}
+\contentsline {subsection}{\numberline {5.5.2}BuildingActivity}{34}
+\contentsline {subsection}{\numberline {5.5.3}GuideActivity and MapsActivity}{35}
+\contentsline {section}{\numberline {5.6}Implementation issues}{35}
+\contentsline {subsection}{\numberline {5.6.1}Going back to previous Activity}{36}
+\contentsline {subsection}{\numberline {5.6.2}JavaScript callbacks}{36}
+\contentsline {chapter}{\numberline {6}Professional and Ethical Issues}{38}
+\contentsline {section}{\numberline {6.1}Section Heading}{38}
+\contentsline {chapter}{\numberline {7}Results/Evaluation}{39}
+\contentsline {section}{\numberline {7.1}Software Testing}{39}
+\contentsline {section}{\numberline {7.2}Section Heading}{39}
+\contentsline {chapter}{\numberline {8}Conclusion and Future Work}{40}
+\contentsline {chapter}{\numberline {A}User Guide}{41}
+\contentsline {section}{\numberline {A.1}Instructions}{41}
+\contentsline {section}{Bibliography}{41}
+\contentsline {chapter}{\numberline {B}Source Code}{42}
+\contentsline {section}{\numberline {B.1}Instructions}{42}
