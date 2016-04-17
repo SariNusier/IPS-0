@@ -400,14 +400,21 @@ router.route("/buildings")
         selectedRooms = req.body.selected_rooms;
         var roomIDs = selectedRooms.map(function(selectedRooms) {return selectedRooms.id;});
         Room.find({_id: {$in: roomIDs}}, function(err,data){
-            request.request_set = data;
+            var dataObj = [];
+            
+            for(var i = 0; i< data.length;i++) {
+                var temp = data[i].toObject();
+                temp.excitement = selectedRooms[i].excitement;
+               dataObj.push(temp);
+             
+            }
+            request.request_set = dataObj;
             console.log(request.request_set); 
 
             client.write(JSON.stringify(request));
             client.end();
         });
         client.on('data', (data) => {
-            console.log("ENDING!!!!!!!!!!!!!!!!!!!!!");
             console.log(data.toString());
             //client.end();
             response = data;

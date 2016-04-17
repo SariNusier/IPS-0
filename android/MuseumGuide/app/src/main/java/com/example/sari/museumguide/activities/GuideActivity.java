@@ -28,8 +28,9 @@ public class GuideActivity extends AppCompatActivity {
     private Building b;
     WifiManager wifiManager;
     Room currentRoom;
+    String selectedRooms;
     long timeOfChange = System.currentTimeMillis();
-
+    TextView currentRoomView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +42,10 @@ public class GuideActivity extends AppCompatActivity {
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         registerReceiver(broadcastReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         b =(Building) getIntent().getSerializableExtra("building");
+        selectedRooms = getIntent().getStringExtra("selected_rooms");
+        currentRoomView = (TextView)findViewById(R.id.current_room_textview);
+        String route = Database.getRoute(b.getId(),selectedRooms,getIntent().getIntExtra("deadline",10000));
+        currentRoomView.setText(route);
         currentRoom = null; //Entrance room?
         wifiManager.startScan();
     }
@@ -59,7 +64,7 @@ public class GuideActivity extends AppCompatActivity {
             List<ScanResult> found = wifiManager.getScanResults();
             String[] RPIDs = new String[found.size()];
             Double[] values = new Double[found.size()];
-            TextView currentRoomView = (TextView)findViewById(R.id.current_room_textview);
+
             currentRoomView.setText("");
             for (ScanResult sr : found) {
                 Log.d("FOUND: ", "" + sr.BSSID + ": " + sr.level);

@@ -107,9 +107,19 @@ public class BuildingActivity extends AppCompatActivity {
     }
 
     public void startGuideActivity(View v){
-        Intent intent = new Intent(this, GuideActivity.class);
-        intent.putExtra("building",b);
-        startActivity(intent);
+        String selectedRooms = "";
+        for(int i = 0;i<b.getRooms().length;++i){
+            if(selected_rooms[i]){
+                selectedRooms+=b.getRooms()[i].getId()+":"+"1"+",";
+            }
+        }
+        if(!selectedRooms.isEmpty()){
+            Intent intent = new Intent(this, GuideActivity.class);
+            intent.putExtra("building",b);
+            intent.putExtra("selected_rooms",selectedRooms.substring(0,selectedRooms.length()-1));
+            //intent.putExtra("deadline",0);
+            startActivity(intent);
+        }
     }
 
 }

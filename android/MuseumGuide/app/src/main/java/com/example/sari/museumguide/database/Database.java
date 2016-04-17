@@ -1,6 +1,7 @@
 package com.example.sari.museumguide.database;
 
 import android.util.Log;
+import android.util.Pair;
 
 import com.example.sari.museumguide.models.indoormapping.Building;
 import com.example.sari.museumguide.models.indoormapping.Floor;
@@ -115,8 +116,26 @@ public class Database {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        postData("locationdata",room_id,toSend.toString());
+        postData("locationdata", room_id, toSend.toString());
         return true;
+    }
+
+    public static String getRoute(String building_id, String rooms_exc, int deadline){
+
+        JSONObject toSend = new JSONObject();
+        JSONArray selectedRooms = new JSONArray();
+        try {
+            String[] rooms = rooms_exc.split(",");
+        for(String s:rooms){
+            selectedRooms.put(new JSONObject().put("id", (s.split(":"))[0])
+                                              .put("excitement", (s.split(":"))[1]));
+        }
+        toSend.put("deadline",deadline);
+        toSend.put("selected_rooms",selectedRooms);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return postData("route",building_id,toSend.toString());
     }
 
     public static Building getBuilding(String id){

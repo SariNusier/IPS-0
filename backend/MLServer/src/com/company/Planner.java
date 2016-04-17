@@ -29,7 +29,8 @@ public class Planner {
     };
 
     public static String route(JSONArray jsonArray, int deadline, String building_id){
-        makePDDL(getRoomsFromJSON(jsonArray),deadline);
+        ArrayList<Room> rooms = getRoomsFromJSON(jsonArray);
+        makePDDL(rooms,deadline);
 
         ArrayList<String> toExecute = new ArrayList<>();
         toExecute.add("#!/bin/bash\n" +
@@ -63,7 +64,7 @@ public class Planner {
 
         //System.out.println(parseOutput(output));
 
-        return parseOutput(output).toString();
+        return makeFinalResult(parseOutput(output),rooms);
 
     }
     public static ArrayList<Room> getRoomsFromJSON(JSONArray jsonArray){
@@ -81,7 +82,7 @@ public class Planner {
                     room.getJSONObject("rectangle").getJSONObject("rb").getDouble("y"));
             RectangleDB r = new RectangleDB(lt,rt,lb,rb);
             Room toAdd = new Room(room.getString("_id"),room.getString("building_id"),room.getString("name"),r,
-                    room.getDouble("width"),room.getDouble("height"),room.getDouble("est_time"),1);
+                    room.getDouble("width"),room.getDouble("height"),room.getDouble("est_time"),room.getInt("excitement"));
             toReturn.add(toAdd);
         }
         return toReturn;
@@ -167,5 +168,24 @@ public class Planner {
         }
 
        return toReturn;
+    }
+
+    private static String makeFinalResult(ArrayList<String> output, ArrayList<Room> rooms){
+        String toReturn = "";
+        for(String s:output){
+            String[] tempSplit = s.split(" ");
+            if(tempSplit[0].equals("view")){
+                int roomIndex =Integer.parseInt(tempSplit[2].substring(tempSplit[2].indexOf("e")+1));
+                toReturn += "view:"+rooms.get(roomIndex).getId()+";";
+
+            } else if(tempSplit[0].equals("walk")){
+                int roomIndexOr = Integer.parseInt(tempSplit[2].substring(tempSplit[2].indexOf("e")+1));
+                int roomIndexDest = Integer.parseInt(tempSplit[3].substring(tempSplit[3].indexOf("e")+1));
+
+                toReturn += "walk:"+rooms.get(roomIndexOr).getId()+","+rooms.get(roomIndexDest).getId()+";";
+            }
+        }
+
+        return toReturn.substring(0,toReturn.length()-1);
     }
 }

@@ -27,7 +27,4 @@ dependencies {
     compile 'com.google.android.gms:play-services:8.4.0'
     compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
     compile files('src/main/libs/mysqlconn.jar')
-    compile 'org.optaplanner:optaplanner-core:6.4.0.Final'
-    compile files('src/main/libs/pddl4j-3.1.0.jar')
-    compile files('src/main/libs/javaff.jar')
 }
