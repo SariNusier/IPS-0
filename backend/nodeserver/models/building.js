@@ -1,5 +1,5 @@
 var db = require('../db');
-
+//check the commas after Number
 var Rectangle = {
 		lt:{
 			x: Number,
@@ -17,7 +17,7 @@ var Rectangle = {
 			x: Number,
 			y: Number,
 		}
-};
+};	
 
 var schema = new db.Schema({
 	rectangle: Rectangle,

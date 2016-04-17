@@ -14,11 +14,35 @@ Due to a higher complexity of indoor environments and the lack of line-of-sight 
 
 \subsection{General}
 Hightower and Borriello [4] define three Location Sensing Techniques: Triangulation, Scene Analysis and Proximity. 
+
 Triangulation can be made through lateration or angulation. For the lateration approach, distance from the device to three or four points (non-collinear/non-coplanar) must be measured. Using a direct form of measurement is the most accurate and straightforward solution, but very hard to implement in an automated system. Another approach is the use of Time-of-Flight, the time taken to reach the reference point, knowing the velocity. When using radio waves to calculate distance, one problem is regarding time synchronisation. Because indoor environments are usually small, the smallest time discrepancy can greatly affect accuracy. Another problem that might arise is when the same pulse arrives at different times, due to reflections. Attenuation can also be used to calculate distance. That is, the signal strength decrease over the travelled distance. “In environments with many obstructions such as an indoor office space, measuring distance using attenuation is usually less accurate than time-of-flight” [4].
-Proximity location sensing determines if a device is near a known point. This can be detected through physical contact or using the limited ranges of Radio transceivers, such as Wi-Fi access points. Another way of determining proximity can be through user interaction. For example in a museum, if each exhibition has a QR code or an NFC card for the user to interact with, a scan of the two can imply that the user is viewing the exhibit and is near it.
 
 Proximity location sensing determines if a device is near a known point. This can be detected through physical contact or using the limited ranges of Radio transceivers, such as Wi-Fi access points. Another way of determining proximity can be through user interaction. For example in a museum, if each exhibition has a QR code or an NFC card for the user to interact with, a scan of the two can imply that the user is viewing the exhibit and is near it.
-\subsection{Fingerprinting}
+\subsection{Current Approaches}
+
+\noindent \textbf{Active Badge}
+
+Developed by AT\&T Cambridge between 1989 and 1992, the active badge system is one of the first IPS created [10], [11]. The system works by attaching an “active badge” to people inside the building. Pulse-width modulated infrared signals are emitted by the badge every 15 seconds, encoding the unique identifier of the badge. The signals are detected by sensors placed around the buildings. A central system processes the data received from the sensors about “sightings” and makes the location information available for users. Both badges and sensors are relatively cheap, the costs of the system mainly coming from the wired connections that must be made between the sensors and the central processing system. 
+
+Using modern technology, the costs can be dramatically reduced. Wired connections can be replaced by cheap wireless modules. Dedicated hardware for badges can be replaced by IR enabled smartphones. This approach offers “room level” accuracy, which is in line with the requirements of the project. One of the problems with this approach comes from the need of having line-of-sight between the badges and sensors. Another problem is that the IR signal can be influenced by other light sources, making it difficult for sensors to pick up the signals. The ability to read data in parallel from multiple devices would increase the complexity and costs of the sensors. This problem would arise if multiple devices are sending a stream of bits simultaneously. Shortening the duration of each transmission can reduce the likelihood of such collisions, but will also drop the bitrate, reducing the number of unique badges that can be generated. Another downside is the lack of IR blasters in smartphones. Even though the Android SDK offers infrared capabilities, the official android compatibility guide does not make any reference to infrared, whereas bluetooth compatibility is mandatory [12].
+
+Other IR based systems, such as Firefly [13], [14] or Optotrak [15], are available but are too expensive and are usually used in applications where a high degree of accuracy is required. 
+
+\medskip
+\noindent \textbf{Active Bat}
+
+This approach was also developed by AT\&T Cambridge [16] and is similar to the Active Badge system. Each person must wear a tag emitting short ultrasound pulses. Sensors placed on the ceiling calculate the distance to the source using the Time-Of-Arrival. The measurements are then used to triangulate the location of the source. The problems of this approach comes mainly for the high costs and the time and effort required to install the sensors. The accuracy of the system is also influenced by reflexions and obstacles between tags and sensors. Cricket [17], [18] is another system using a similar approach.
+
+\medskip
+\noindent \textbf{Wi-Fi triangulation approach}
+
+Radar [19] and Ekahau [20] are two similar approaches to using the already present Wi-Fi infrastructures. Wi-Fi enabled devices are located using the triangulation technique, where distances are measured based on received signal strength (RSSI). One advantage of these systems is that they use the current infrastructure, and no additional hardware is required. Even though they are cheap and easy to implement, using the Wi-Fi RSSI in triangulation has been proven inaccurate, especially when considering the user’s influence on signal strength. 
+
+\medskip
+\noindent \textbf{Wi-Fi Fingerprinting and probabilistic approach}
+
+Compass [21] is an experimental system that uses the Wi-Fi infrastructure to determine location. Unlike the previous examples, compass takes into account the user’s orientation, by using digital compasses. Because the designers tested the system by tracking only one user at a time, it is impossible to determine the scalability of such an approach.
+
 Kaemarungsi and Krishnamurthy [6] review the use of WLAN Location Fingerprinting as a way of locating a device in physical space. Small, A. Smailagic, and D. P. Siewiorek [7] found that the distribution of RSS in dB from Wi-Fi access points follows a Gaussian Distribution. Kaemarungsi and Krishnamurthy [6] argue that this might be due to the lack of user presence when the measurements were taken. They have found that, when a user is present, the distribution was non-Gaussian and asymmetric. They conclude that it is a better approach to record the distribution of RSS rather than calculate and use the mean value. 
 Battiti, M. Brunato [8] use Statistical Learning to determine the location of devices. The first use Bayesian Approach, WKNN and Support Vector machines to solve the location positioning as a regression problem. Another approach taken, close to the approach used in this project, was to consider positioning as a classification problem, labeling each room in the building and using a learning set for each room. Out of 257 measurements, they found the following results:
 \begin{itemize}

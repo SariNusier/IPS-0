@@ -383,6 +383,38 @@ router.route("/buildings")
             }
         });
     })
+
+
+    router.route("/route/:id")
+    .post(function(req,res){
+        var response = {};
+        var net = require('net');
+        var client = net.connect(5000, 'localhost');
+        var request = {};
+        var selectedRooms = [];
+        request.command = 'route';
+        request.building_id = req.params.id;
+        request.deadline = req.body.deadline;
+        request.request_set = [];
+        //request.request_set.push(req.body);
+        selectedRooms = req.body.selected_rooms;
+        var roomIDs = selectedRooms.map(function(selectedRooms) {return selectedRooms.id;});
+        Room.find({_id: {$in: roomIDs}}, function(err,data){
+            request.request_set = data;
+            console.log(request.request_set); 
+
+            client.write(JSON.stringify(request));
+            client.end();
+        });
+        client.on('data', (data) => {
+            console.log("ENDING!!!!!!!!!!!!!!!!!!!!!");
+            console.log(data.toString());
+            //client.end();
+            response = data;
+            res.send(response);
+        });
+        //res.json(response);
+        });
     
 
 

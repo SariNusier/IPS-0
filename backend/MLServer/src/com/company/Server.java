@@ -114,6 +114,9 @@ public class Server
                     } else {
                         pw.write("Weird classify request!");
                     }
+                }  else if(recJSON.getString("command").equals("route")){
+                    pw.write(Planner.route(recJSON.getJSONArray("request_set"),recJSON.getInt("deadline"),
+                            recJSON.getString("building_id")));
                 }
                 pw.flush();
             } catch(IOException exception) {

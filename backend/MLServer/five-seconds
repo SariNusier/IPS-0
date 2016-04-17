@@ -1,0 +1,4 @@
+#!/bin/bash
+ulimit -t 1
+
+./planner --optimise domain.pddl 5713a9028794d11d17c53d56_temp.pddl
