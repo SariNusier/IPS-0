@@ -72,4 +72,14 @@ By applying the product rule of probability, $p(X,Y) = p(Y|X)p(X)$ the joint dis
 A second application of the product rule, this time to the second term on the righthand gives $$p(a,b,c) = p(c|a, b)p(b|a)p(a)$$
 We now represent the right side of the equation as a graph by introducing a node for each variable and associate each node with the corresponding conditional distribution. That is, $c$ is dependent on $a$ and $b$, $b$ is dependant on $a$ and $a$ is independent. A general example can be considered for the joint distribution over $K$ variables given by $p(x_1,x_2,...,x_K)$. As seen before, the joint distribution can be written as: $p(x_1,...,x_K) = p(x_K|x_1,...,x_{K-1})...p(x_2|x_1)p(x_1)$
 
+\section{Orienteering}
+Golden, Levy and Vohra [22], define the orienteering problem as follows: Given n nodes, each node with a score greater or equal than 0, a route of maximum score must be found, which is no longer than a predefined value. The definition of the problem fits well with the requirements of a planned route through a museum. That is, each visitor should select which exhibits they would like to visit, giving a score on how much they would like to visit each exhibit. Based on the estimated time of visit for each exhibit, the route generated must take no longer than the maximum time that they have allocated for the visit.
+
+Benton, Coles and Coles [23] have considered temporal planning where the objectives are not only to minimise makespan, but to also achieve other goals, in a specified time frame. The planner created, OPTIC, will be used to solve the orienteering problem in our project.
+
+
+
+
+
+
 

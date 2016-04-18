@@ -90,6 +90,10 @@ The resources available and the results of each method are as follows:
 	\begin{itemize}
 	\item POST: Returns the predicted location in the building with the specified id
 	\end{itemize}
+\item For resource "route/id":
+	\begin{itemize}
+	\item POST: Returns the generated route, based on the requirements sent, through the building with the specified id
+	\end{itemize}
 \end{itemize}
 
 \subsection{Positioning System}
@@ -108,6 +112,10 @@ This subsystem is built out of a X modules, each one with its own task. It is im
 \item If a classifier has never been built, the system will return an error.
 \item Once the classifier is initialised, it will be used to classify the data received in the request, and will return the room as a result.
 \item The system implements multiple algorithms therefore a format must be implemented to return multiple results given by different algorithms. The data is returned as follows: [algorithm\_name]:[predicted\_room\_id],[algorithm\_name]:[predicted\_room\_id], etc. In other words, the algorithm name and the room predicted by it are separated by ":" and the algorithms are separated using ",".
+\item For a request of Type "route", the system parses the requirements in JSON and creates a problem file in PDDL. 
+\item The problem file is then used with the predefined domain file and the OPTIC planner to generate a suggested route.
+\item The data returned by the planner must also be parsed, the resulting data to be sent following the pattern:
+ "view:room1;walk:room1,room2;view:room2" etc.
 \end{enumerate}
 
 \textbf{Prediction System:}
@@ -169,9 +177,6 @@ There are five classifiers considered:
 Naive Bayes, Bayes Networks, KStar, Decorate and NB Trees. The classifiers are implemented using the Weka Machine Learning Library. The result of each classifier is returned to the backend, therefore, the decision of which predicted value to be used is moved higher up in the system.
 Due to a higher level of precision, the Machine Learning approach will have the priority in implementation.
 
-
-
-
 \subsection{Data Store}
 The Data Store contains two types of data, Building related and Learning related. 
 Building data is all data concerning the operation and visualisation of the buildings and the rooms contained. Learning data is the data used by the Positioning System.
@@ -223,5 +228,5 @@ Because of the vast amount of data that must be transferred between the subsyste
 \end{figure}
 The initial input is in the HOST android application. Here, the user inputs the details of a new building to be created. The data is then converted into JSON and sent to the Backend through a POST request to "/buildings". The backend parses the data and creates a new Building object, storing it in the database. The HOST then can select the building created and begin adding new room. For each new room, the details are entered and submitted. After submitting each room, the data, in JSON format, is sent to the Backend using a POST request to "/rooms/building\_id". The backend then created a new Room object, setting its building id to the specified id and storing it in the database. After the required rooms are added, the HOST must then take the RSS measurements for each room, in order for the classifier to be built. In the room activity, the HOST starts the measurements, and a list of all measurements taken at a point in time is then sent to the backend through a POST method to "measurements/room\_id", where the backend stores it in the database.
 After enough measurements were taken for all the rooms, the host can then press the "learn" button from the building activity, which will send a GET request to "/locate/building\_id". On receipt of this request, the backend queries the database for all the measurements taken in the building and sends it through a TCP connection to the Positioning system, as a "learn" request. The positioning system processes the request and data, parsing it and storing the data locally. It will then initialise a classifier using the data stored, the system is then in standby again. \\
-The next trigger is by the VISITOR app, which, on start, will request a list of buildings from the backend using GET "/buildings/". The backend the queries and returns all the buildings stored. The user can then press on a building and see the list of rooms available. When the user starts a visit, the app starts collecting RSS measurements. For every scan, the list of measurements is sent to the backend using a POST request to "/locate/building\_id". This triggers the backend to send a "classify" request to the backend server, which returns a list of predicted locations. The backend the forwards the information back to the user.
+The next trigger is made by the VISITOR app, which, on start, will request a list of buildings from the backend using GET "/buildings/". The backend the queries and returns all the buildings stored. The user can then press on a building and see the list of rooms available. When the user starts a visit, a POST request is sent with the rooms and "want" levels that the user has specified to "/route/". The backend then sends a "route" request and forwards the data to the positioning system, which returns the suggested route. Finally, the app starts collecting RSS measurements. For every scan, the list of measurements is sent to the backend using a POST request to "/locate/building\_id". This triggers the backend to send a "classify" request to the positioning server, which returns a list of predicted locations. The backend the forwards the information back to the user.
 

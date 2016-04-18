@@ -34,9 +34,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Front Matter - project title, name, supervisor name and date
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{6CCS3PRJ Final Year\\\vspace{0.2cm}Individual Project Report Title}
+\title{6CCS3PRJ\\\vspace{0.2cm}Indoor Positioning System}
 \author{Sari Nusier}
-\studentID{000000}
+\studentID{1317015}
 \supervisor{Dr. Andrew Coles}
 
 \date{\today}
@@ -58,7 +58,40 @@
 \chapter{Introduction}
 This is one of the most important components of the report. It should begin with a clear statement of what the project is about so that the nature and scope of the project can be understood by a lay reader. It should summarise everything that you set out to achieve, provide a clear summary of the project's background and relevance to other work, and give pointers to the remaining sections of the report, which will contain the bulk of the technical material.
 
+\section{Motivation}
+Visiting multiple museums has led me to notice that, even though there are maps and guides available, there is no simple way of going on a self guided tour. Another issue was that most of the details provided about the exhibits are delivered through audio guides, with no options available for hearing impaired people. These issues can be solved by developing a digital guide.
+
+In order to implement such a system, the visitor must be aware of its location at all times. This has led me to discover the existence of the concept of context aware systems, and the problem that indoor positioning poses to the implementation of such systems. After some research, I have come to the conclusion that, even though there are many studies that try to solve the problem of indoor positioning, no universal solution can be found, and the number of available systems is limited. In a museum guide application, as in other similar applications, accuracy is not a necessity, even less so if it affects precision. Therefore my decision was to try and develop a system that identifies only the room in which a person is located, instead of the actual coordinates in space. This will hopefully increase the precision of the system, giving the correct results more often than if the system were to predict a more accurate location.
+
+\section{Project Scope}
+Due to the lack of GPS availability in indoor environments, a different approach to positioning must be taken. The project examines the performance and feasibility of applying Machine Learning classification in the context of indoor positioning. The classifiers are created using the widely available Wi-Fi infrastructure. Received Signal Strength measurements of all visible Access Points will be taken inside each room, creating a “fingerprint” which can be later used to determine in which room a measurement was taken. Even though the project uses Wi-Fi signal strength as the means to creating “fingerprints”, the positioning system is developed to work independent of the measuring system, other signal types or distance measurements can be used.
+The project will also implement a solution to the orienteering problem, being able to suggest routes based on visitor preference and time constraints.
+The system developed is composed of multiple subsystems, from user interface to the backend implementing the positioning and orienteering algorithms. The subsystems will be as independent as possible, to reduce the impact on the system as a whole when changes are made in the subsystems.
+
+\section{Objectives}
+The resulting system must be easy to use and offer a starting point for future work. Basic interfacing with the system will be made through two Android applications. The application should store the data inputted by the users in a simple to parse format. The Backend server and the positioning and orienteering systems must be independent and run as separate instances on a machine, allowing for more flexibility.
+Below are the main objectives summarised:
+\begin{enumerate}
+\item Create two android apps that will allow for users to interact with the system. The Administration app should be easy to use and allow hosts to create and manage the data. The Visitor app should display user’s location and suggest a route to follow for their visit.
+\item Create a server that runs the management of the positioning and orienteering system.
+\item Create a Restful API and a Database to manage and store the content provided by the other subsystems. It should provide a way to store data and forward requests from the apps to the positioning and orienteering system.
+\end{enumerate}
+
 \section{Report Structure}
+The report's body is split into 9 chapters, including the Introduction.
+Chapter 2, Background, will discuss current approaches to positioning for both outdoors and indoors, focusing more on the indoors part, as it is more relevant. It will also discuss the tools used for orienteering and give a little bit of background on Machine Learning and classifiers. 
+
+Chapter 3 will define the Requirements of the system and will then show what approaches will be taken in order to meet those requirements.
+
+Chapter 4 will look into the design of the entire system and the interaction between its components. Moreover, it will look in more detail at the design of each subsystem, providing an aid to the implementation phase.
+
+Chapter 6 will discuss the Software development approach used during the implementation of the software. It will then list the steps taken to develop the resulting system, provide a detailed description of the implementation of each subsystem and briefly discuss some of the problems encountered during the process.
+
+Chapter 7 will evaluate the resulting software by comparing it with the requirements and design defined in the previous chapters. In addition, it will evaluate the precision of the Machine Learning approach to positioning by showing some statistical data collected during testing. Finally, it will look at how the software was tested to avoid possible bugs and to ensure a feasible end result.
+ 
+
+
+
 
 \include{Chapters/Background}
 \include{Chapters/ReqSpec}
