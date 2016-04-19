@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="MLServer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/MLServer_jar</output-path>
+    <root id="archive" name="MLServer.jar">
+      <element id="module-output" name="MLServer" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../libs/json-20160212.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-lang3-3.3.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../libs/weka.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

@@ -1,4 +1,12 @@
 \chapter{Professional and Ethical Issues}
-Either in a seperate section or throughout the report demonstrate that you are aware of the \textbf{Code of Conduct \& Code of Good Practice} issued by the British Computer Society and have applied their principles, where appropriate, as you carried out your project.
+The British Computing Society Code of Conduct was taken into account when developing the software. Other ethical issues were also considered and made sure that the resulting software does not infringe any rights of third parties, including and not limited to rights regarding privacy and intellectual property. 
 
-\section{Section Heading}
+The resulting software relies heavily on multiple libraries and tools developed by third parties. Those include the Weka collection of machine learning algorithms developed at The University of Waikato[reference], OPTIC planner[reference] and the PDDL domain file which my supervisor help me write as I had limited knowledge in Planning. Other libraries were used throughout the software and can be seen in the code. 
+
+Most of the data collected comes from user input. An exception is the collection and storage of Mac Addresses of the visible Wi-Fi access points and the signal strength measurements related. The duration of a visit for each room is uploaded and used to calculate the average visit time for each room. The average is stored but each visit's duration is not. All the data is anonymous and is not linked to any individual. 
+
+As mentioned previously, no access control has yet been implemented, and therefore, the security of the system is very limited. All data held by the system is accessible. The next feature to be implemented will be security, and if anyone else should continue work on the system, I recommend them to do the same.
+
+The current implementation scans for all Wi-Fi access points, regardless of who owns them. This should not be an issue, as all Wi-Fi enabled devices do it, but storing the data might become an issue. If the system is used in a practical situation, the software must be changed to ensure that only the APs related to the building implementing the system are recorded.
+
+  

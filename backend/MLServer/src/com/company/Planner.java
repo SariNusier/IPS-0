@@ -15,7 +15,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 /**
  * Created by sari on 17/04/16.
@@ -35,6 +34,7 @@ public class Planner {
         ArrayList<String> toExecute = new ArrayList<>();
         toExecute.add("#!/bin/bash\n" +
                 "ulimit -t 1\n");
+        //CHECK BUILDING_ID FORMAT!!
         toExecute.add( "./planner " + "--optimise " + "domain.pddl "+building_id+"_temp.pddl");
         Path execPath = Paths.get("five-seconds");
         try {

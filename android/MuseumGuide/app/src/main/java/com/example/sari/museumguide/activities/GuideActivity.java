@@ -31,6 +31,7 @@ public class GuideActivity extends AppCompatActivity {
     String selectedRooms;
     long timeOfChange = System.currentTimeMillis();
     TextView currentRoomView;
+    TextView routeTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,8 +45,9 @@ public class GuideActivity extends AppCompatActivity {
         b =(Building) getIntent().getSerializableExtra("building");
         selectedRooms = getIntent().getStringExtra("selected_rooms");
         currentRoomView = (TextView)findViewById(R.id.current_room_textview);
+        routeTextView = (TextView)findViewById(R.id.visitor_route_textview);
         String route = Database.getRoute(b.getId(),selectedRooms,getIntent().getIntExtra("deadline",10000));
-        currentRoomView.setText(route);
+        routeTextView.setText(parseRoute(route));
         currentRoom = null; //Entrance room?
         wifiManager.startScan();
     }
@@ -105,5 +107,18 @@ public class GuideActivity extends AppCompatActivity {
             Database.postLocationData(currentRoom.getId(), TimeUnit.MILLISECONDS.toSeconds(duration));
         }
         return true;
+    }
+
+    private String parseRoute(String route){
+        String toReturn = "";
+        String[] steps = route.split(";");
+        for(String step:steps){
+            if(step.split(":")[0].equals("view")){
+                toReturn+="View room: "+b.findRoomById(step.split(":")[1]).getRoomName()+"\n";
+            } else {
+                toReturn+="Go to room: "+b.findRoomById(step.split(":")[1].split(",")[1]).getRoomName()+"\n";
+            }
+        }
+        return toReturn;
     }
 }

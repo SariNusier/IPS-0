@@ -21,6 +21,7 @@ import com.example.sari.museumguide.R;
 import com.example.sari.museumguide.database.Database;
 import com.example.sari.museumguide.models.indoormapping.Building;
 import com.example.sari.museumguide.models.indoormapping.Room;
+import com.example.sari.museumguide.tools.CustomAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,13 +57,14 @@ public class BuildingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ArrayList roomNames = new ArrayList<String>();
+        final ArrayList roomNames = new ArrayList<String>();
         b = Database.getBuilding(building_id);
         for(Room r: b.getRooms()){
             roomNames.add(r.getRoomName());
         }
-        museumListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice,
-                roomNames);
+       // museumListAdapter = new ArrayAdapter(this, R.layout.custom_listview_item,
+        //        roomNames);
+        museumListAdapter = new CustomAdapter(this, roomNames);
         museumListView.setAdapter(museumListAdapter);
         selected_rooms = new boolean[roomNames.size()];
       /*  museumListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -80,17 +82,17 @@ public class BuildingActivity extends AppCompatActivity {
         museumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (selected_rooms[position]) {
-                    selected_rooms[position] = false;
-                } else {
-                    selected_rooms[position] = true;
-                }
+                selected_rooms[position] = !selected_rooms[position];
+                Log.d("Selected", "Ceva!");
                 String result = "";
                 for (boolean bool : selected_rooms) {
                     result += "," + bool;
                 }
                 Log.d("Selected", result);
                 estTimeView.setText("Estimated time: " +(int) getEstTime());
+
+                selected_rooms[position] = !selected_rooms[position];
+
             }
         });
 

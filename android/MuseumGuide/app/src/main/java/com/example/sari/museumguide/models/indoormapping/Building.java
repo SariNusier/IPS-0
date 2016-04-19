@@ -83,4 +83,13 @@ public class Building implements Serializable{
     public void setRooms(Room[] rooms) {
         this.rooms = rooms;
     }
+
+    public Room findRoomById(String room_id){
+        for(Room r:rooms){
+            if(r.getId().equals(room_id)){
+                return r;
+            }
+        }
+        return null;
+    }
 }
