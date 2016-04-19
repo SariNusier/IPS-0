@@ -1,5 +1,119 @@
 \chapter{Results/Evaluation}
+In this chapter we will review the performance of the resulting system and compare it with the requirements set in Chapter 3.
+\section{IPS Performance Analysis}
 
-\section{Software Testing}
+The Java module implementing the Machine Learning algorithms uses only two types of classifiers, Naive Bayes and Bayes Network. Other classifiers were tested using the Weka GUI Explorer. 
+
+Data was collected for two different buildings. The first set of data was taken in my personal flat. The surface area is approximately $55 m^2$ with all the rooms being close to each other. The rooms classified are: Kitchen, Bedroom, Living Room and Hallway. One assumption made was that, if the algorithm performance well in such a restricted environment, were the distance between rooms is quite limited, a better performance will be noticed in a larger space. The second set of data was taken at the Strand campus of King's College London. Because there was limited access to rooms and because of some people staring at a crazy looking guy walking around in circles talking to himself and lifting his phone in the air as if he was trying to film a concert or catch better signal, only a limited number of rooms were chosen for the test. After collecting the data, the classifiers were built and applied to the learning set. In order to get a more realistic result, the classifiers were also built with a part of the data, the rest being used as a test set.
+
+In the flat tests, the fours rooms mention above were taken into account. 87 measurements were taken: 19 for room a, 24 for room b, 25 for room c and 19 for room d. Applying the built classifier to the learning set yielded the following results:
+
+\noindent Naive Bayes:
+\begin{lstlisting}
+Time taken to build model: 0 seconds
+=== Evaluation on training set ===
+=== Summary ===
+Correctly Classified Instances          87              100      %
+Incorrectly Classified Instances         0                0      %
+Total Number of Instances               87     
+=== Confusion Matrix ===
+  a  b  c  d   <-- classified as
+ 19  0  0  0 |  a
+  0 24  0  0 |  b
+  0  0 25  0 |  c
+  0  0  0 19 |  d
+\end{lstlisting}
+
+\noindent Bayes Net:
+\begin{lstlisting}
+Time taken to build model: 0.01 seconds
+=== Evaluation on training set ===
+=== Summary ===
+Correctly Classified Instances          86               98.8506 %
+Incorrectly Classified Instances         1                1.1494 %
+Total Number of Instances               87     
+=== Confusion Matrix ===
+  a  b  c  d   <-- classified as
+ 19  0  0  0 |  a
+  0 24  0  0 |  b
+  0  0 24  1 |  c
+  0  0  0 19 |  d
+\end{lstlisting}
+The result show that the Naive Bayes algorithm classified all instances correctly were as Bayes Net had one error, when using the learning set as the test set.
+
+A major difference in performance can be seen when separating the learning set from the training set. As it can be seen below, Bayes Networks perform much better in classifying the data, with only three errors.
+
+\noindent Naive Bayes:
+\begin{lstlisting}
+Time taken to build model: 0 seconds
+=== Evaluation on test set ===
+=== Summary ===
+Correctly Classified Instances          37               84.0909 %
+Incorrectly Classified Instances         7               15.9091 %
+Total Number of Instances               44     
+=== Confusion Matrix ===
+  a  b  c  d   <-- classified as
+  9  0  0  0 |  a
+  0 13  0  0 |  b
+  0  0 13  2 |  c
+  5  0  0  2 |  d
+\end{lstlisting}
+
+\noindent Naive Bayes:
+\begin{lstlisting}
+=== Evaluation on test set ===
+=== Summary ===
+Correctly Classified Instances          41               93.1818 %
+Incorrectly Classified Instances         3                6.8182 %
+Total Number of Instances               44     
+=== Confusion Matrix ===
+  a  b  c  d   <-- classified as
+  8  1  0  0 |  a
+  0 13  0  0 |  b
+  0  0 13  2 |  c
+  0  0  0  7 |  d
+
+
+\end{lstlisting}
+
+A worst case scenario test was taken, with only two instances for each room in the training set and 79 instances in the test set. The results show that, even with such a scarce learning set and large test set, Naive Bayes classified 60.7\% of instances correctly, and using Bayes Networks, 70.8\% of instances were correctly classified. It is important to mention that this worst case scenario is highly improbable.
+
+In the strand campus case, three rooms were tested and 40 readings were taken in total: 8 readings for room a, 22 for room b and 10 for room c. Below are the results of applying the model on the learning set.
+
+\noindent Naive Bayes:
+\begin{lstlisting}
+Time taken to build model: 0.02 seconds
+=== Evaluation on training set ===
+=== Summary ===
+Correctly Classified Instances          40              100      %
+Incorrectly Classified Instances         0                0      %
+Total Number of Instances               40     
+=== Confusion Matrix ===
+  a  b  c   <-- classified as
+  8  0  0 |  a
+  0 22  0 |  b
+  0  0 10 |  c
+\end{lstlisting}
+
+\noindent Bayes Net:
+\begin{lstlisting}
+Time taken to build model: 0.06 seconds
+=== Evaluation on training set ===
+=== Summary ===
+Correctly Classified Instances          40              100      %
+Incorrectly Classified Instances         0                0      %
+Total Number of Instances               40     
+=== Confusion Matrix ===
+  a  b  c   <-- classified as
+  8  0  0 |  a
+  0 22  0 |  b
+  0  0 10 |  c
+\end{lstlisting}
+As it can be seen, 100\% of instances were correctly classified using both classifiers, with a difference of 0.04 seconds in performance. 
+
+In the second test, only 17 instances were used for learning and 23 instances were used for testing, the results being again 100\% for both types of classifiers. Because of such a high precision, the learning set was further reduced to 6 instances (2 for each room) and  the test set was increased to 34 instances, the result was again, 100\% for both types of classifiers.
+
+A table was created showing the results of other classifiers tested:
+
 
 \section{Section Heading}
