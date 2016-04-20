@@ -34,33 +34,45 @@
 \contentsline {chapter}{\numberline {5}Implementation}{28}
 \contentsline {section}{\numberline {5.1}Development approach}{28}
 \contentsline {section}{\numberline {5.2}Backend}{30}
-\contentsline {section}{\numberline {5.3}Positioning System}{31}
-\contentsline {subsection}{\numberline {5.3.1}Server}{31}
-\contentsline {subsection}{\numberline {5.3.2}Learner}{33}
+\contentsline {subsection}{\numberline {5.2.1}Database and REST API}{30}
+\contentsline {subsection}{\numberline {5.2.2}Testing}{31}
+\contentsline {section}{\numberline {5.3}Positioning System}{32}
+\contentsline {subsection}{\numberline {5.3.1}Server}{32}
+\contentsline {subsection}{\numberline {5.3.2}Learner}{34}
 \contentsline {subsection}{\numberline {5.3.3}Planner}{35}
+\contentsline {subsection}{\numberline {5.3.4}Testing}{36}
 \contentsline {section}{\numberline {5.4}Administration App}{36}
-\contentsline {subsection}{\numberline {5.4.1}Models and Tools Packages}{36}
-\contentsline {subsection}{\numberline {5.4.2}Database}{36}
-\contentsline {subsection}{\numberline {5.4.3}MainActivity}{37}
-\contentsline {subsection}{\numberline {5.4.4}BuildingsActivity}{37}
+\contentsline {subsection}{\numberline {5.4.1}Models and Tools Packages}{37}
+\contentsline {subsection}{\numberline {5.4.2}Database}{37}
+\contentsline {subsection}{\numberline {5.4.3}MainActivity}{38}
+\contentsline {subsection}{\numberline {5.4.4}BuildingsActivity}{38}
 \contentsline {subsection}{\numberline {5.4.5}EditBuildingActivity}{38}
-\contentsline {subsection}{\numberline {5.4.6}EditRoomActivity}{38}
+\contentsline {subsection}{\numberline {5.4.6}EditRoomActivity}{39}
 \contentsline {subsection}{\numberline {5.4.7}AddBuildingActivity}{39}
-\contentsline {subsection}{\numberline {5.4.8}AddRoomActivity}{39}
-\contentsline {section}{\numberline {5.5}Visitor App (Museum Guide)}{39}
-\contentsline {subsection}{\numberline {5.5.1}MainActivity}{39}
-\contentsline {subsection}{\numberline {5.5.2}BuildingActivity}{39}
+\contentsline {subsection}{\numberline {5.4.8}AddRoomActivity}{40}
+\contentsline {section}{\numberline {5.5}Visitor App (Museum Guide)}{40}
+\contentsline {subsection}{\numberline {5.5.1}MainActivity}{40}
+\contentsline {subsection}{\numberline {5.5.2}BuildingActivity}{40}
 \contentsline {subsection}{\numberline {5.5.3}GuideActivity and MapsActivity}{40}
 \contentsline {section}{\numberline {5.6}Implementation issues}{41}
-\contentsline {subsection}{\numberline {5.6.1}Going back to previous Activity}{41}
-\contentsline {subsection}{\numberline {5.6.2}JavaScript callbacks}{41}
-\contentsline {chapter}{\numberline {6}Professional and Ethical Issues}{43}
-\contentsline {chapter}{\numberline {7}Results/Evaluation}{44}
-\contentsline {section}{\numberline {7.1}IPS Performance Analysis}{44}
-\contentsline {section}{\numberline {7.2}Section Heading}{48}
-\contentsline {chapter}{\numberline {8}Conclusion and Future Work}{49}
-\contentsline {chapter}{\numberline {A}User Guide}{50}
-\contentsline {section}{\numberline {A.1}Instructions}{50}
-\contentsline {section}{Bibliography}{50}
-\contentsline {chapter}{\numberline {B}Source Code}{51}
-\contentsline {section}{\numberline {B.1}Instructions}{51}
+\contentsline {subsection}{\numberline {5.6.1}Going back to previous Activity}{42}
+\contentsline {subsection}{\numberline {5.6.2}JavaScript callbacks}{42}
+\contentsline {chapter}{\numberline {6}Results/Evaluation}{43}
+\contentsline {section}{\numberline {6.1}IPS Performance Analysis}{43}
+\contentsline {section}{\numberline {6.2}Project Evaluation}{47}
+\contentsline {subsection}{\numberline {6.2.1}Host and Visitor applications}{48}
+\contentsline {subsection}{\numberline {6.2.2}Positioning system}{49}
+\contentsline {subsection}{\numberline {6.2.3}Backend}{49}
+\contentsline {chapter}{\numberline {7}Professional and Ethical Issues}{50}
+\contentsline {chapter}{\numberline {8}Conclusion and Future Work}{51}
+\contentsline {section}{\numberline {8.1}Conclusion}{51}
+\contentsline {section}{\numberline {8.2}Future Work}{52}
+\contentsline {subsection}{\numberline {8.2.1}Security and Data collection}{52}
+\contentsline {subsection}{\numberline {8.2.2}Graphics}{52}
+\contentsline {subsection}{\numberline {8.2.3}Optimisation}{52}
+\contentsline {subsection}{\numberline {8.2.4}Proximity interactions}{53}
+\contentsline {chapter}{\numberline {A}User Guide}{54}
+\contentsline {section}{\numberline {A.1}Instructions}{54}
+\contentsline {section}{Bibliography}{54}
+\contentsline {chapter}{\numberline {B}Source Code}{55}
+\contentsline {section}{\numberline {B.1}Instructions}{55}

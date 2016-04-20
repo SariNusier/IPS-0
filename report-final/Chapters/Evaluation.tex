@@ -126,16 +126,16 @@ The table below shows the results of other classifiers tested:
  KStar       & 87 Instances & = Learning Set & 0s & 100\% \\
  Decorate    & 87 Instances & = Learning Set & 0.7s & 100\% \\
  NB Trees    & 87 Instances & = Learning Set & 2.54 s & 100\% \\
- Naive Bayes & 42 Instances & 45 Instances & 0s & 86.66\% \\
- Bayes Net   & 42 Instances & 45 Instances & 0s & 93.33\% \\
- KStar       & 42 Instances & 45 Instances & 0s & 60\% \\
- Decorate    & 42 Instances & 45 Instances & 0.15s & 84.44\% \\
- NB Trees    & 42 Instances & 45 Instances & 0.01 s & 93.33\% \\
- Naive Bayes & 8 Instances & 78 Instances & 0s & 60.75\% \\
- Bayes Net   & 8 Instances & 78 Instances & 0s & 70.88\% \\
- KStar       & 8 Instances & 78 Instances & 0s & 40.50\% \\
- Decorate    & 8 Instances & 78 Instances & 0.01s & 51.89\% \\
- NB Trees    & 8 Instances & 78 Instances & 0.01s & 72.15\% \\
+ Naive Bayes & 42 Instances & 45 Instances   & 0s & 86.66\% \\
+ Bayes Net   & 42 Instances & 45 Instances   & 0s & 93.33\% \\
+ KStar       & 42 Instances & 45 Instances   & 0s & 60\% \\
+ Decorate    & 42 Instances & 45 Instances   & 0.15s & 84.44\% \\
+ NB Trees    & 42 Instances & 45 Instances   & 0.01 s & 93.33\% \\
+ Naive Bayes & 8 Instances  & 78 Instances   & 0s & 60.75\% \\
+ Bayes Net   & 8 Instances  & 78 Instances   & 0s & 70.88\% \\
+ KStar       & 8 Instances  & 78 Instances   & 0s & 40.50\% \\
+ Decorate    & 8 Instances  & 78 Instances   & 0.01s & 51.89\% \\
+ NB Trees    & 8 Instances  & 78 Instances   & 0.01s & 72.15\% \\
  \hline
 \end{tabular}
 
@@ -143,5 +143,29 @@ The table below shows the results of other classifiers tested:
 It can also be seen that the precision of this system is higher than that shown be the system in Chapter 2. There, the best result was given by WKNN regression algorithm with 94.16\% which is comparable to the Bayes Net results when using only 42 instances. We can therefore assume that, given a larger learning set, such as the one provided in the system mentioned in Chapter 2, the results of using Bayes Net can be equal or even better.
 
 
+\section{Project Evaluation}
+All subsystems defined in the specifications were created. For user interaction, two separate Android Applications were developed, one for Administration and one for the Visitors. Backend and database were developed in NodeJS and serve HTTP Requests through a RESTful API. The positioning system implements Machine Learning and Planning algorithms for identifying the location of the users and for suggesting an efficient visit route.
 
-\section{Section Heading}
+\subsection{Host and Visitor applications}
+Most requirements were met for both the Host and Visitor android applications. 
+
+The HOST can create, delete and view buildings and rooms. The ability to edit was implemented in the Backend, but not in the applications. This is because the quality of the interface was not a main concern when developing the project, editing would have made the interface even more crowded than it already is, without offering such an important capability, given that the building layouts do not change that often. (H1, H2)
+
+As mentioned above the application can scan and send to the server all Signal Strength Measurements taken in a scan (H3). When a room is being measured, scanning happens one after another, with the shortest possible delay. One issue here is that, the Android SDK does not allow for "explicit" calls to scan. The function call serves as a request to the system, which will handle the scan when available. The time between scans cannot be further reduced, therefore it can be considered a small limitation. Updating the positioning system was implemented (H4), but resetting was not (H5). A reset of the system can be made by deleting the ARFF file stored on the server. This was because the requirement did not prove useful enough to be accessible through the app. It could even create more problems if a reset command is called by mistake. 
+
+The Visitor can view a list of buildings and select a specific building from the list (V1). Suggesting the building in which the user is located was not implemented (V2). This was due to the complexity that the implementation would have added to the system. Because the system is only in its early stages, not enough buildings would be stored for this requirement, and the complexity that it adds, to be justified. The visitor can choose the rooms to visit, rating their importance (V3, V5). An estimated time of the visit and a planned route based on the previously mentioned requirements are suggested to the user (V4, V6). The Visitor's current location is also displayed and updated (V7). On limitation here is again, as mentioned above, the delay between scans. Requirements (V8) was not implemented, showing only the path from the beginning to the end, not updating it based on the user location. This was because, if the user does leave the suggested path, it is likely that they would be able to find their way back on the suggested path, especially knowing their location. Not implementing V8 increased the performance and decreased unnecessary complexity of the system.
+
+\subsection{Positioning system}
+The positioning system has implemented both the positioning and planning algorithms. 
+
+The Machine Learning algorithm was implemented using the Weka library. It can parse the data received from the backend, creating classifiers or classifying the data received (PS1, PS2, PS3, PS4, PS5). 
+
+The Positioning Server can also receive the specifications given by the visitor for a route, planning the route using OPTIC Planner (PS6, PS7).
+
+\subsection{Backend}
+All the models specified were implemented and can be stored in the MongoDB database implemented(B1, B2). A RESTful API was implemented, handling requests received for retrieving data from the database or from the positioning system (B3).     
+
+
+
+
+ 

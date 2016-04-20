@@ -34,6 +34,7 @@ The project has taken a lean software development approach. The main goal was to
 The beginning of the implementation focused more on the Backend, in order to analyse the feasibility of different approaches. Once a basic version of the backend was implemented, the administration app was the next step in the implementation process. This allowed for data to be inputted easier so that the rest of the system can be tested faster, when needed. The Backend and Database were tested using PostMan. Having Wi-Fi scanning capability early on helped understand the nature of the measurements, contributing to the design of the positioning system. The positioning system was implemented separately, as a Java program, and data was parsed and fed into the system manually, for testing. Once the Positioning system proved feasible, data inputting became automated and the implementation moved its focus towards the Visitor app.
 
 \section{Backend}
+\subsection{Database and REST API}
 Implementation of the backend started by using a MySQL database. For easier administration MySQL Workbench software was used. A test database was created with two Tables. The first table, Building, contained five attributes: Name (VARCHAR), Width (INT), Length (INT), ID (INT) and Rectangle of type Geometry. The Geometry type is part of the Spatial Data Types offered in MySQL and it helps model and manage geometrical shapes [1].
 \\
 Due to compatibility issues, the implementation of the backend moved to using a NodeJS server with a MongoDB database, which is the current implementation.
@@ -81,6 +82,11 @@ room_id: {type: String, required: true} }
 \end{lstlisting}
 
 The RESTful API was implemented using NodeJS and the ExpressJS Web Application framework, for handling HTTP requests. The endpoints implemented followed the Design.
+
+\subsection{Testing}
+The backend was tested using the Postman Application. Requests were manually created and sent to the server, which ran locally. Further tests were made with the server running on a Virtual Machine hosted by DigitalOcean. No performance issues were noticed in either case.
+
+Further tests were done during and after the development of the two Android Applications. The HTTP requests were made using the Java HttpURLConnection class.
 
 \section{Positioning System}
 
@@ -191,11 +197,22 @@ For each room in the request, an exhibit must be defined in the problem file. Fo
 \end{lstlisting}
 The initial state is then defined, by inserting what rooms the user wants to view, how long it takes for each room, and how much does the user want to see a specific room. The deadline is finally inserted and goals are written. The file generated is named "buildingID\_temp.pddl". 
 After the file is generated, the planner is executed with the two files as arguments. The planner can run for very long, giving better and better solutions over time. The problem is that, we want the solution in a limited time, therefore the execution of the planner is limited to one second. The output of the planner is then parsed and returned as a String. 
+
+\subsection{Testing}
+
+The Machine Learning classifiers were initially tested by manually entering the data. A Java class was later created to automate a part of the data parsing. After the initial tests were completed, the current program was written, fully automating the parsing process. The Machine Learning algorithms were tested on different data sets, throughout the development of the project. The final test results are shown and discussed in the Results/Evaluation chapter (6). 
+
+The same principle applied to the testing of the Planning algorithm. Data for initial tests were manually entered. The current code was then written automating the creation of the Problem PDDL file. 
+
+In both cases additional tests were done as part of Backend testing. Using Postman, requests were sent to check whether the requested data is correctly parsed and used, and the outputs of the algorithms were correctly returned to the user.
+
 \section{Administration App}
 This is the main entry point to the system. The user can create buildings, add rooms and take measurements for the positioning system. In this part, we will look at the components of this app and their implementation. The classes included in the database, models and tools packages are used in both the administration and visitor app. Their implementations will be described in this section.
 
 \subsection{Models and Tools Packages}
 Following the design of the software, the data models are implemented in Java, using the same attributes as the Backend models. One addition is the introduction of a Floor class, which can be later used for separating the building in floors. The current implementation does not use this model. The classes implement Serializable, to facilitate the transfer of data across activities. 
+
+JUnit testing was performed to ensure that the models were correctly implemented. 
 \subsection{Database}
 The Database class offers a number of static methods that are used to connect to the Backend API. It handles HTTP connections, post and get requests, and data parsing.
 
@@ -229,6 +246,7 @@ public static String classify(RPMeasurement measurement, String building_id);
 \end{lstlisting}
 They parse received data from JSON instantiating Java Objects to be used inside the Activities or create JSON Objects from Java objects, in order for the data to be sent.
 
+Tests were performed by sending mock data and monitoring the received data on the Backend side.
 \subsection{MainActivity}
 This is the entry activity to the app. It does not contain any important code, except a button which leads to the BuildingActivity. It was created as a way to access any activities that might branch out or that might not be accessible once the user is in BuildingActivity.
 
@@ -260,6 +278,7 @@ This activity consists of a form and a submit button. The user completes the for
 \subsection{AddRoomActivity}
 Similar to the AddBuildingActivity. The difference consists in that, for faster testing, default values for the fields have been added. Another difference is that the data is posted to the server through a call to Database.addRoom(). 
 
+Testing was performed by using all the functions of the application.
 \section{Visitor App (Museum Guide)}
 This is the android application used by the visitors. It offers the ability to view the buildings available and locate themselves once in one of the available buildings. As mentioned above, the Database and Models packages used in the Administration app are reused here, with an identical implementation.
 
@@ -273,6 +292,8 @@ As mentioned in the requirements, a visual aid must be given to the user concern
 
 \noindent
 Collecting signal strength measurements is implemented the same way as in the EditRoomActivity in the Admin App. The difference comes in that the user does not have the ability to stop the scans. After each scan has finished, the scan data is sent to the Backend to be classified, by calling Database.classify(). The result given is a list of multiple predictions. Here, a decision must be made on when to change the location, and what location will be chosen if the predictions are different. Testing has been made using different approaches. To assure precision, one approach is to not change the room at the exact moment a prediction shows a change. If the prediction shows that the room has been changed, the software can wait for 2 more predictions. If these predictions show the same room, then the position should be updated. The issue here is that the delay might be too long. The android operating system does not allow for an explicit call to start a scan, but rather hints the system to start scanning, when possible. Therefore, a delay can be quite long and the location can be changed multiple times while the app is still deciding whether the change is legitimate. This can lead to the system getting stuck indicating an outdated location. To fix this, updates can happen without making such checks. In the testing and evaluation section we will determine which approach is statistically the best, considering both precision and speed.
+
+Testing was performed by using all the functions of the application.
 \section{Implementation issues}
 In order to determine the number and magnitude of the issues experienced during the development of an application, I usually look at how many keys and/or keyboards stopped working during the implementation phase. I am glad to say that, for this particular project, no keyboards were harmed. That is not to say that problems did no emerge along the way, nevertheless solutions were found quickly and pain-free. Below are some of the problems and solutions found, as far as I can remember, as most of the problems tend to arise in the middle of the night, when memory functions are not at their peak.
 
@@ -292,13 +313,3 @@ Room.find({'building_id': req.params.id}, function(err,data){
     });
 });
 \end{lstlisting}
-
-    
-
- 
-
-
-
-
-
- 
