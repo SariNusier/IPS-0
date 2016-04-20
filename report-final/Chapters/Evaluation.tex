@@ -113,7 +113,35 @@ As it can be seen, 100\% of instances were correctly classified using both class
 
 In the second test, only 17 instances were used for learning and 23 instances were used for testing, the results being again 100\% for both types of classifiers. Because of such a high precision, the learning set was further reduced to 6 instances (2 for each room) and  the test set was increased to 34 instances, the result was again, 100\% for both types of classifiers.
 
-A table was created showing the results of other classifiers tested:
+The table below shows the results of other classifiers tested:
+
+\begin{tabular}{ |p{3cm}|p{3cm}|p{3cm}|p{2cm}|p{2cm}| }
+ \hline
+ \multicolumn{5}{|c|}{Classifier Precision} \\
+ \hline
+ Classifier Type & Learning Set & Testing Set & Build time & Precision\\
+ \hline
+ Naive Bayes & 87 Instances & = Learning Set & 0s & 100\% \\
+ Bayes Net   & 87 Instances & = Learning Set & 0.01s & 98.75\% \\
+ KStar       & 87 Instances & = Learning Set & 0s & 100\% \\
+ Decorate    & 87 Instances & = Learning Set & 0.7s & 100\% \\
+ NB Trees    & 87 Instances & = Learning Set & 2.54 s & 100\% \\
+ Naive Bayes & 42 Instances & 45 Instances & 0s & 86.66\% \\
+ Bayes Net   & 42 Instances & 45 Instances & 0s & 93.33\% \\
+ KStar       & 42 Instances & 45 Instances & 0s & 60\% \\
+ Decorate    & 42 Instances & 45 Instances & 0.15s & 84.44\% \\
+ NB Trees    & 42 Instances & 45 Instances & 0.01 s & 93.33\% \\
+ Naive Bayes & 8 Instances & 78 Instances & 0s & 60.75\% \\
+ Bayes Net   & 8 Instances & 78 Instances & 0s & 70.88\% \\
+ KStar       & 8 Instances & 78 Instances & 0s & 40.50\% \\
+ Decorate    & 8 Instances & 78 Instances & 0.01s & 51.89\% \\
+ NB Trees    & 8 Instances & 78 Instances & 0.01s & 72.15\% \\
+ \hline
+\end{tabular}
+
+\medskip \noindent Even though NBTrees show a higher precision when a scarce learning set is provided, the build time is quite high when a larger one is used. For 87 instances, a 2.54 second delay will affect the performance of the overall application. The delay would increase even higher if the a larger learning set would be given. Therefore, the best solution given the tests made is Bayes Net, and therefore this classifier will be used for the application.
+It can also be seen that the precision of this system is higher than that shown be the system in Chapter 2. There, the best result was given by WKNN regression algorithm with 94.16\% which is comparable to the Bayes Net results when using only 42 instances. We can therefore assume that, given a larger learning set, such as the one provided in the system mentioned in Chapter 2, the results of using Bayes Net can be equal or even better.
+
 
 
 \section{Section Heading}
