@@ -126,6 +126,15 @@ public class Room implements Serializable{
         return exhibits;
     }
 
+    public String hasExhibit(String exhibit_id){
+        for(String e: exhibits){
+            if(e.split(",")[1].equals(exhibit_id)){
+                return e;
+            }
+        }
+        return null;
+    }
+
     public double getEst_time() {
 
         return est_time;

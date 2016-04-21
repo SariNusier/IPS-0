@@ -1,5 +1,7 @@
 package com.example.sari.museumguide.activities;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sari.museumguide.R;
 import com.example.sari.museumguide.database.Database;
@@ -22,16 +25,24 @@ import com.example.sari.museumguide.models.indoormapping.Room;
 import com.example.sari.museumguide.models.positioning.RPMeasurement;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Handler;
 
 public class GuideActivity extends AppCompatActivity {
+    private static final int BLUETOOTH_THRESHOLD = -40;
     private Building b;
     WifiManager wifiManager;
+    BluetoothAdapter bluetoothAdapter;
     Room currentRoom;
     String selectedRooms;
+    boolean btAvailable = false;
     long timeOfChange = System.currentTimeMillis();
+    String currentExhibit;
     TextView currentRoomView;
     TextView routeTextView;
+    TextView exhibitTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,27 +50,47 @@ public class GuideActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter == null) {
+            btAvailable = false;
+        } else if (!bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, 1);
+        }
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        registerReceiver(broadcastReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        registerReceiver(wifiBroadcastReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         b =(Building) getIntent().getSerializableExtra("building");
         selectedRooms = getIntent().getStringExtra("selected_rooms");
         currentRoomView = (TextView)findViewById(R.id.current_room_textview);
         routeTextView = (TextView)findViewById(R.id.visitor_route_textview);
+        exhibitTextView = (TextView) findViewById(R.id.visitor_exhibit_textview);
         String route = Database.getRoute(b.getId(),selectedRooms,getIntent().getIntExtra("deadline",10000));
         routeTextView.setText(parseRoute(route));
         currentRoom = null; //Entrance room?
         wifiManager.startScan();
+        currentExhibit = "";
+        exhibitTextView.setText("No exhibit nearby");
+        //bluetoothAdapter.startDiscovery();
+        registerReceiver(btBroadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+        TimerTask tt = new TimerTask() {
+            @Override
+            public void run() {
+                bluetoothAdapter.startDiscovery();
+            }
+        };
+        new Timer().scheduleAtFixedRate(tt,0,5000);
+
     }
 
     @Override
     protected void onStop()
     {
-        unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(wifiBroadcastReceiver);
+        unregisterReceiver(btBroadcastReceiver);
         super.onStop();
     }
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver wifiBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
@@ -87,6 +118,35 @@ public class GuideActivity extends AppCompatActivity {
             //currentRoomView.setText(currentRoomView.getText()+currentRoom.getRoomName());
             shouldChangeRoom(currentRoom);
             wifiManager.startScan();
+        }
+    };
+
+    private final BroadcastReceiver btBroadcastReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(BluetoothDevice.ACTION_FOUND.equals(action)) {
+                int  rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                Log.d("BLUE:", device.getAddress()+" "+device.getName()+" "+rssi);
+                if(currentExhibit.isEmpty())
+                {
+                    if(device.getName() != null && currentRoom != null){
+                        String exhibit = currentRoom.hasExhibit(device.getAddress());
+                        if(exhibit !=null && rssi > BLUETOOTH_THRESHOLD){
+                            bluetoothAdapter.cancelDiscovery();
+                            currentExhibit = device.getAddress();
+                            exhibitTextView.setText("You are viewing: "+exhibit.split(",")[0]);
+                        }
+                    }
+                } else {
+                    if(device.getAddress().equals(currentExhibit) && rssi >= BLUETOOTH_THRESHOLD){
+                        bluetoothAdapter.cancelDiscovery();
+                    } else {
+                        currentExhibit = "";
+                        exhibitTextView.setText("No exhibit nearby");
+                    }
+                }
+            }
         }
     };
 
@@ -120,5 +180,14 @@ public class GuideActivity extends AppCompatActivity {
             }
         }
         return toReturn;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            btAvailable = true;
+        } else
+            btAvailable = false;
     }
 }

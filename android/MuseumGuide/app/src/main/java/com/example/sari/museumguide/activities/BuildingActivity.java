@@ -62,12 +62,13 @@ public class BuildingActivity extends AppCompatActivity {
         for(Room r: b.getRooms()){
             roomNames.add(r.getRoomName());
         }
-       // museumListAdapter = new ArrayAdapter(this, R.layout.custom_listview_item,
-        //        roomNames);
-        museumListAdapter = new CustomAdapter(this, roomNames);
+        //museumListAdapter = new ArrayAdapter(this, R.layout.custom_listview_item,
+        //       roomNames);
+        museumListAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_multiple_choice,roomNames);
+       // museumListAdapter = new CustomAdapter(this, roomNames);
         museumListView.setAdapter(museumListAdapter);
         selected_rooms = new boolean[roomNames.size()];
-      /*  museumListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+       /* museumListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("Items selected:", "Selected");
@@ -78,7 +79,7 @@ public class BuildingActivity extends AppCompatActivity {
                 Log.d("Items selected:", "Unselected                                                                                                                                                                        ");
             }
         });
-       */
+*/
         museumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -90,8 +91,6 @@ public class BuildingActivity extends AppCompatActivity {
                 }
                 Log.d("Selected", result);
                 estTimeView.setText("Estimated time: " +(int) getEstTime());
-
-                selected_rooms[position] = !selected_rooms[position];
 
             }
         });

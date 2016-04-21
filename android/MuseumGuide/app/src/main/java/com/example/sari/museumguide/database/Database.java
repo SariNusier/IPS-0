@@ -194,7 +194,9 @@ public class Database {
             try {
                 JSONArray array = new JSONArray(exhibits);
                 for(int i = 0; i<array.length(); ++i){
-                    room.addExhibit(array.getJSONObject(i).getString("name")+":"
+                    room.addExhibit(array.getJSONObject(i).getString("name")+","
+                            +array.getJSONObject(i).getString("rpid"));
+                    Log.d("ADDED EXHIBIT",array.getJSONObject(i).getString("name")+":"
                             +array.getJSONObject(i).getString("rpid"));
                 }
             } catch (JSONException e) {
