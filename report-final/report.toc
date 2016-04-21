@@ -5,7 +5,7 @@
 \contentsline {section}{\numberline {1.4}Report Structure}{5}
 \contentsline {chapter}{\numberline {2}Background}{6}
 \contentsline {section}{\numberline {2.1}Global Positioning System}{6}
-\contentsline {section}{\numberline {2.2}Indoor Positioning System}{7}
+\contentsline {section}{\numberline {2.2}Indoor Positioning System}{6}
 \contentsline {subsection}{\numberline {2.2.1}General}{7}
 \contentsline {subsection}{\numberline {2.2.2}Current Approaches}{7}
 \contentsline {section}{\numberline {2.3}Machine Learning}{9}
@@ -71,8 +71,8 @@
 \contentsline {subsection}{\numberline {8.2.2}Graphics}{52}
 \contentsline {subsection}{\numberline {8.2.3}Optimisation}{52}
 \contentsline {subsection}{\numberline {8.2.4}Proximity interactions}{53}
-\contentsline {chapter}{\numberline {A}User Guide}{54}
-\contentsline {section}{\numberline {A.1}Instructions}{54}
 \contentsline {section}{Bibliography}{54}
-\contentsline {chapter}{\numberline {B}Source Code}{55}
-\contentsline {section}{\numberline {B.1}Instructions}{55}
+\contentsline {chapter}{\numberline {A}User Guide}{55}
+\contentsline {section}{\numberline {A.1}Instructions}{55}
+\contentsline {chapter}{\numberline {B}Source Code}{56}
+\contentsline {section}{\numberline {B.1}Instructions}{56}

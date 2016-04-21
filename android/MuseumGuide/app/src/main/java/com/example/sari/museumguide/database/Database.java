@@ -189,6 +189,18 @@ public class Database {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        for(Room room: toReturn){
+            String exhibits = getData("exhibits", room.getId());
+            try {
+                JSONArray array = new JSONArray(exhibits);
+                for(int i = 0; i<array.length(); ++i){
+                    room.addExhibit(array.getJSONObject(i).getString("name")+":"
+                            +array.getJSONObject(i).getString("rpid"));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         return toReturn.toArray(new Room[toReturn.size()]);
     }
 

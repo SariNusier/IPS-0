@@ -5,6 +5,7 @@ import com.example.sari.museumguide.tools.Rectangle;
 import com.example.sari.museumguide.tools.RectangleDB;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Room implements Serializable{
     private String roomName;
@@ -15,6 +16,7 @@ public class Room implements Serializable{
     private String roomDescription;
     private double width,height;
     private double est_time;
+    private ArrayList<String> exhibits;
 
 
     public Room(String id, String building_id, String roomName, RectangleDB rectangleDB, double width, double height, double est_time){
@@ -27,6 +29,7 @@ public class Room implements Serializable{
         this.building_id = building_id;
         this.roomRectangle = new Rectangle(new Point(0,0),0,0); //for testing!!!
         this.est_time = est_time;
+        exhibits = new ArrayList<>();
     }
 
     public String getBuilding_id() {
@@ -41,6 +44,7 @@ public class Room implements Serializable{
         this.height = height;
         this.roomDescription = "";
         this.rectangleDB = rectangleDB;
+        exhibits = new ArrayList<>();
         this.roomRectangle = new Rectangle(new Point(0,0),0,0); //for testing!!!
     }
 
@@ -48,6 +52,7 @@ public class Room implements Serializable{
         this.roomRectangle = r;
         roomName = "";
         roomDescription = "";
+        exhibits = new ArrayList<>();
     }
 
     public String getRoomName() {
@@ -111,6 +116,14 @@ public class Room implements Serializable{
 
     public void setEst_time(double est_time) {
         this.est_time = est_time;
+    }
+
+    public void addExhibit(String exhibit){
+        exhibits.add(exhibit);
+    }
+
+    public ArrayList<String> getExhibits(){
+        return exhibits;
     }
 
     public double getEst_time() {

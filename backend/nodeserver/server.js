@@ -5,6 +5,7 @@ var router      =   express.Router();
 var Building    =   require('./models/building');
 var Room        =   require('./models/room');
 var RP          =   require('./models/RP');
+var ERP         =   require('./models/ExhibitRP');
 var RPMeasurement = require('./models/RPMeasurement');
 
 app.use(bodyParser.json());
@@ -424,7 +425,34 @@ router.route("/buildings")
         });
     
 
-
+router.route("/exhibits/:id")
+    .get(function(req,res){
+        var response = {};
+        ERP.find({'room_id': req.params.id}, function(err,data){
+            if(err){
+                response = {"error" : true,"message" : "Error!"};
+            } else {
+                response = data;
+            }
+            res.json(response);
+        });
+    })
+    .post(function(req,res){
+        var db = new ERP();
+        var response = {};
+        db.rpid = req.body.rpid; 
+        db.name = req.body.name;
+        db.room_id = req.params.id; 
+        db.save(function(err){
+            if(err) {
+                response = {"error" : true,"message" : "Failed!"};
+                console.log(err);
+            } else {
+                response = {"error" : false,"message" : "Data added"};
+            }
+            res.json(response);
+        });
+    });
 
 app.use('/',router);
 app.listen(3000);

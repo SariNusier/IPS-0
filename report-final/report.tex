@@ -5,7 +5,7 @@
 \documentclass[12pt]{informatics-report}
 \usepackage{color}
 \usepackage[square,sort,comma,numbers]{natbib}
-
+\usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{indentfirst}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
@@ -87,7 +87,7 @@ Chapter 4 will look into the design of the entire system and the interaction bet
 
 Chapter 6 will discuss the Software development approach used during the implementation of the software. It will then list the steps taken to develop the resulting system, provide a detailed description of the implementation of each subsystem and briefly discuss some of the problems encountered during the process.
 
-Chapter 7 will evaluate the resulting software by comparing it with the requirements and design defined in the previous chapters. In addition, it will evaluate the precision of the Machine Learning approach to positioning by showing some statistical data collected during testing. Finally, it will look at how the software was tested to avoid possible bugs and to ensure a feasible end result.
+Chapter 7 will evaluate the resulting software by comparing it with the requirements and design defined in the previous chapters. In addition, it will evaluate the precision of the Machine Learning approach to positioning by showing some statistical data collected during testing. Finally, it will look at how the software was tested to avoid possible bugs and to ensure a feasible end result ~\cite{Hofmann}.
  
 
 
@@ -107,6 +107,16 @@ Chapter 7 will evaluate the resulting software by comparing it with the requirem
 \bibliographystyle{plain}
 \bibliography{references}
 \addcontentsline{toc}{section}{Bibliography}
+\begin{thebibliography}{99}
+
+\bibitem{Hofmann} B. Hofmann, H. Wellinhof, and H. Lichtenegger, ”GPS: Theory and Practice”, Springer-Verlag, Vienna, 1997.
+
+\bibitem{Gu} Gu, Yanying, Anthony Lo, and Ignas Niemegeers. ”A survey of indoor positioning systems for wireless personal networks.” Communications Surveys Tutorials, IEEE 11.1 (2009):
+13-32.
+
+\bibitem{Golden} B.L. Golden, L. Levy, and R. Vohra. The orienteering problem. Naval Research Logistics, 34(3):307-318, 1987.
+
+\end{thebibliography}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendices
