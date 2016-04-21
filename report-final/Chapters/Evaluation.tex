@@ -2,7 +2,7 @@
 In this chapter we will review the performance of the resulting system and compare it with the requirements set in Chapter 3.
 \section{IPS Performance Analysis}
 
-The Java module implementing the Machine Learning algorithms uses only two types of classifiers, Naive Bayes and Bayes Network. Other classifiers were tested using the Weka GUI Explorer. 
+The Java module implementing the Machine Learning algorithms uses only two types of classifiers, Naive Bayes and Bayes Network. Other classifiers were tested using the Weka GUI Explorer ~\cite{Weka}. 
 
 Data was collected for two different buildings. The first set of data was taken in my personal flat. The surface area is approximately $55 m^2$ with all the rooms being close to each other. The rooms classified are: Kitchen, Bedroom, Living Room and Hallway. One assumption made was that, if the algorithm performance well in such a restricted environment, were the distance between rooms is quite limited, a better performance will be noticed in a larger space. The second set of data was taken at the Strand campus of King's College London. Because there was limited access to rooms and because of some people staring at a crazy looking guy walking around in circles talking to himself and lifting his phone in the air as if he was trying to film a concert or catch better signal, only a limited number of rooms were chosen for the test. After collecting the data, the classifiers were built and applied to the learning set. In order to get a more realistic result, the classifiers were also built with a part of the data, the rest being used as a test set.
 
@@ -158,7 +158,7 @@ The Visitor can view a list of buildings and select a specific building from the
 \subsection{Positioning system}
 The positioning system has implemented both the positioning and planning algorithms. 
 
-The Machine Learning algorithm was implemented using the Weka library. It can parse the data received from the backend, creating classifiers or classifying the data received (PS1, PS2, PS3, PS4, PS5). 
+The Machine Learning algorithm was implemented using the Weka library ~\cite{Weka}. It can parse the data received from the backend, creating classifiers or classifying the data received (PS1, PS2, PS3, PS4, PS5). 
 
 The Positioning Server can also receive the specifications given by the visitor for a route, planning the route using OPTIC Planner (PS6, PS7).
 

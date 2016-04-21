@@ -9,9 +9,7 @@ In this section we will define the architecture of the entire system, showing th
 The architecture of the system is comprised of three subsystems. The top subsystem is concerned with interfacing the end users (HOST and VISITOR) to the lower subsystems. The middle subsystem offers an API to the bottom subsystems. The bottom subsystems manage and provide the information required for the entire system to run. To continue, we will review each subsystem in more detail, from top to bottom.
 \clearpage
 \subsection{User Space}
-This layer is comprised of two Android Application, one for each type of user.
-\\
-The following are common features for both applications:
+\noindent This layer is comprised of two Android Application, one for each type of user. The following are common features for both applications:
 \begin{enumerate}
 \item Implement serializable classes for the models defined in the database
 \item Request and receive data from the backend in JSON format.
@@ -24,9 +22,9 @@ The following are common features for both applications:
 \item Implement Wi-Fi capabilities in order to measure signal strength of all visible APs.
 \end{enumerate}
 These common features will be implemented in packages that can be shared across the two apps.
-\\
-\textbf{Administration application (HOST)}
-\\
+
+\noindent \textbf{Administration application (HOST)}
+
 Due to the difference in requirements a separate android application must be developed for the HOST. In addition to the common features, the application will also implement the following:
 \begin{enumerate}
 \item A button to add a new building In addition to the list of available buildings.
@@ -39,15 +37,16 @@ Due to the difference in requirements a separate android application must be dev
 \item The add room button will open an activity containing a form and a submit button for creating a new room.
 \end{enumerate}
 
-\textbf{Visitor application}
-\\
+\noindent \textbf{Visitor application}
+
 In addition to the common features, the visitor application will also implement the following:
 \begin{enumerate}
 \item A clickable ListView with all the buildings available.
 \item Selecting a Building will open an activity containing a list of all rooms as selectable items. Selecting an item will update the Estimated Time value displayed somewhere below.
 \item A button to start the visit will open another activity that either displays the Google Indoor Map if available, or a textview.
 \item The Visit Activity displays the current location of the visitor as a pin on the Map or as text.
-\item The Visit Activity will also display a recommended path for the visit on the Map or as text.
+\item The Visit Activity displays a recommended path for the visit on the Map or as text.
+\item The Visit Activity detects and displays the current exhibit beind viewed, using proximity sensing.
 \end{enumerate}
 
 \subsection{Backend}
@@ -94,11 +93,14 @@ The resources available and the results of each method are as follows:
 	\begin{itemize}
 	\item POST: Returns the generated route, based on the requirements sent, through the building with the specified id
 	\end{itemize}
+\item For resource "exhibit/id":
+	\item GET: Returns all exhibits in the room with the specified id as a pair of Bluetooth beacon address and Name.
+	\item POST: Creates a new exhibit with the given name and address.
 \end{itemize}
 
 \subsection{Positioning System}
 This is the most important part of the project. It is the software which implements the machine learning and data processing algorithms in order to create the classifiers needed for positioning.
-This subsystem is built out of a X modules, each one with its own task. It is implemented using the Weka Machine Learning libraries. The software implements the following features:
+This subsystem is built out of a X modules, each one with its own task. It is implemented using the Weka Machine Learning libraries ~\cite{Weka}. The software implements the following features:
 \begin{enumerate}
 \item Opens TCP connections in order to receive requests and data.
 \item A JSON Object is received containing the request type and the data to be used.
@@ -118,12 +120,10 @@ This subsystem is built out of a X modules, each one with its own task. It is im
  "view:room1;walk:room1,room2;view:room2" etc.
 \end{enumerate}
 
-\textbf{Prediction System:}
-\\
-When designing the system, multiple methods for finding the location of the device were considered.
-\\
-\textit{\textbf{Trilateration}}
-\\
+\noindent When designing the system, multiple methods for finding the location of the device were considered.
+
+\noindent \textit{\textbf{Trilateration}}
+
 Firstly, dimensions of the building and its rooms, and the coordinates of each RP must be known. An RSS measurement is then taken for each visible RP: one next to the RP and one at the furthest corner from the RP, in the same room. To increase precision, more measurements at each of the two points can be taken and the results averaged. \\ 
 We define: \\
 $MRP_0$ - Average signal strength taken at the RP coordinates. \\
@@ -140,7 +140,7 @@ First calculate the distance d between the center of the circles $d = |P_1 - P_0
 If $d > r_0 + r_1$ or $d < |r_0 - r_1|$ then there are no solutions. If $d = 0$ and $r_0 = r_1$ then are an infinite number of solutions.\\
 Considering the two triangles $P_0P_2P_3$ and $P_1P_2P_3$ we can write $$a^2 + h^2 = r_0^2$$ $$b^2 + h^2 = r_1^2$$
 
-Using $d = a + b$ we can solve for $a$,
+\noindent Using $d = a + b$ we can solve for $a$,
 $$a = \frac{r_0^2 - r_1^2 +d^2}{2d}$$
 It can be readily shown that this reduces to $r_0$ when the two circles touch at one point.
 Solve for $h$ by substituting a into the first equation, $$h^2 = r_0^2 - a^2$$
@@ -150,7 +150,7 @@ The problem with this approach is that it assumes that the distance measurements
 This can be solved by finding the closest point to all circles, such that the sum of all distances from a point to the circle be the minimum.\\
 \\
 \textit{\textbf{Probability based approach}}
-\\
+
 Because the specification of the software favours precision over accuracy, it is therefore a better approach to try and guess the room in which the device is found, instead of the actual coordinates. Therefore, an approach is to calculate the probability of a device to be in a room, based on statistic data.\\
 Each room must store a list of average readings for all the reference points visible from that room. 
 We define:\\
@@ -168,13 +168,13 @@ We then calculate
 $$\frac{\displaystyle\sum_{i=1}^{M} \frac{1}{S(RP_i, R_x)}}{N(R_x)}$$
 where $M$ is the number of measurements in the set.
 The result is the probability for the measurements to have been taken in room $R_x$.
-We can then compare the probability for all rooms and choose the one which is most likely.
+We can then compare the probability for all rooms and choose the one which is most likely.\\
 \\
 \textit{\textbf{Machine Learning approach}}
-\\
+
 Machine Learning algorithms can be applied to this application in order to predict the room in which a device is located. We first define a learning set of all measurements taken and the rooms that the measurements were taken in.\\
 There are five classifiers considered:
-Naive Bayes, Bayes Networks, KStar, Decorate and NB Trees. The classifiers are implemented using the Weka Machine Learning Library. The result of each classifier is returned to the backend, therefore, the decision of which predicted value to be used is moved higher up in the system.
+Naive Bayes, Bayes Networks, KStar, Decorate and NB Trees. The classifiers are implemented using the Weka Machine Learning Library ~\cite{Weka}. The result of each classifier is returned to the backend, therefore, the decision of which predicted value to be used is moved higher up in the system.
 Due to a higher level of precision, the Machine Learning approach will have the priority in implementation.
 
 \subsection{Data Store}
@@ -220,7 +220,7 @@ RP Measurement: Distance to an RP as measured in a specific room.
 	\item Room ID: The ID of the room in which the measurement was taken
 \end{itemize}
 
-\section{DATA FLOW and STATE MACHINE}
+\section{Data Flow and Subsystem Interaction}
 Because of the vast amount of data that must be transferred between the subsystems, it is important to visualise and understand what data must be inputted in each subsystem, what data is outputted by each subsystem and how this data moves around in the entire system.
 \begin{figure}
 \noindent\makebox[\textwidth]{\includegraphics[width=\paperwidth]{DIAGRAMS/dataflow.pdf}}
