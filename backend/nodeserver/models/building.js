@@ -1,5 +1,5 @@
 var db = require('../db');
-//check the commas after Number
+
 var Rectangle = {
 		lt:{
 			x: Number,

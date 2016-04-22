@@ -1,3 +1,10 @@
+//THE SERVER WAS BUILT WITH THE HELP OF THE FOLLOWING:
+// https://codeforgeek.com/2015/08/restful-api-node-mongodb/
+// https://nodejs.org/api/
+// https://docs.mongodb.org/manual/
+// http://mongoosejs.com/docs/guide.html
+// http://expressjs.com/en/guide/routing.html
+
 var express     =   require("express");
 var app         =   express();
 var bodyParser  =   require("body-parser");
@@ -16,16 +23,13 @@ router.get("/",function(req,res){
 
 
 });
- app.use('/', router);
-//route() will allow you to use same path for different HTTP operation.
-//So if you have same URL but with different HTTP OP such as POST,GET etc
-//Then use route() to remove redundant code.
+
+app.use('/', router);
 
 router.route("/buildings")
     .get(function(req,res){
         var response = {};
         Building.find({},function(err,data){
-        // Mongo command to fetch all data from collection.
             if(err) {
                 response = {"error" : true,"message" : "Error fetching data"};
             } else {
@@ -38,8 +42,6 @@ router.route("/buildings")
         var response = {};
         console.log("Post");
         console.log(req);
-        // fetch email and password from REST request.
-        // Add strict validation when you use this in Production.
         db.rectangle.lt = req.body.rectangle.lt;
         db.rectangle.rt = req.body.rectangle.rt;
         db.rectangle.lb = req.body.rectangle.lb;
@@ -47,11 +49,7 @@ router.route("/buildings")
         db.name = req.body.name;
         db.width = req.body.width;
         db.height = req.body.height; 
-        // Hash the password using SHA1 algorithm.
-        //db.id =  req.body.id;
         db.save(function(err){
-        // save() will run insert() command of MongoDB.
-        // it will add new data in collection.
             if(err) {
                 response = {"error" : true,"message" : "Failed!"};
                 console.log(err);
@@ -66,7 +64,6 @@ router.route("/buildings")
     .get(function(req,res){
         var response = {};
         Building.findById(req.params.id,function(err,data){
-        // This will run Mongo Query to fetch data based on ID.
             if(err) {
                 response = {"error" : true,"message" : "Error fetching data"};
             } else {
@@ -78,14 +75,10 @@ router.route("/buildings")
     })
     .put(function(req,res){
         var response = {};
-        // first find out record exists or not
-        // if it does then update the record
         Building.findById(req.params.id,function(err,data){
             if(err) {
                 response = {"error" : true,"message" : "Error fetching data"};
             } else {
-            // we got data from Mongo.
-            // change it accordingly.
                 if(req.body.rectangle !== undefined){
                     data.rectangle.lt = req.body.rectangle.lt;
                     data.rectangle.rt = req.body.rectangle.rt;
@@ -102,7 +95,6 @@ router.route("/buildings")
                     data.height = req.body.height;
                 }
                 
-                // save the data
                 data.save(function(err){
                     if(err) {
                         response = {"error" : true,"message" : "Error updating data"};
@@ -117,12 +109,10 @@ router.route("/buildings")
     })
     .delete(function(req,res){
         var response = {};
-        // find the data
         Building.findById(req.params.id,function(err,data){
             if(err) {
                 response = {"error" : true,"message" : "Error fetching data"};
             } else {
-                // data exists, remove it.
                 Room.remove({'building_id' : req.params.id},function(err){
                     if(err) {
                         response = {"error" : true,"message" : "Error deleting data"};
@@ -169,11 +159,7 @@ router.route("/buildings")
         db.est_time = req.body.est_time;
         db.N_avg = 0;
         db.building_id = req.params.id; 
-        // Hash the password using SHA1 algorithm.
-        //db.id =  req.body.id;
         db.save(function(err){
-        // save() will run insert() command of MongoDB.
-        // it will add new data in collection.
             if(err) {
                 response = {"error" : true,"message" : "Failed!"};
                 console.log(err);
@@ -199,7 +185,6 @@ router.route("/buildings")
     })
     .delete(function(req,res){
         var response = {};
-        // find the data
         RPMeasurement.remove({},function(err){
                     if(err) {
                         response = {"error" : true,"message" : "Error deleting data"};
@@ -252,8 +237,6 @@ router.route("/buildings")
         var rooms;
         Room.find({'building_id': req.params.id}, function(err,data){
             rooms = data.map(function(data) {return data._id;});
-            //console.log(rooms);
-
             RPMeasurement.find({room_id: {$in: rooms}}, function(err,data){
                 request.learning_set = data;
                 console.log(JSON.stringify(request));
@@ -268,7 +251,6 @@ router.route("/buildings")
             res.send(data.toString());
             count++;
         });
-        //res.json(response);
         })
     .post(function(req,res){
         var response = {};
@@ -301,7 +283,6 @@ router.route("/buildings")
             if(count == 2)
                 client.end();
         });
-        //res.json(response);
         });
 
     router.route("/locate/:id")
@@ -320,7 +301,6 @@ router.route("/buildings")
         client.write(JSON.stringify(request));
         client.on('data', (data) => {
             console.log(data.toString());
-            //client.end();
             response = data;
         });
         client.end;
@@ -343,7 +323,6 @@ router.route("/buildings")
             res.send(response);
         });
         client.end();
-        //res.json(response);
         });
 
     router.route("/locationdata/:id")
@@ -397,7 +376,6 @@ router.route("/buildings")
         request.building_id = req.params.id;
         request.deadline = req.body.deadline;
         request.request_set = [];
-        //request.request_set.push(req.body);
         selectedRooms = req.body.selected_rooms;
         var roomIDs = selectedRooms.map(function(selectedRooms) {return selectedRooms.id;});
         Room.find({_id: {$in: roomIDs}}, function(err,data){
@@ -405,9 +383,14 @@ router.route("/buildings")
             
             for(var i = 0; i< data.length;i++) {
                 var temp = data[i].toObject();
-                temp.excitement = selectedRooms[i].excitement;
-               dataObj.push(temp);
-             
+                for(var j = 0; j<selectedRooms.length;j++){
+                    if(selectedRooms[j].id == temp._id){
+                        temp.excitement = selectedRooms[j].excitement;
+                        dataObj.push(temp);    
+                    }
+                        
+                }
+               
             }
             request.request_set = dataObj;
             console.log(request.request_set); 
@@ -417,11 +400,9 @@ router.route("/buildings")
         });
         client.on('data', (data) => {
             console.log(data.toString());
-            //client.end();
             response = data;
             res.send(response);
         });
-        //res.json(response);
         });
     
 
