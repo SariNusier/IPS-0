@@ -9,26 +9,19 @@ import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.sari.museumguide.R;
 import com.example.sari.museumguide.database.Database;
 import com.example.sari.museumguide.models.indoormapping.Building;
 import com.example.sari.museumguide.models.indoormapping.Room;
 import com.example.sari.museumguide.models.positioning.RPMeasurement;
-
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Handler;
 
 public class GuideActivity extends AppCompatActivity {
     private static final int BLUETOOTH_THRESHOLD = -40;
@@ -58,20 +51,22 @@ public class GuideActivity extends AppCompatActivity {
             startActivityForResult(enableBtIntent, 1);
         }
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        registerReceiver(wifiBroadcastReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        registerReceiver(wifiBroadcastReceiver,
+                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         b =(Building) getIntent().getSerializableExtra("building");
         selectedRooms = getIntent().getStringExtra("selected_rooms");
         currentRoomView = (TextView)findViewById(R.id.current_room_textview);
         routeTextView = (TextView)findViewById(R.id.visitor_route_textview);
         exhibitTextView = (TextView) findViewById(R.id.visitor_exhibit_textview);
-        String route = Database.getRoute(b.getId(),selectedRooms,getIntent().getIntExtra("deadline",10000));
+        String route = Database.getRoute(b.getId(),selectedRooms,
+                getIntent().getIntExtra("deadline",10000));
         routeTextView.setText(parseRoute(route));
         currentRoom = null; //Entrance room?
         wifiManager.startScan();
         currentExhibit = "";
         exhibitTextView.setText("No exhibit nearby");
-        //bluetoothAdapter.startDiscovery();
-        registerReceiver(btBroadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+        registerReceiver(btBroadcastReceiver,
+                new IntentFilter(BluetoothDevice.ACTION_FOUND));
         TimerTask tt = new TimerTask() {
             @Override
             public void run() {
@@ -104,18 +99,19 @@ public class GuideActivity extends AppCompatActivity {
                 RPIDs[found.indexOf(sr)] = sr.BSSID;
                 values[found.indexOf(sr)] = (double) sr.level;
             }
-            String foundRoomID = Database.classify(new RPMeasurement(RPIDs, values, null), b.getId());
+            String foundRoomID = Database.classify(new RPMeasurement(RPIDs, values, null),
+                    b.getId());
             String[] results = foundRoomID.split(",");
             for(String result:results){
                 for(Room room:b.getRooms()){
                     if(room.getId().equals(result.split(":")[1])){
-                        currentRoomView.setText(currentRoomView.getText()+result.split(":")[0]+":"+room.getRoomName()+"\n");
+                        currentRoomView.setText(currentRoomView.getText()
+                                +result.split(":")[0]+":"+room.getRoomName()+"\n");
                         shouldChangeRoom(room);
                         break;
                     }
                 }
             }
-            //currentRoomView.setText(currentRoomView.getText()+currentRoom.getRoomName());
             shouldChangeRoom(currentRoom);
             wifiManager.startScan();
         }
@@ -139,7 +135,8 @@ public class GuideActivity extends AppCompatActivity {
                         }
                     }
                 } else {
-                    if(device.getAddress().equals(currentExhibit) && rssi >= BLUETOOTH_THRESHOLD){
+                    if(device.getAddress().equals(currentExhibit)
+                            && rssi >= BLUETOOTH_THRESHOLD){
                         bluetoothAdapter.cancelDiscovery();
                     } else {
                         currentExhibit = "";
@@ -164,7 +161,8 @@ public class GuideActivity extends AppCompatActivity {
             long curTime = System.currentTimeMillis();
             long duration = curTime-timeOfChange;
             timeOfChange = curTime;
-            Database.postLocationData(currentRoom.getId(), TimeUnit.MILLISECONDS.toSeconds(duration));
+            Database.postLocationData(currentRoom.getId(),
+                    TimeUnit.MILLISECONDS.toSeconds(duration));
         }
         return true;
     }
@@ -174,9 +172,12 @@ public class GuideActivity extends AppCompatActivity {
         String[] steps = route.split(";");
         for(String step:steps){
             if(step.split(":")[0].equals("view")){
-                toReturn+="View room: "+b.findRoomById(step.split(":")[1]).getRoomName()+"\n";
+                toReturn+="View room: "
+                        +b.findRoomById(step.split(":")[1]).getRoomName()+"\n";
             } else {
-                toReturn+="Go to room: "+b.findRoomById(step.split(":")[1].split(",")[1]).getRoomName()+"\n";
+                toReturn+="Go to room: "
+                        +b.findRoomById(step.split(":")[1].split(",")[1])
+                        .getRoomName()+"\n";
             }
         }
         return toReturn;

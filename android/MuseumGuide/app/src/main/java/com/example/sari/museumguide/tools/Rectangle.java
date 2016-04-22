@@ -2,9 +2,6 @@ package com.example.sari.museumguide.tools;
 
 import java.io.Serializable;
 
-/**
- * Created by sari on 15/02/16.
- */
 public class Rectangle implements Serializable{
     private Point coordinates;
     private double width, height;

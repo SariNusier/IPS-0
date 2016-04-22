@@ -21,6 +21,7 @@
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,6 +52,7 @@
             android:name=".activities.BuildingActivity"
             android:label="@string/title_activity_building"
             android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -60,6 +62,7 @@
         <activity
             android:name=".activities.GuideActivity"
             android:label="@string/title_activity_guide"
+            android:screenOrientation="portrait"
             android:parentActivityName=".activities.BuildingActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

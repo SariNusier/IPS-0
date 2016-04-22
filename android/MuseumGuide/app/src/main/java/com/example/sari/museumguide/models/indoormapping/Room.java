@@ -19,12 +19,12 @@ public class Room implements Serializable{
     private ArrayList<String> exhibits;
 
 
-    public Room(String id, String building_id, String roomName, RectangleDB rectangleDB, double width, double height, double est_time){
+    public Room(String id, String building_id, String roomName,
+                RectangleDB rectangleDB, double width, double height, double est_time){
         this.roomName = roomName;
         this.id = id;
         this.width = width;
         this.height = height;
-        //this.roomDescription = roomDescription;
         this.rectangleDB = rectangleDB;
         this.building_id = building_id;
         this.roomRectangle = new Rectangle(new Point(0,0),0,0); //for testing!!!
@@ -36,7 +36,8 @@ public class Room implements Serializable{
         return building_id;
     }
 
-    public Room(String building_id, String roomName, RectangleDB rectangleDB, double width, double height){
+    public Room(String building_id, String roomName,
+                RectangleDB rectangleDB, double width, double height){
         this.building_id = building_id;
 
         this.roomName = roomName;
@@ -80,17 +81,20 @@ public class Room implements Serializable{
     }
 
     public boolean isNeighbour(Room room){
-        //for convenience, a room is not its own neighbour
         if(this == room)
             return false;
 
-        if(this.getRoomRectangle().getCoordinates().getX() + this.getRoomRectangle().getWidth()
+        if(this.getRoomRectangle().getCoordinates().getX()
+                + this.getRoomRectangle().getWidth()
                 == room.getRoomRectangle().getCoordinates().getX()
-                || this.getRoomRectangle().getCoordinates().getY() + this.getRoomRectangle().getHeight()
+                || this.getRoomRectangle().getCoordinates().getY()
+                + this.getRoomRectangle().getHeight()
                 == room.getRoomRectangle().getCoordinates().getY()
-                || room.getRoomRectangle().getCoordinates().getX() + room.getRoomRectangle().getWidth()
+                || room.getRoomRectangle().getCoordinates().getX()
+                + room.getRoomRectangle().getWidth()
                 == this.getRoomRectangle().getCoordinates().getX()
-                || room.getRoomRectangle().getCoordinates().getY() + room.getRoomRectangle().getHeight()
+                || room.getRoomRectangle().getCoordinates().getY()
+                + room.getRoomRectangle().getHeight()
                 == this.getRoomRectangle().getCoordinates().getY())
             return true;
 

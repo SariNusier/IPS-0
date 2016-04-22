@@ -1,20 +1,16 @@
 package com.example.sari.museumguide.database;
 
 import android.util.Log;
-import android.util.Pair;
-
 import com.example.sari.museumguide.models.indoormapping.Building;
 import com.example.sari.museumguide.models.indoormapping.Floor;
 import com.example.sari.museumguide.models.indoormapping.Room;
 import com.example.sari.museumguide.models.positioning.RPMeasurement;
 import com.example.sari.museumguide.tools.Point;
 import com.example.sari.museumguide.tools.RectangleDB;
-
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.InputStream;
@@ -28,7 +24,6 @@ import java.util.ArrayList;
  */
 public class Database {
 
-    //public final static String API_URL = "http://178.62.127.39:3000/";
     public final static String API_URL = "http://192.168.1.106:3000/";
     public static Building[] getBuildings(){
         String StringData = getData("buildings");
@@ -38,18 +33,28 @@ public class Database {
             JSONArray JSONData = new JSONArray(StringData);
             for(int i = 0; i<JSONData.length();++i){
                 JSONObject building = JSONData.getJSONObject(i);
-                Point lt = new Point(building.getJSONObject("rectangle").getJSONObject("lt").getDouble("x"),
-                                     building.getJSONObject("rectangle").getJSONObject("lt").getDouble("y"));
-                Point rt = new Point(building.getJSONObject("rectangle").getJSONObject("rt").getDouble("x"),
-                                     building.getJSONObject("rectangle").getJSONObject("rt").getDouble("y"));
-                Point lb = new Point(building.getJSONObject("rectangle").getJSONObject("lb").getDouble("x"),
-                                     building.getJSONObject("rectangle").getJSONObject("lb").getDouble("y"));
-                Point rb = new Point(building.getJSONObject("rectangle").getJSONObject("rb").getDouble("x"),
-                                     building.getJSONObject("rectangle").getJSONObject("rb").getDouble("y"));
+                Point lt = new Point(building.getJSONObject("rectangle")
+                                             .getJSONObject("lt").getDouble("x"),
+                                     building.getJSONObject("rectangle")
+                                             .getJSONObject("lt").getDouble("y"));
+                Point rt = new Point(building.getJSONObject("rectangle")
+                                             .getJSONObject("rt").getDouble("x"),
+                                     building.getJSONObject("rectangle")
+                                             .getJSONObject("rt").getDouble("y"));
+                Point lb = new Point(building.getJSONObject("rectangle")
+                                             .getJSONObject("lb").getDouble("x"),
+                                     building.getJSONObject("rectangle")
+                                             .getJSONObject("lb").getDouble("y"));
+                Point rb = new Point(building.getJSONObject("rectangle")
+                                             .getJSONObject("rb").getDouble("x"),
+                                     building.getJSONObject("rectangle")
+                                             .getJSONObject("rb").getDouble("y"));
                 RectangleDB r = new RectangleDB(lt,rt,lb,rb);
-                Building toAdd = new Building(building.getString("_id"),r,building.getString("name"),
-                        building.getDouble("width"),building.getDouble("height"),
-                        getRooms(building.getString("_id")));
+                Building toAdd = new Building(building.getString("_id"),r,
+                                              building.getString("name"),
+                                              building.getDouble("width"),
+                                              building.getDouble("height"),
+                                              getRooms(building.getString("_id")));
                 toReturn.add(toAdd);
                 getRooms(building.getString("_id"));
             }
@@ -103,12 +108,8 @@ public class Database {
         return true;
     }
 
-    /**Only storing duration so far
-     *
-     * @param room_id
-     * @param duration
-     * @return
-     */
+
+    //Only storing duration so far
     public static boolean postLocationData(String room_id, long duration){
        JSONObject toSend = new JSONObject();
         try {
@@ -143,13 +144,20 @@ public class Database {
         Building toReturn = null;
         try {
             JSONObject building = new JSONObject(StringData);
-            Point lt = new Point(building.getJSONObject("rectangle").getJSONObject("lt").getDouble("x"),
-                                 building.getJSONObject("rectangle").getJSONObject("lt").getDouble("y"));
-            Point rt = new Point(building.getJSONObject("rectangle").getJSONObject("rt").getDouble("x"),
-                        building.getJSONObject("rectangle").getJSONObject("rt").getDouble("y"));
-            Point lb = new Point(building.getJSONObject("rectangle").getJSONObject("lb").getDouble("x"),
-                        building.getJSONObject("rectangle").getJSONObject("lb").getDouble("y"));
-            Point rb = new Point(building.getJSONObject("rectangle").getJSONObject("rb").getDouble("x"),
+            Point lt = new Point(building.getJSONObject("rectangle")
+                                         .getJSONObject("lt").getDouble("x"),
+                                 building.getJSONObject("rectangle")
+                                         .getJSONObject("lt").getDouble("y"));
+            Point rt = new Point(building.getJSONObject("rectangle")
+                                         .getJSONObject("rt").getDouble("x"),
+                        building.getJSONObject("rectangle")
+                                         .getJSONObject("rt").getDouble("y"));
+            Point lb = new Point(building.getJSONObject("rectangle")
+                                         .getJSONObject("lb").getDouble("x"),
+                        building.getJSONObject("rectangle")
+                                         .getJSONObject("lb").getDouble("y"));
+            Point rb = new Point(building.getJSONObject("rectangle")
+                                          .getJSONObject("rb").getDouble("x"),
                        building.getJSONObject("rectangle").getJSONObject("rb").getDouble("y"));
             RectangleDB r = new RectangleDB(lt,rt,lb,rb);
             toReturn = new Building(building.getString("_id"),r,building.getString("name"),
@@ -174,16 +182,26 @@ public class Database {
             JSONArray JSONData = new JSONArray(StringData);
             for(int i = 0; i<JSONData.length();++i){
                 JSONObject room = JSONData.getJSONObject(i);
-                Point lt = new Point(room.getJSONObject("rectangle").getJSONObject("lt").getDouble("x"),
-                                     room.getJSONObject("rectangle").getJSONObject("lt").getDouble("y"));
-                Point rt = new Point(room.getJSONObject("rectangle").getJSONObject("rt").getDouble("x"),
-                                     room.getJSONObject("rectangle").getJSONObject("rt").getDouble("y"));
-                Point lb = new Point(room.getJSONObject("rectangle").getJSONObject("lb").getDouble("x"),
-                                     room.getJSONObject("rectangle").getJSONObject("lb").getDouble("y"));
-                Point rb = new Point(room.getJSONObject("rectangle").getJSONObject("rb").getDouble("x"),
-                                     room.getJSONObject("rectangle").getJSONObject("rb").getDouble("y"));
+                Point lt = new Point(room.getJSONObject("rectangle")
+                                         .getJSONObject("lt").getDouble("x"),
+                                     room.getJSONObject("rectangle")
+                                         .getJSONObject("lt").getDouble("y"));
+                Point rt = new Point(room.getJSONObject("rectangle")
+                                         .getJSONObject("rt").getDouble("x"),
+                                     room.getJSONObject("rectangle")
+                                         .getJSONObject("rt").getDouble("y"));
+                Point lb = new Point(room.getJSONObject("rectangle")
+                                         .getJSONObject("lb").getDouble("x"),
+                                     room.getJSONObject("rectangle")
+                                         .getJSONObject("lb").getDouble("y"));
+                Point rb = new Point(room.getJSONObject("rectangle")
+                                         .getJSONObject("rb").getDouble("x"),
+                                     room.getJSONObject("rectangle")
+                                         .getJSONObject("rb").getDouble("y"));
                 RectangleDB r = new RectangleDB(lt,rt,lb,rb);
-                Room toAdd = new Room(room.getString("_id"),building_id,room.getString("name"),r,room.getDouble("width"),room.getDouble("height"),room.getDouble("est_time"));
+                Room toAdd = new Room(room.getString("_id"),building_id,room.getString("name"),
+                        r,room.getDouble("width"),room.getDouble("height"),
+                        room.getDouble("est_time"));
                 toReturn.add(toAdd);
             }
         } catch (Exception e) {
@@ -224,7 +242,6 @@ public class Database {
 
             roomToAdd.put("rectangle", rectangle);
             postData("rooms", building_id, roomToAdd.toString());
-            //building.setRooms(getRooms(building.getId()));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -238,7 +255,7 @@ public class Database {
         String data = "";
         String building_id = "";
         String request = params[0];
-        InputStream inputStream = null;
+        InputStream inputStream;
 
         if (params.length >= 2){
             building_id = params[1];
@@ -262,7 +279,7 @@ public class Database {
         Log.d("Data to send", data);
         String building_id = "";
         String request = params[0];
-        InputStream is = null;
+        InputStream is;
         String dataRec = "";
         if (params.length >= 2){
             building_id = params[1];
@@ -272,13 +289,10 @@ public class Database {
             URL url = new URL(API_URL+request+"/"+building_id);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             Log.d("Error", "Ex " + url.toString());
-            //connection.setRequestMethod("POST");
             connection.setDoOutput(true);
             connection.setChunkedStreamingMode(0);
             connection.setRequestProperty("Content-Type", "application/json");
-            //connection.setRequestProperty("Content-Length", "" + Integer.toString(data.getBytes().length));
             OutputStream os = new BufferedOutputStream(connection.getOutputStream());
-            //BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
 
             os.write(data.getBytes());
             os.flush();
@@ -291,7 +305,6 @@ public class Database {
             }
             os.close();
             connection.disconnect();
-            //connection.connect();
         } catch (Exception e) {
             Log.d("Error","Ex "+e);
             e.printStackTrace();
@@ -316,7 +329,6 @@ public class Database {
             connection.setRequestMethod("DELETE");
             connection.getContent();
             connection.disconnect();
-            //connection.connect();
         } catch (Exception e) {
             Log.d("Error","Ex "+e);
             e.printStackTrace();

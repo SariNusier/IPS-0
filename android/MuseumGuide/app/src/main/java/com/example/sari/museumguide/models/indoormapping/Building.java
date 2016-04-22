@@ -1,13 +1,11 @@
 package com.example.sari.museumguide.models.indoormapping;
 
-import com.example.sari.museumguide.tools.Rectangle;
+
 import com.example.sari.museumguide.tools.RectangleDB;
 
 import java.io.Serializable;
 
-/**
- * Created by sari on 15/02/16.
- */
+
 public class Building implements Serializable{
     private RectangleDB rectangle;
     private String name;
@@ -18,7 +16,8 @@ public class Building implements Serializable{
 
 
 
-    public Building(String id, RectangleDB rectangle, String name, double width, double height, Room[] rooms) {
+    public Building(String id, RectangleDB rectangle,
+                    String name, double width, double height, Room[] rooms) {
         this.rectangle = rectangle;
         this.id = id;
         this.name = name;

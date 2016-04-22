@@ -10,7 +10,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/customCheckBox"/>
+        android:id="@+id/chkBox"/>
 
     <SeekBar
         android:focusable="false"
@@ -18,8 +18,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/seekBar"
         android:layout_margin="10dp"
-        android:progress="20"
-        android:secondaryProgress="20"
+        android:progress="0"
+        android:max="8"
+        android:secondaryProgress="0"
         android:indeterminate="false" />
 
 

@@ -1,38 +1,28 @@
 package com.example.sari.museumguide.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.sari.museumguide.R;
 import com.example.sari.museumguide.database.Database;
 import com.example.sari.museumguide.models.indoormapping.Building;
 import com.example.sari.museumguide.models.indoormapping.Room;
 import com.example.sari.museumguide.tools.CustomAdapter;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class BuildingActivity extends AppCompatActivity {
     private ListView museumListView;
-    private ArrayAdapter museumListAdapter;
     private TextView estTimeView;
+    private EditText deadlineText;
     private Building b;
     private String building_id;
-    private boolean selected_rooms[];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,15 +32,9 @@ public class BuildingActivity extends AppCompatActivity {
         b =(Building) getIntent().getSerializableExtra("building");
         building_id = b.getId();
         museumListView = (ListView)findViewById(R.id.room_list_building);
+        deadlineText = (EditText) findViewById(R.id.deadline_edittext);
         museumListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         estTimeView = (TextView)findViewById(R.id.estimated_time_textview);
-        /*museumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startEditRoomActivity(position);
-            }
-        });
-        */
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -62,45 +46,19 @@ public class BuildingActivity extends AppCompatActivity {
         for(Room r: b.getRooms()){
             roomNames.add(r.getRoomName());
         }
-        //museumListAdapter = new ArrayAdapter(this, R.layout.custom_listview_item,
-        //       roomNames);
-        museumListAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_multiple_choice,roomNames);
-       // museumListAdapter = new CustomAdapter(this, roomNames);
+        ArrayAdapter museumListAdapter = new CustomAdapter(this, roomNames);
         museumListView.setAdapter(museumListAdapter);
-        selected_rooms = new boolean[roomNames.size()];
-       /* museumListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("Items selected:", "Selected");
-            }
+        updateEstTime();
+    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                Log.d("Items selected:", "Unselected                                                                                                                                                                        ");
-            }
-        });
-*/
-        museumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selected_rooms[position] = !selected_rooms[position];
-                Log.d("Selected", "Ceva!");
-                String result = "";
-                for (boolean bool : selected_rooms) {
-                    result += "," + bool;
-                }
-                Log.d("Selected", result);
-                estTimeView.setText("Estimated time: " +(int) getEstTime());
-
-            }
-        });
-
+    public void updateEstTime(){
+        estTimeView.setText("Estimated time: " +(int) getEstTime());
     }
 
     public double getEstTime(){
         double toReturn = 0;
         for(int i = 0;i<b.getRooms().length;++i){
-            if(selected_rooms[i]){
+            if(((CustomAdapter) museumListView.getAdapter()).isChecked(i)){
                 toReturn+=b.getRooms()[i].getEst_time();
             }
         }
@@ -110,15 +68,19 @@ public class BuildingActivity extends AppCompatActivity {
     public void startGuideActivity(View v){
         String selectedRooms = "";
         for(int i = 0;i<b.getRooms().length;++i){
-            if(selected_rooms[i]){
-                selectedRooms+=b.getRooms()[i].getId()+":"+"1"+",";
+            if(((CustomAdapter) museumListView.getAdapter()).isChecked(i)){
+                selectedRooms+=b.getRooms()[i].getId()+":"
+                        +((CustomAdapter) museumListView.getAdapter()).getProgress(i)
+                        +",";
             }
         }
-        if(!selectedRooms.isEmpty()){
+        Log.d("SELECTED ROOMS: ",selectedRooms);
+        if(!selectedRooms.isEmpty() && !deadlineText.getText().toString().isEmpty()){
             Intent intent = new Intent(this, GuideActivity.class);
             intent.putExtra("building",b);
-            intent.putExtra("selected_rooms",selectedRooms.substring(0,selectedRooms.length()-1));
-            //intent.putExtra("deadline",0);
+            intent.putExtra("selected_rooms",selectedRooms
+                                             .substring(0,selectedRooms.length()-1));
+            intent.putExtra("deadline",Integer.parseInt(deadlineText.getText().toString()));
             startActivity(intent);
         }
     }

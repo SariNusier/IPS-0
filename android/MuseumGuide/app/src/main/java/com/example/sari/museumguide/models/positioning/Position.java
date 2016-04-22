@@ -1,8 +1,5 @@
 package com.example.sari.museumguide.models.positioning;
 
-/**
- * Created by sari on 18/02/16.
- */
 public class Position {
     RPMeasurement[] measurements;
 
