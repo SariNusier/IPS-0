@@ -2,9 +2,6 @@ package com.example.sari.ips_admin.tools;
 
 import java.io.Serializable;
 
-/**
- * Created by sari on 15/02/16.
- */
 public class Point implements Serializable{
     private double x, y;
 

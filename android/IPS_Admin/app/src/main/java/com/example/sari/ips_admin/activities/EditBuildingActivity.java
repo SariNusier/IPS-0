@@ -7,8 +7,6 @@ import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,15 +18,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.example.sari.ips_admin.R;
 import com.example.sari.ips_admin.database.Database;
 import com.example.sari.ips_admin.models.indoormapping.Building;
 import com.example.sari.ips_admin.models.indoormapping.Room;
 import com.example.sari.ips_admin.models.positioning.RPMeasurement;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +30,6 @@ import java.util.List;
 //CHECK IF GETTING BUILDINGS HERE IS ACTUALLY NEEDED!
 public class EditBuildingActivity extends AppCompatActivity {
     private ListView museumListView;
-    private ArrayAdapter museumListAdapter;
     private Building b;
     private String building_id;
     WifiManager wifiManager;
@@ -58,7 +51,8 @@ public class EditBuildingActivity extends AppCompatActivity {
             }
         });
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        registerReceiver(broadcastReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        registerReceiver(broadcastReceiver,
+                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
@@ -70,8 +64,8 @@ public class EditBuildingActivity extends AppCompatActivity {
         for(Room r: b.getRooms()){
             roomNames.add(r.getRoomName());
         }
-        museumListAdapter = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,
-                roomNames);
+        ArrayAdapter museumListAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_expandable_list_item_1, roomNames);
         museumListView.setAdapter(museumListAdapter);
 
     }
@@ -127,10 +121,12 @@ public class EditBuildingActivity extends AppCompatActivity {
                     RPIDs[found.indexOf(sr)] = sr.BSSID;
                     values[found.indexOf(sr)] = (double) sr.level;
                 }
-                String foundRoomID = Database.classify(new RPMeasurement(RPIDs, values, null), building_id);
+                String foundRoomID = Database.classify(new RPMeasurement(RPIDs, values, null),
+                                                        building_id);
                 for(Room r:b.getRooms()){
                     if(r.getId().equals(foundRoomID)){
-                        ((TextView)findViewById(R.id.building_located_room)).setText(r.getRoomName());
+                        ((TextView)findViewById(R.id.building_located_room))
+                                .setText(r.getRoomName());
                         break;
                     }
                 }

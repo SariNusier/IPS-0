@@ -7,23 +7,18 @@ import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.sari.ips_admin.R;
 import com.example.sari.ips_admin.database.Database;
 import com.example.sari.ips_admin.models.positioning.RPMeasurement;
-
 import java.util.List;
-//TODO: Add start and stop measurement.
+
 public class EditRoomActivity extends AppCompatActivity {
     private String currentRoom = "";
     WifiManager wifiManager;
@@ -41,7 +36,8 @@ public class EditRoomActivity extends AppCompatActivity {
         Intent intent = getIntent();
         currentRoom = intent.getStringExtra("room_id");
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        registerReceiver(broadcastReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        registerReceiver(broadcastReceiver,
+                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         measureButton.setOnClickListener(startMListener);
 
     }

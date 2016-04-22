@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class Rectangle implements Serializable{
     private Point coordinates;
-    private double width, height;
+    private double width, length;
 
-    public Rectangle(Point coordinates, double width, double height){
+    public Rectangle(Point coordinates, double width, double length){
         this.coordinates = coordinates;
         this.width = width;
-        this.height = height;
+        this.length = length;
     }
 
     public Point getCoordinates() {
@@ -20,8 +20,8 @@ public class Rectangle implements Serializable{
         return width;
     }
 
-    public double getHeight() {
-        return height;
+    public double getLength() {
+        return length;
     }
 
     public void setCoordinates(Point coordinates) {
@@ -32,12 +32,12 @@ public class Rectangle implements Serializable{
         this.width = width;
     }
 
-    public void setHeight(double height) {
-        this.height = height;
+    public void setLength(double length) {
+        this.length = length;
     }
 
     public Point getCenter(){
-        return new Point((width+coordinates.getX())/2,(height+coordinates.getY())/2);
+        return new Point((width+coordinates.getX())/2,(length+coordinates.getY())/2);
     }
 
 }

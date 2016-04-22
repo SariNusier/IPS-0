@@ -3,8 +3,6 @@ package com.example.sari.ips_admin.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,18 +13,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 import com.example.sari.ips_admin.R;
 import com.example.sari.ips_admin.database.Database;
 import com.example.sari.ips_admin.models.indoormapping.Building;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class BuildingsActivity extends AppCompatActivity {
     Building[] buildings;
     private  ListView museumListView;
-    private ArrayAdapter museumListAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +34,8 @@ public class BuildingsActivity extends AppCompatActivity {
         Should not stay like this forever, fetching data must be done outside the UI thread.
         It is implemented like this only because of my laziness.
          */
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy
+                                        .Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         museumListView = (ListView)findViewById(R.id.museumListView);
         museumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -63,12 +59,12 @@ public class BuildingsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         buildings = Database.getBuildings();
-        ArrayList buildingNames = new ArrayList<String>();
+        ArrayList buildingNames = new ArrayList<>();
         for(Building b: buildings){
             buildingNames.add(b.getName());
         }
-        museumListAdapter = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,
-                buildingNames);
+        ArrayAdapter museumListAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_expandable_list_item_1, buildingNames);
         museumListView.setAdapter(museumListAdapter);
     }
 

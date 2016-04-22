@@ -53,7 +53,7 @@ public class Database {
                 Building toAdd = new Building(building.getString("_id"),r,
                                               building.getString("name"),
                                               building.getDouble("width"),
-                                              building.getDouble("height"),
+                                              building.getDouble("length"),
                                               getRooms(building.getString("_id")));
                 toReturn.add(toAdd);
                 getRooms(building.getString("_id"));
@@ -69,7 +69,7 @@ public class Database {
         try {
             buildingToAdd.put("name",building.getName());
             buildingToAdd.put("width", building.getWidth());
-            buildingToAdd.put("height",building.getHeight());
+            buildingToAdd.put("length",building.getLength());
             JSONObject rectangle = new JSONObject();
             rectangle.put("lt", new JSONObject().put("x", building.getRectangle().getLt().getX())
                                                 .put("y", building.getRectangle().getLt().getY()))
@@ -161,7 +161,7 @@ public class Database {
                        building.getJSONObject("rectangle").getJSONObject("rb").getDouble("y"));
             RectangleDB r = new RectangleDB(lt,rt,lb,rb);
             toReturn = new Building(building.getString("_id"),r,building.getString("name"),
-                        building.getDouble("width"),building.getDouble("height"),
+                        building.getDouble("width"),building.getDouble("length"),
                         getRooms(building.getString("_id")));
 
         } catch (Exception e) {
@@ -200,7 +200,7 @@ public class Database {
                                          .getJSONObject("rb").getDouble("y"));
                 RectangleDB r = new RectangleDB(lt,rt,lb,rb);
                 Room toAdd = new Room(room.getString("_id"),building_id,room.getString("name"),
-                        r,room.getDouble("width"),room.getDouble("height"),
+                        r,room.getDouble("width"),room.getDouble("length"),
                         room.getDouble("est_time"));
                 toReturn.add(toAdd);
             }
@@ -229,7 +229,7 @@ public class Database {
         try {
             roomToAdd.put("name", room.getRoomName());
             roomToAdd.put("width", room.getWidth());
-            roomToAdd.put("height", room.getHeight());
+            roomToAdd.put("length", room.getLength());
             JSONObject rectangle = new JSONObject();
             rectangle.put("lt", new JSONObject().put("x", room.getRectangleDB().getLt().getX())
                     .put("y", room.getRectangleDB().getLt().getY()))

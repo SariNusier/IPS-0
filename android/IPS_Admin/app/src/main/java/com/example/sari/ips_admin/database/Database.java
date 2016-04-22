@@ -1,33 +1,21 @@
 package com.example.sari.ips_admin.database;
 
-import android.os.AsyncTask;
-import android.util.Log;
 
+import android.util.Log;
 import com.example.sari.ips_admin.models.indoormapping.Building;
 import com.example.sari.ips_admin.models.indoormapping.Floor;
 import com.example.sari.ips_admin.models.indoormapping.Room;
 import com.example.sari.ips_admin.models.positioning.RPMeasurement;
 import com.example.sari.ips_admin.tools.Point;
-import com.example.sari.ips_admin.tools.Rectangle;
 import com.example.sari.ips_admin.tools.RectangleDB;
-
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.EOFException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -36,7 +24,6 @@ import java.util.ArrayList;
  */
 public class Database {
 
-    //public final static String API_URL = "http://178.62.127.39:3000/";
     public final static String API_URL = "http://192.168.1.106:3000/";
     public static Building[] getBuildings(){
         String StringData = getData("buildings");
@@ -56,7 +43,7 @@ public class Database {
                                      building.getJSONObject("rectangle").getJSONObject("rb").getDouble("y"));
                 RectangleDB r = new RectangleDB(lt,rt,lb,rb);
                 Building toAdd = new Building(building.getString("_id"),r,building.getString("name"),
-                        building.getDouble("width"),building.getDouble("height"),
+                        building.getDouble("width"),building.getDouble("length"),
                         getRooms(building.getString("_id")));
                 toReturn.add(toAdd);
                 getRooms(building.getString("_id"));
@@ -72,7 +59,7 @@ public class Database {
         try {
             buildingToAdd.put("name",building.getName());
             buildingToAdd.put("width", building.getWidth());
-            buildingToAdd.put("height",building.getHeight());
+            buildingToAdd.put("length",building.getLength());
             JSONObject rectangle = new JSONObject();
             rectangle.put("lt", new JSONObject().put("x", building.getRectangle().getLt().getX())
                                                 .put("y", building.getRectangle().getLt().getY()))
@@ -126,7 +113,7 @@ public class Database {
                        building.getJSONObject("rectangle").getJSONObject("rb").getDouble("y"));
             RectangleDB r = new RectangleDB(lt,rt,lb,rb);
             toReturn = new Building(building.getString("_id"),r,building.getString("name"),
-                        building.getDouble("width"),building.getDouble("height"),
+                        building.getDouble("width"),building.getDouble("length"),
                         getRooms(building.getString("_id")));
 
         } catch (Exception e) {
@@ -156,7 +143,9 @@ public class Database {
                 Point rb = new Point(room.getJSONObject("rectangle").getJSONObject("rb").getDouble("x"),
                                      room.getJSONObject("rectangle").getJSONObject("rb").getDouble("y"));
                 RectangleDB r = new RectangleDB(lt,rt,lb,rb);
-                Room toAdd = new Room(room.getString("_id"),building_id,room.getString("name"),r,room.getDouble("width"),room.getDouble("height"),room.getDouble("est_time"));
+                Room toAdd = new Room(room.getString("_id"),building_id,
+                        room.getString("name"),r,room.getDouble("width"),
+                        room.getDouble("length"),room.getDouble("est_time"));
                 toReturn.add(toAdd);
             }
         } catch (Exception e) {
@@ -170,7 +159,7 @@ public class Database {
         try {
             roomToAdd.put("name", room.getRoomName());
             roomToAdd.put("width", room.getWidth());
-            roomToAdd.put("height", room.getHeight());
+            roomToAdd.put("length", room.getLength());
             JSONObject rectangle = new JSONObject();
             rectangle.put("lt", new JSONObject().put("x", room.getRectangleDB().getLt().getX())
                     .put("y", room.getRectangleDB().getLt().getY()))
@@ -183,7 +172,6 @@ public class Database {
 
             roomToAdd.put("rectangle", rectangle);
             postData("rooms", roomToAdd.toString(), building_id);
-            //building.setRooms(getRooms(building.getId()));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,7 +185,7 @@ public class Database {
         String data = "";
         String building_id = "";
         String request = params[0];
-        InputStream inputStream = null;
+        InputStream inputStream;
 
         if (params.length >= 2){
             building_id = params[1];
@@ -220,7 +208,7 @@ public class Database {
         String id = "";
         String request = params[0];
         String data = params[1];
-        InputStream is = null;
+        InputStream is;
         String dataRec = "";
         if (params.length > 2){
             id = params[2];
@@ -230,14 +218,10 @@ public class Database {
             URL url = new URL(API_URL+request+"/"+id);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             Log.d("Error", "Ex " + url.toString());
-            //connection.setRequestMethod("POST");
             connection.setDoOutput(true);
             connection.setChunkedStreamingMode(0);
             connection.setRequestProperty("Content-Type", "application/json");
-            //connection.setRequestProperty("Content-Length", "" + Integer.toString(data.getBytes().length));
             OutputStream os = new BufferedOutputStream(connection.getOutputStream());
-            //BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
-
             os.write(data.getBytes());
             os.flush();
             is = new BufferedInputStream(connection.getInputStream());
@@ -249,7 +233,6 @@ public class Database {
             }
             os.close();
             connection.disconnect();
-            //connection.connect();
         } catch (Exception e) {
             Log.d("Error","Ex "+e);
             e.printStackTrace();
@@ -274,7 +257,6 @@ public class Database {
             connection.setRequestMethod("DELETE");
             connection.getContent();
             connection.disconnect();
-            //connection.connect();
         } catch (Exception e) {
             Log.d("Error","Ex "+e);
             e.printStackTrace();

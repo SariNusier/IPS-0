@@ -1,17 +1,12 @@
 package com.example.sari.ips_admin.models.positioning;
 
-import android.graphics.Paint;
 import android.util.Pair;
-
 import java.util.ArrayList;
 
-/**
- * Created by sari on 18/02/16.
- */
+
 public class RPMeasurement {
     //String RPID; //this is a unique identifier for the reference point. (eg.: MAC ADDRESS)
     String room_id;
-    //double value;
     ArrayList<Pair<String,Double>> readings = new ArrayList<>();
 
     public RPMeasurement(String[] RPIDs, Double[] values,String room_id) {
