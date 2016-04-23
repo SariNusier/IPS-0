@@ -337,14 +337,14 @@ router.route("/buildings")
                 var est_time;
                 var N_avg;
                 if(!isFinite(data.est_time)){
-                    data.est_time = 0;
-                    est_time = 0;
+                    data.est_time = 1;
+                    est_time = 1;
                 } else {
                     est_time = data.est_time;
                 }
                 if(!isFinite(data.N_avg)){
-                    data.N_avg = 0;
-                    N_avg = 0;
+                    data.N_avg = 1;
+                    N_avg = 1;
                 } else {
                     N_avg = data.N_avg;
                 }

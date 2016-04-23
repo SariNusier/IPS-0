@@ -25,8 +25,8 @@ var schema = new db.Schema({
 	width: {type: Number, required: true},
 	length:{type: Number, required: true},
 	floor: Number,
-	est_time: {type: Number, default: 0},
-	N_avg: {type: Number,default:0},
+	est_time: {type: Number, default: 1},
+	N_avg: {type: Number,default:1},
 	building_id: {type: String, required: true}
 });
 

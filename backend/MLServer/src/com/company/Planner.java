@@ -76,7 +76,7 @@ public class Planner {
                     room.getJSONObject("rectangle").getJSONObject("rb").getDouble("y"));
             RectangleDB r = new RectangleDB(lt,rt,lb,rb);
             Room toAdd = new Room(room.getString("_id"),room.getString("building_id"),room.getString("name"),r,
-                    room.getDouble("width"),room.getDouble("height"),
+                    room.getDouble("width"),room.getDouble("length"),
                     room.getDouble("est_time"),room.getInt("excitement"));
             toReturn.add(toAdd);
         }
