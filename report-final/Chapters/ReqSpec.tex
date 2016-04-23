@@ -1,7 +1,7 @@
 \chapter{Requirements and Specifiations}
-HOST represents the management of the building implementing the positioning system.\\ 
+\noindent The HOST represents the management of the building implementing the positioning system.\\ 
 VISITOR is any user of the positioning app, independent of the building they are visiting.
-Both users will require Wi-Fi enabled Android Devices and a stable internet connection. 
+Both users will require Wi-Fi enabled Android Devices and a stable internet connection.
 
 \section{Requirements}
 The requirements are split in four categories. The first two are concerned with user requirements from both HOST and VISITOR perspective. The positioning system is the software that handles data analysis and machine learning to provide the position of the VISITOR. In addition, the positioning server is used to generate visitor routes and approximate visit times.
@@ -81,6 +81,8 @@ For requirements PS1 to PS5 a Java application will be developed and should cont
 		\item Accept TCP connections to send and receive JSON data. (PS - 1, 5)
 		\item Implement machine learning and JSON parsing libraries. (PS - 1, 2, 3, 4, 5)
 		\item Implement planning and JSON parsing for the planner used. (PS - 6, 7)
+		\item Machine Learning algorithm should take less than 10 seconds to build a model and less than 1 second to classify input data.
+		\item Planner should take less than 2 seconds to generate a route.
 	\end{itemize}
 
 \subsection{Backend}
