@@ -1,7 +1,6 @@
 package com.company;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.bayes.NaiveBayes;
@@ -14,12 +13,9 @@ import java.io.*;
 
 public class Server
 {
-    NaiveBayes globalNB;
-    BayesNet globalBN;
     String currentBID;
     ArrayList<Pair<String,BayesNet>> classifiersBN;
     ArrayList<Pair<String,NaiveBayes>> classifiersNB;
-    boolean nbinit;
     public Server()
     {
         classifiersBN = new ArrayList<>();
@@ -28,27 +24,18 @@ public class Server
         try {
             ServerSocket sSocket = new ServerSocket(5000);
             System.out.println("Server started!");
-            globalNB = new NaiveBayes();
-            nbinit = false;
             currentBID = "";
-            //Loop that runs server functions
+
             while(true) {
-                //Wait for a client to connect
                 Socket socket = sSocket.accept();
-                //Create a new custom thread to handle the connection
                 ClientThread cT = new ClientThread(socket);
-
-                //Start the thread!
                 new Thread(cT).start();
-
             }
         } catch(IOException exception) {
             System.out.println("Error: " + exception);
         }
     }
 
-    //Here we create the ClientThread inner class and have it implement Runnable
-    //This means that it can be used as a thread
     class ClientThread implements Runnable
     {
         Socket socket;
@@ -69,12 +56,12 @@ public class Server
                 System.out.println(rec);
                 JSONObject recJSON = new JSONObject(rec);
                 if(recJSON.getString("command").equals("learn")){
-                    //globalNB = Learner.learnFromJSON_NB(recJSON.getString("building_id"),recJSON.getJSONArray("learning_set"));
-                    //globalBN = Learner.learnFromJSON_BN(recJSON.getString("building_id"),recJSON.getJSONArray("learning_set"));
-                    BayesNet bn = Learner.learnFromJSON_BN(recJSON.getString("building_id"),recJSON.getJSONArray("learning_set"));
-                    NaiveBayes nb = Learner.learnFromJSON_NB(recJSON.getString("building_id"),recJSON.getJSONArray("learning_set"));
+                    BayesNet bn = Learner.learnFromJSON_BN(recJSON.getString("building_id"),
+                            recJSON.getJSONArray("learning_set"));
+                    NaiveBayes nb = Learner.learnFromJSON_NB(recJSON.getString("building_id"),
+                            recJSON.getJSONArray("learning_set"));
                     int i = buildingClassifierBNInitialised(recJSON.getString("building_id"));
-                    int j = buildingClassifierNBInitialised(recJSON.getString("building_id"));
+                    int j = buildingClassifierNBInitialised(recJSON.getString("building_id")); //not really needed.
                     if(i>-1){
                         classifiersBN.set(i,Pair.of(recJSON.getString("building_id"),bn));
                     } else {
@@ -89,7 +76,7 @@ public class Server
                     pw.write("Done!");
                 } else if(recJSON.getString("command").equals("classify")){
                     int i = buildingClassifierBNInitialised(recJSON.getString("building_id"));
-                    int j = buildingClassifierNBInitialised(recJSON.getString("building_id"));
+                    int j = buildingClassifierNBInitialised(recJSON.getString("building_id")); //same
 
                     if(i>-1){
                         String res ="BN:"+Learner.classify_BN(recJSON.getString("building_id"),
@@ -105,7 +92,7 @@ public class Server
                         classifiersNB.add(Pair.of(recJSON.getString("building_id"),nb));
 
                         i = buildingClassifierBNInitialised(recJSON.getString("building_id"));
-                        j = buildingClassifierNBInitialised(recJSON.getString("building_id"));
+                        j = buildingClassifierNBInitialised(recJSON.getString("building_id")); //same
                         String res ="BN:"+Learner.classify_BN(recJSON.getString("building_id"),
                                 recJSON.getJSONArray("learning_set"),classifiersBN.get(i).getRight());
                         res += ",NB:"+Learner.classify_NB(recJSON.getString("building_id"),

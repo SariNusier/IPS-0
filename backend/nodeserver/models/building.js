@@ -23,7 +23,7 @@ var schema = new db.Schema({
 	rectangle: Rectangle,
 	name: {type: String, required: true},
 	width: {type: Number, required: true},
-	height:{type: Number, required: true}
+	length:{type: Number, required: true}
 })
 
 var buildings = db.model('building', schema);

@@ -23,7 +23,7 @@ var schema = new db.Schema({
 	rectangle: Rectangle,
 	name: {type: String, required: true},
 	width: {type: Number, required: true},
-	height:{type: Number, required: true},
+	length:{type: Number, required: true},
 	floor: Number,
 	est_time: {type: Number, default: 0},
 	N_avg: {type: Number,default:0},

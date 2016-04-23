@@ -1,38 +1,35 @@
 package models.indoormapping;
 
-import tools.Rectangle;
-import tools.RectangleDB;
 
+import tools.RectangleDB;
 import java.io.Serializable;
 
-/**
- * Created by sari on 15/02/16.
- */
+
 public class Building implements Serializable{
     private RectangleDB rectangle;
     private String name;
     private double width;
-    private double height;
+    private double length;
     private String id;
     private Room[] rooms;
 
 
 
-    public Building(String id, RectangleDB rectangle, String name, double width, double height, Room[] rooms) {
+    public Building(String id, RectangleDB rectangle, String name, double width, double length, Room[] rooms) {
         this.rectangle = rectangle;
         this.id = id;
         this.name = name;
         this.width = width;
-        this.height = height;
+        this.length = length;
         this.rooms = rooms;
     }
 
-    public Building(RectangleDB rectangle, String name, double width, double height) {
+    public Building(RectangleDB rectangle, String name, double width, double length) {
         this.rectangle = rectangle;
         this.id = "";
         this.name = name;
         this.width = width;
-        this.height = height;
+        this.length = length;
     }
 
     public void setRectangle(RectangleDB rectangle) {
@@ -47,12 +44,11 @@ public class Building implements Serializable{
         this.width = width;
     }
 
-    public void setHeight(double height) {
-        this.height = height;
+    public void setLength(double length) {
+        this.length = length;
     }
 
     public RectangleDB getRectangle() {
-
         return rectangle;
     }
 
@@ -64,8 +60,8 @@ public class Building implements Serializable{
         return width;
     }
 
-    public double getHeight() {
-        return height;
+    public double getLength() {
+        return length;
     }
 
     public String getId() {

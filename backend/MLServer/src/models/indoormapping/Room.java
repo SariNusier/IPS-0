@@ -13,17 +13,17 @@ public class Room implements Serializable{
     private Rectangle roomRectangle;
     private RectangleDB rectangleDB;
     private String roomDescription;
-    private double width,height;
+    private double width, length;
     private double est_time;
     private int excitement;
 
 
-    public Room(String id, String building_id, String roomName, RectangleDB rectangleDB, double width, double height, double est_time, int excitement){
+    public Room(String id, String building_id, String roomName, RectangleDB rectangleDB,
+                double width, double length, double est_time, int excitement){
         this.roomName = roomName;
         this.id = id;
         this.width = width;
-        this.height = height;
-        //this.roomDescription = roomDescription;
+        this.length = length;
         this.rectangleDB = rectangleDB;
         this.building_id = building_id;
         this.roomRectangle = new Rectangle(new Point(0,0),0,0); //for testing!!!
@@ -35,12 +35,11 @@ public class Room implements Serializable{
         return building_id;
     }
 
-    public Room(String building_id, String roomName, RectangleDB rectangleDB, double width, double height){
+    public Room(String building_id, String roomName, RectangleDB rectangleDB, double width, double length){
         this.building_id = building_id;
-
         this.roomName = roomName;
         this.width = width;
-        this.height = height;
+        this.length = length;
         this.roomDescription = "";
         this.rectangleDB = rectangleDB;
         this.roomRectangle = new Rectangle(new Point(0,0),0,0); //for testing!!!
@@ -77,17 +76,17 @@ public class Room implements Serializable{
     }
 
     public boolean isNeighbour(Room room){
-        //for convenience, a room is not its own neighbour
+
         if(this == room)
             return false;
 
         if(this.getRoomRectangle().getCoordinates().getX() + this.getRoomRectangle().getWidth()
                 == room.getRoomRectangle().getCoordinates().getX()
-                || this.getRoomRectangle().getCoordinates().getY() + this.getRoomRectangle().getHeight()
+                || this.getRoomRectangle().getCoordinates().getY() + this.getRoomRectangle().getLength()
                 == room.getRoomRectangle().getCoordinates().getY()
                 || room.getRoomRectangle().getCoordinates().getX() + room.getRoomRectangle().getWidth()
                 == this.getRoomRectangle().getCoordinates().getX()
-                || room.getRoomRectangle().getCoordinates().getY() + room.getRoomRectangle().getHeight()
+                || room.getRoomRectangle().getCoordinates().getY() + room.getRoomRectangle().getLength()
                 == this.getRoomRectangle().getCoordinates().getY())
             return true;
 
@@ -107,8 +106,8 @@ public class Room implements Serializable{
         return width;
     }
 
-    public double getHeight() {
-        return height;
+    public double getLength() {
+        return length;
     }
 
     public void setEst_time(double est_time) {

@@ -16,9 +16,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * Created by sari on 17/04/16.
- */
 public class Planner {
     private static final String[] pddlIntro = {
         "(define (problem simplemuseum)",
@@ -30,11 +27,10 @@ public class Planner {
     public static String route(JSONArray jsonArray, int deadline, String building_id){
         ArrayList<Room> rooms = getRoomsFromJSON(jsonArray);
         makePDDL(rooms,deadline);
-
+        building_id = building_id.replaceAll("[\\s&;]+","");
         ArrayList<String> toExecute = new ArrayList<>();
         toExecute.add("#!/bin/bash\n" +
                 "ulimit -t 1\n");
-        //CHECK BUILDING_ID FORMAT!!
         toExecute.add( "./planner " + "--optimise " + "domain.pddl "+building_id+"_temp.pddl");
         Path execPath = Paths.get("five-seconds");
         try {
@@ -62,8 +58,6 @@ public class Planner {
             e.printStackTrace();
         }
 
-        //System.out.println(parseOutput(output));
-
         return makeFinalResult(parseOutput(output),rooms);
 
     }
@@ -82,13 +76,12 @@ public class Planner {
                     room.getJSONObject("rectangle").getJSONObject("rb").getDouble("y"));
             RectangleDB r = new RectangleDB(lt,rt,lb,rb);
             Room toAdd = new Room(room.getString("_id"),room.getString("building_id"),room.getString("name"),r,
-                    room.getDouble("width"),room.getDouble("height"),room.getDouble("est_time"),room.getInt("excitement"));
+                    room.getDouble("width"),room.getDouble("height"),
+                    room.getDouble("est_time"),room.getInt("excitement"));
             toReturn.add(toAdd);
         }
         return toReturn;
     }
-
-   // public static
 
     private static void makePDDL(ArrayList<Room> rooms, int deadline){
 
@@ -98,6 +91,7 @@ public class Planner {
         toWrite.add("    ");
         for(Room r:rooms){
             toWrite.set(toWrite.size()-1,toWrite.get(toWrite.size()-1)+"e"+rooms.indexOf(r)+" ");
+            System.out.println("ROOM CREATED: "+"\nINDEX: "+rooms.indexOf(r)+" "+r.getRoomName());
         }
         toWrite.set(toWrite.size()-1,toWrite.get(toWrite.size()-1)+"- exhibit");
         toWrite.add(")");

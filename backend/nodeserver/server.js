@@ -48,7 +48,7 @@ router.route("/buildings")
         db.rectangle.rb = req.body.rectangle.rb;
         db.name = req.body.name;
         db.width = req.body.width;
-        db.height = req.body.height; 
+        db.length = req.body.length; 
         db.save(function(err){
             if(err) {
                 response = {"error" : true,"message" : "Failed!"};
@@ -91,8 +91,8 @@ router.route("/buildings")
                 if(req.body.width !== undefined){
                     data.width = req.body.width;
                 }
-                if(req.body.height !== undefined){
-                    data.height = req.body.height;
+                if(req.body.length !== undefined){
+                    data.length = req.body.length;
                 }
                 
                 data.save(function(err){
@@ -155,7 +155,7 @@ router.route("/buildings")
         db.rectangle.rb = req.body.rectangle.rb;
         db.name = req.body.name;
         db.width = req.body.width;
-        db.height = req.body.height;
+        db.length = req.body.length;
         db.est_time = req.body.est_time;
         db.N_avg = 0;
         db.building_id = req.params.id; 

@@ -7,7 +7,6 @@ import weka.classifiers.bayes.NaiveBayes;
 import weka.core.Instances;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -21,13 +20,6 @@ import java.util.Set;
 
 public class Learner {
 
-
-    /** Naive Bayes
-     *
-     * @param building_id
-     * @param JSONData
-     * @return
-     */
     public static NaiveBayes learnFromJSON_NB(String building_id, JSONArray JSONData){
         makeLearnerARFFfromJSON(building_id,JSONData);
         NaiveBayes nb = new NaiveBayes();
@@ -42,12 +34,6 @@ public class Learner {
         return nb;
     }
 
-    /**Bayes Networks
-     *
-     * @param building_id
-     * @param JSONData
-     * @return
-     */
     public static BayesNet learnFromJSON_BN(String building_id, JSONArray JSONData){
         makeLearnerARFFfromJSON(building_id,JSONData);
         BayesNet bn = new BayesNet();
@@ -103,7 +89,10 @@ public class Learner {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return labeled.instance(0).classAttribute().value((int)clsLabel);
+        if (labeled != null) {
+            return labeled.instance(0).classAttribute().value((int)clsLabel);
+        }
+        return "na";
 
     }
 
@@ -122,8 +111,10 @@ public class Learner {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return labeled.instance(0).classAttribute().value((int)clsLabel);
-
+        if (labeled != null) {
+            return labeled.instance(0).classAttribute().value((int)clsLabel);
+        }
+        return "na";
     }
 
     public static void makeLearnerARFFfromJSON(String building_id, JSONArray JSONData){
@@ -206,7 +197,7 @@ public class Learner {
                 rpids.add(((JSONObject) pair).getString("RPID"));
             }
         }
-        Set<String> noDuplicates = new LinkedHashSet<String>(rpids);
+        Set<String> noDuplicates = new LinkedHashSet<>(rpids);
         rpids.clear();
         rpids.addAll(noDuplicates);
         return rpids;
@@ -217,7 +208,7 @@ public class Learner {
         for(Object reading: JSONdata){
             rooms.add(((JSONObject) reading).getString("room_id"));
         }
-        Set<String> noDuplicates = new LinkedHashSet<String>(rooms);
+        Set<String> noDuplicates = new LinkedHashSet<>(rooms);
         rooms.clear();
         rooms.addAll(noDuplicates);
         return rooms;
