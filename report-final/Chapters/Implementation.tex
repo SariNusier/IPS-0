@@ -14,8 +14,8 @@ The project has taken a lean software development approach. The main goal was to
 	\item Tables were created in MySQL and Spatial Data Types were tested (B1, B2).
 	\item NodeJS server, MongoDB and basic data models were created for experimentation (B1, B2, B3).
 	\item The MySQL approach to the database was abandoned and data models were developed for MongoDB. The REST API was also developed to allow manipulation of the newly created database (B1, B2, B3).
-	\item  Administration app was created (H1- H5).
-	\item Java class for integrating with the API was implemented and added to the Administration app (H1-H5).
+	\item  Administration app was created (H1- H4).
+	\item Java class for integrating with the API was implemented and added to the Administration app (H1-H4).
 	\item Buildings Activity was implemented to show the list of all the buildings available (H1).
 	\item Added building creation capability in the backend and in the Application's Database helper class (B1, H1).
 	\item Building creation activity implemented in the Admin app (H1).
@@ -37,10 +37,10 @@ The beginning of the implementation focused more on the Backend, in order to ana
 
 \section{Backend}
 \subsection{Database and REST API}
-Implementation of the backend started by using a MySQL database. For easier administration MySQL Workbench software was used. A test database was created with two Tables. The first table, Building, contained five attributes: Name (VARCHAR), Width (INT), Length (INT), ID (INT) and Rectangle of type Geometry. The Geometry type is part of the Spatial Data Types offered in MySQL and it helps model and manage geometrical shapes [1].
-\\
-Due to compatibility issues, the implementation of the backend moved to using a NodeJS server with a MongoDB database, which is the current implementation.
-To ease implementation, Mongoose object modelling library was used when creating the Database models [2]. The four models implemented and their corresponding schemas are shown below. 
+Implementation of the backend started by using a MySQL database. For easier administration MySQL Workbench software was used. A test database was created with two Tables. The first table, Building, contained five attributes: Name (VARCHAR), Width (INT), Length (INT), ID (INT) and Rectangle of type Geometry. The Geometry type is part of the Spatial Data Types offered in MySQL and it helps model and manage geometrical shapes ~\cite{MySql}.
+
+Due to compatibility issues, the implementation of the backend moved to using a NodeJS server ~\cite{NodeJS} with a MongoDB database ~\cite{MongoDB}, which is the current implementation.
+To ease implementation, Mongoose object modelling library was used when creating the Database models ~\cite{Mongoose}. The five models implemented and their corresponding schemas are shown below. 
 \\
 \textbf{Rectangle:}
 This is a helper model to be used inside the other models, not to be instantiated on its own.
@@ -54,7 +54,7 @@ lb:{x: Number, y: Number}, rb:{x: Number, y: Number} }
 The building follows the model defined in the Design. 
 \begin{lstlisting}
 { rectangle: Rectangle, name: {type: String, required: true},
-width: {type: Number, required: true}, height:{type: Number, required: true} }
+width: {type: Number, required: true}, length:{type: Number, required: true} }
 \end{lstlisting}
 
 \noindent
@@ -62,7 +62,7 @@ width: {type: Number, required: true}, height:{type: Number, required: true} }
 Changes from the design were added here in order to implement the average visit time. The est\_time is given by calculating the average visit durations. For the average to be calculated, N\_avg stores the numbers of visits that the room has had.
 \begin{lstlisting}
 { rectangle: Rectangle, name: {type: String, required: true},
-width: {type: Number, required: true}, height:{type: Number, required: true},
+width: {type: Number, required: true}, length:{type: Number, required: true},
 floor: Number, est_time: {type: Number, default: 0}, N_avg: {type: Number,default:0},
 building_id: {type: String, required: true} }
 \end{lstlisting}
@@ -92,7 +92,7 @@ room_id: {type: String, required: true},
 name: {type: String, required: true} }
 \end{lstlisting}
 
-The RESTful API was implemented using NodeJS and the ExpressJS Web Application framework, for handling HTTP requests. The endpoints implemented followed the Design.
+The RESTful API was implemented using NodeJS and the ExpressJS Web Application framework ~\cite{ExpressJS}, for handling HTTP requests. The endpoints implemented followed the definition in Chapter 4.1.2 so will not be mentioned here to avoid repetition.
 
 \subsection{Testing}
 The backend was tested using the Postman Application. Requests were manually created and sent to the server, which ran locally. Further tests were made with the server running on a Virtual Machine hosted by DigitalOcean. No performance issues were noticed in either case.
@@ -103,7 +103,7 @@ Further tests were done during and after the development of the two Android Appl
 
 \subsection{Server}
 This class deals with receiving and sending data through a TCP connection to the Node Server. 
-It contains an inner class, ClientThread, implementing Runnable, so that each request from the database is ran on a separate thread. The server waits for connections in a while(true) loop. When it receives a connection, it starts a new thread, instantiating a ClientThread object. A Buffered reader is used to read the data received from the node server. The data is in JSON format, therefore parsing must be done. The org.json[4] library is used in order to parse the data. 
+It contains an inner class, ClientThread, implementing Runnable, so that each request from the database is ran on a separate thread. The server waits for connections in a while(true) loop. When it receives a connection, it starts a new thread, instantiating a ClientThread object. A Buffered reader is used to read the data received from the node server. The data is in JSON format, therefore parsing must be done. The org.json library ~\cite{org.json} is used in order to parse the data. 
 \begin{lstlisting} 
 {"command":"learn","building_id":"id","learning_set":[]}
 \end{lstlisting}
@@ -113,7 +113,7 @@ The classifiers are not instantiated by using new, but they are returned by a st
 \begin{lstlisting} 
 public static BayesNet learnFromJSON_BN(String building_id, JSONArray JSONData)
 \end{lstlisting}
- A global ArrayList storing Pairs [5] of building id and classifier object is maintained. The list is used to minimise the number of times a classifier must be initialised. If the returned classifier from Learner.learnFromJSON has been previously initialised, the new object returned is introduced in the list using set, overwriting the previous object. If the classifier has not been previously initialised, it is added to the list, using the add method. 
+A global ArrayList storing Pairs ~\cite{tuple} of building id and classifier object is maintained. The list is used to minimise the number of times a classifier must be initialised. If the returned classifier from Learner.learnFromJSON has been previously initialised, the new object returned is introduced in the list using set, overwriting the previous object. If the classifier has not been previously initialised, it is added to the list, using the add method. 
 \begin{lstlisting}
 //Check if a BayesNet classifier has been initialised.	
 public int buildingClassifierBNInitialised(String building_id){
@@ -183,12 +183,13 @@ public static String classify_BN(String building_id, JSONArray JSONdata, BayesNe
 The list of attributes is kept the same as in the previous method, with the difference being in the data. The data is only one line, because we are trying to classify based on one reading. Another difference is that, at the end of the line, instead of a room id, a question mark is inserted. This file is saved with the name "buildingID\_temp.arff" and used to predict the RoomID, which is then returned to the caller. In order to facilitate concurrent calls to classify, temporary files must be created with different names, such as an index. After the method has finished, the program must delete the file so that the index gets freed.
 
 The methods mentioned above must be able to apply different classifiers. Therefore, more than one method has been created for both learning and classifying, such as: learnFromJSON\_BN, learnFomJSON\_NB, classify\_NB and classify\_BN. 
+\newpage
 
 \subsection{Planner}
 \begin{lstlisting}
 public static String route(JSONArray jsonArray, int deadline, String building_id)
 \end{lstlisting}
-Visit route generation is implemented using the OPTIC planner. The planner takes as input two files: domain.pddl and problem.pddl. The domain file is predefined, whereas the problem file must be generated for each request. 
+Visit route generation is implemented using the OPTIC planner ~\cite{OPTIC}. The planner takes as input two files: domain.pddl and problem.pddl. The domain file is predefined, whereas the problem file must be generated for each request. 
 The domain defines to object types, exhibit and person: 
 \begin{lstlisting}
 (:types
@@ -203,11 +204,11 @@ For each room in the request, an exhibit must be defined in the problem file. Fo
 )
 \end{lstlisting}
 The initial state is then defined, by inserting what rooms the user wants to view, how long it takes for each room, and how much does the user want to see a specific room. The deadline is finally inserted and goals are written. The file generated is named "buildingID\_temp.pddl". An example file can be found in Appendix B.
-After the file is generated, the planner is executed with the two files as arguments. The planner running time could be very long, giving better and better solutions over time. As it was mentioned in the requirements, the rout must be generated in less than 2 seconds, therefore the maximum time of execution for the planner was limited. The output of the planner is then parsed and returned as a String. 
+After the file is generated, the planner is executed with the two files as arguments. The planner running time could be very long, giving better and better solutions over time. As it was mentioned in the requirements, the route must be generated in less than 2 seconds, therefore the maximum time of execution for the planner was limited. The output of the planner is then parsed and returned as a String. 
 
 \subsection{Testing}
 
-The Machine Learning classifiers were initially tested by manually entering the data. A Java class was later created to automate a part of the data parsing. After the initial tests were completed, the current program was written, fully automating the parsing process. The Machine Learning algorithms were tested on different data sets, throughout the development of the project. The final test results are shown and discussed in the Results/Evaluation chapter (6). 
+The Machine Learning classifiers were initially tested by manually entering the data. A Java class was later created to automate a part of the data parsing. After the initial tests were completed, the current program was written, fully automating the parsing process. The Machine Learning algorithms were tested on different data sets, throughout the development of the project. The final test results are shown and discussed in the Evaluation and Results chapter (6). 
 
 The same principle applied to the testing of the Planning algorithm. Data for initial tests were manually entered. The current code was then written automating the creation of the Problem PDDL file. The planner was first given 10, 5, 2 and 1 second to find a route. Running the planner for more than 1 second did not yield better results, therefore it was limited at a maximum execution time of 1 second, less than required in the specifications.
 
@@ -313,10 +314,10 @@ Testing was performed by using all the functions of the application.
 In order to determine the number and magnitude of the issues experienced during the development of an application, I usually look at how many keys and/or keyboards stopped working during the implementation phase. I am glad to say that, for this particular project, no keyboards were harmed. That is not to say that problems did no emerge along the way, nevertheless solutions were found quickly and pain-free. Below are some of the problems and solutions found, as far as I can remember, as most of the problems tend to arise in the middle of the night, when memory functions are not at their peak.
 
 \subsection{Going back to previous Activity}
-As seen before, when the users clicks on a building, the Building object selected is passed to the next activity, which uses the object as a global variable. The problem is that, when going back from the RoomActivity to the Building activity, by default, Android instantiates another activity. Therefore, the global variable holding the Building passed from the list is going to be null, and when accessed a NullPointerException is thrown. The solution was to set the launch mode of the BuildingAcitivty to "singleTask" in the Manifest file [6]. By doing so, the application can hold only one instance of that activity, which will always be on top of the activity stack, therefore, saving all the local instances too.
+As seen before, when the users clicks on a building, the Building object selected is passed to the next activity, which uses the object as a global variable. The problem is that, when going back from the RoomActivity to the Building activity, by default, Android instantiates another activity. Therefore, the global variable holding the Building passed from the list is going to be null, and when accessed a NullPointerException is thrown. The solution was to set the launch mode of the BuildingAcitivty to "singleTask" in the Manifest file ~\cite{activity-element}. By doing so, the application can hold only one instance of that activity, which will always be on top of the activity stack, therefore, saving all the local instances too.
 
 \subsection{Bluetooth Scanning}
-Scanning for Bluetooth devices is an expensive task, therefore, scans are initiated at predefined time intervals, and stopped once an exhibit is detected. Starting the scan was added into a TimerTask which is scheduled to run every 5 seconds.
+Scanning for Bluetooth devices is an expensive task so it must be used with care. I didn’t really care, but I was forced to once I discovered that Android blocks further scans from being made if scans are requested too often. Therefore, scans must be initiated at predefined time intervals, and stopped once an exhibit is detected. Starting the scan was added into a TimerTask which is scheduled to run every 5 seconds.
 \begin{lstlisting}
 //timer task to start the scan every 5 seconds
 TimerTask tt = new TimerTask() {
@@ -335,7 +336,7 @@ if(device.getAddress().equals(currentExhibit) && rssi >= BLUETOOTH_THRESHOLD){
 \end{lstlisting}
 
 \subsection{JavaScript callbacks} 
-When the user chooses to press the Learn button in the Admin app, a request is sent to the Node server. The node server must then query and prepare the data to be sent to the Positioning server. Because MonogoDB is a NoSql database, joins are not as straight forward. Therefore, in order to get all the RPMeasurements held for each Room inside a specific building, some form of nested loops are required. In this case, the first query returns all the rooms in one Building. For each room returned, a query is then made for all the RPMeasurements associated to that room. After writing the straightforward code, to my surprise, the data sent to the server was always empty. As this was my first time programming using JavaScript and NodeJS, I did not know that the queries are executed, by default, concurrently. This lead to the subsequent queries to by executed before the previous queries finished. Because I was lacking experience, solving this problem took me quite some time, until I understood how to use callback functions. The end solution looks something like this:
+When the user chooses to press the Learn button in the Admin app, a request is sent to the Node server. The node server must then query and prepare the data to be sent to the Positioning server. Because MonogoDB is a NoSql database, joins are not as straight forward. Therefore, in order to get all the RPMeasurements held for each Room inside a specific building, some form of nested loops are required. In this case, the first query returns all the rooms in one Building. For each room returned, a query is then made for all the RPMeasurements associated to that room. After writing the "straightforward" code, to my surprise, the data sent to the server was always empty. As this was my first time programming using JavaScript and NodeJS, I did not know that the queries are executed, by default, concurrently. This lead to the subsequent queries to by executed before the previous queries finished. Because I was lacking experience, solving this problem took me quite some time, until I understood how to use callback functions, or at least I believe I understood them. The end solution looks something like this:
 \begin{lstlisting}
 var rooms;
 Room.find({'building_id': req.params.id}, function(err,data){
@@ -349,11 +350,11 @@ Room.find({'building_id': req.params.id}, function(err,data){
 \end{lstlisting}
 
 \subsection{Custom ListView}
-Even though the Android SDK offers multiple options for implementing a ListView, a custom implementation was needed for the application. Each item in the list should contain a TextBox with the name of the room, a CheckBox to select the room for the visit and a SeekBar to allow the user to define how excited the user is to visit the room. 
+Even though the Android SDK offers multiple options for implementing a ListView, a custom implementation was needed for the application. Each item in the list should contain a TextBox with the name of the room, a CheckBox to select the room for the visit and a SeekBar to allow the user to share how excited they are about visiting the room. 
 
-To implement the specifications above, a custom XML layout was created containing the views. In addition to the layout, a custom ArrayAdapter was also implemented to handle user interactions. At the beginning the task seemed simple, until a problem arose when implementing the onClickListener for each item. The issue is that the action listener must be defined within the CustomAdapter class, instead of the Activity containing the ListView. As the estimated time is updated when the users selects or deselects a room, it was not possible to update value because the activity was not aware when selections occurred. 
+To implement the specifications above, a custom XML layout was created containing the views. In addition to the layout, a custom ArrayAdapter was also implemented to handle user interactions. At the beginning the task seemed simple, until a problem arose when implementing the onClickListener for each item. The issue is that the action listener must be defined within the CustomAdapter class, instead of the Activity containing the ListView. As the estimated time is updated when the users selects or deselects a room, it was not possible to update the value any more, because the activity was not aware when selections occurred. 
 
-To solve this problem, a public method was defined in BuildingActivity to update the Estimated Time. T
+To solve this problem, a public method was defined in BuildingActivity to update the Estimated Time.
 \begin{lstlisting}
 public void updateEstTime(){
         estTimeView.setText("Estimated time: " +(int) getEstTime());
@@ -387,5 +388,6 @@ public boolean isChecked(int position) {
 	return checked[position];
 }
 \end{lstlisting}
+In short, CustomAdapter is implementing the listener and reacts when a selection is made by calling updateEstTime implemented in the Activity. The activity calculates the estimated time by checking which rooms are selected using isChecked() implemented in CustomAdapter.
 
 

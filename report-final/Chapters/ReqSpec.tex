@@ -9,10 +9,9 @@ The requirements are split in four categories. The first two are concerned with 
 \subsection{Host requirements}
 	\begin{itemize}
 		\item H1 - Host must be able to create, edit, remove or view buildings.
-		\item H2 - Host must be able to create, edit, remove or view rooms from specific buildings.
-		\item H3 - Host must be able to measure WiFi APs signal strength for a specific room.
-		\item H4 - Host must be able to update the positioning system with new measurements.
-		\item H5 - Host must be able to reset the positioning system when needed.
+		\item H2 - Host must be able to create, edit, remove or view rooms from a specified building.
+		\item H3 - Host must be able to measure WiFi APs signal strength for a specified room.
+		\item H4 - Host must be able to train, update or reset the positioning system with new measurements.
 	\end{itemize}
 
 \subsection{Visitor requirements}
@@ -20,29 +19,29 @@ The requirements are split in four categories. The first two are concerned with 
 		\item V1 - Manually select a building to visit.
 		\item V2 - Receive a suggestion regarding the building they are in.
 		\item V3 - Choose the rooms/exhibits they would like to visit inside a building.
-		\item V4 - See an estimated time of visit based on selected rooms/exhibits.
-		\item V5 - Rate the degree of importance for visiting a specific room/exhibit.
-		\item V6 - See a suggested visit path based on selected rooms/exhibits.
+		\item V4 - Receive an estimated time of visit based on selected rooms/exhibits.
+		\item V5 - Rate the importance of visiting a specific room/exhibit.
+		\item V6 - Receive a suggested visit path based on selected rooms/exhibits.
 		\item V7 - See its current location within the building.
-		\item V8 - See a visit path based on his current location and the selected rooms/exhibits.
-		\item V9 - Display the current exhibit being view, based on proximity.
+		\item V8 - See a visit path based on its current location and the selected rooms/exhibits.
+		\item V9 - Display the current exhibit being view, based on proximity sensing.
 	\end{itemize}
 
 \subsection{Positioning requirements}
 	\begin{itemize}
 		\item PS1 - Receive a learning set containing AP signal strength measurements and the 	location they were taken in.
 		\item PS2 - Create classifiers from learning set.
-		\item PS3 - Receive unclassified data in containing AP signal strength measurements.
+		\item PS3 - Receive unclassified data containing AP signal strength measurements.
 		\item PS4 - Classify received data using one or more previously built classifiers.
-		\item PS5 - Return classified data in a format that is easily parsable by the user
+		\item PS5 - Return classified data in a format that can be easily parsed by the user.
 		\item PS6 - Receive visitor requirements as a list of selected rooms and the level to which the visitor wants to visit each room, and a deadline.
-		\item PS7 - Generate and return a route based on the specifications received.
+		\item PS7 - Generate and return a route based on the requirements received from the user.
 	\end{itemize}
 
 \subsection{Backend requirements}
 	\begin{itemize}
 		\item B1 - Database should store buildings and the rooms within each building. 
-		\item B2. Database should store learning set for each building.
+		\item B2. Database should store learning set for each building and other important data.
 		\item B3. Server should maintain a RESTful API to interface with the database and positioning 			system.
 	\end{itemize}
 
@@ -51,20 +50,19 @@ The requirements are split in four categories. The first two are concerned with 
 The specifications show what should be implemented in order to meet the requirements of the software.
 
 \subsection{Host}
-For requirements H1 to H5 an android application will be developed for the administration of the buildings created for a HOST. The app should contain:
+For requirements H1 to H4 an android application will be developed for the administration of the buildings created by a HOST:
 	\begin{itemize}
 		\item Activity to view all the buildings available (H1)
 		\item Activity to add a new building (H1)
-		\item Activity for the management of a specific building (H - 1, 2, 4, 5)
+		\item Activity for the management of a specific building (H - 1, 2, 4)
 		\item Activity for the management of a specific room (H - 2, 3)
-		\item Make HTTP requests to the Backend Server
+		\item Make HTTP requests and receive data from the Backend.
 	\end{itemize}
 
 \subsection{Visitor}
-For requirements V1 to V8 an android application will be developed and should contain:
+For requirements V1 to V9 an android application will be developed as follows:
 	\begin{itemize}
 		\item Activity to view all the buildings available (V1)
-		\item Search through the building list by name (V1)
 		\item Move the current building, if detected, to the top of the list (V2)
 		\item An activity containing a list of exhibits/rooms inside a building (V3)
 		\item Compute the sum of the estimated visit time of all the selected rooms (V4)
@@ -76,12 +74,13 @@ For requirements V1 to V8 an android application will be developed and should co
 	\end{itemize}
 
 \subsection{Positioning system}
-For requirements PS1 to PS5 a Java application will be developed and should contain:
+For requirements PS1 to PS5 a Java application will be developed as follows:
 	\begin{itemize}
 		\item Accept TCP connections to send and receive JSON data. (PS - 1, 5)
 		\item Implement machine learning and JSON parsing libraries. (PS - 1, 2, 3, 4, 5)
 		\item Implement planning and JSON parsing for the planner used. (PS - 6, 7)
 		\item Machine Learning algorithm should take less than 10 seconds to build a model and less than 1 second to classify input data.
+		\item The classifier should be able to predict the correct room more than 80\% of the time.
 		\item Planner should take less than 2 seconds to generate a route.
 	\end{itemize}
 
@@ -94,10 +93,10 @@ The backend should implement a database and an HTTP server to:
 
 \subsection{Limitations}
 When developing the system, security was not a main consideration. The system does not implement any form of authentication or access control. It does not distinguish between multiple users, all data being commonly accessible and anonymous. 
-The data is available only through the REST API, and any request which is not formatted accordingly will be ignored. Arbitrary code execution and any type of code injection has been considered and security measures implemented.
+The data is available only through the REST API, and any request which is not formatted correctly will be ignored. Arbitrary code execution and any type of code injections have been considered and security measures implemented.
 The design of the backend is made to be extendable and any additional security measures can be easily implement.
-The user interface was not a priority, therefore the design is simple, but usable. Outputs are usually plain text, and visual cues are rarely given. 
-The visual indoor maps and all the visual cues (location pin, walk path, etc.) are implemented using the Google Maps API, therefore, are available only for the buildings that have implemented Google Indoor Maps.
+The beauty of the user interface was not a priority, therefore the design is simple, but usable. Outputs are usually plain text, and visual cues are rarely given. 
+The visual indoor maps and all the visual cues (location pin, walk path, etc.) are implemented using the Google Maps API, therefore, available only for the buildings that have implemented Google Indoor Maps.
 
 
 
