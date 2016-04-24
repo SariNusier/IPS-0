@@ -24,7 +24,7 @@ import java.util.ArrayList;
  */
 public class Database {
 
-    public final static String API_URL = "http://192.168.1.106:3000/";
+    public final static String API_URL = "http://178.62.127.39:3000/";
     public static Building[] getBuildings(){
         String StringData = getData("buildings");
         ArrayList<Building> toReturn = new ArrayList<>();

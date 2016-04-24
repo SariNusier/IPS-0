@@ -1,11 +1,6 @@
 package com.example.sari.ips_admin.activities;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.wifi.ScanResult;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,23 +12,18 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import com.example.sari.ips_admin.R;
 import com.example.sari.ips_admin.database.Database;
 import com.example.sari.ips_admin.models.indoormapping.Building;
 import com.example.sari.ips_admin.models.indoormapping.Room;
-import com.example.sari.ips_admin.models.positioning.RPMeasurement;
 import java.util.ArrayList;
-import java.util.List;
 
 
-//CHECK IF GETTING BUILDINGS HERE IS ACTUALLY NEEDED!
+//CHECK IF GETTING BUILDINGS HERE IS ACTUALLY NEEDED.
 public class EditBuildingActivity extends AppCompatActivity {
     private ListView museumListView;
     private Building b;
     private String building_id;
-    WifiManager wifiManager;
-    boolean toMeasure = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,16 +40,13 @@ public class EditBuildingActivity extends AppCompatActivity {
                 startEditRoomActivity(position);
             }
         });
-        wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        registerReceiver(broadcastReceiver,
-                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ArrayList roomNames = new ArrayList<String>();
+        ArrayList roomNames = new ArrayList<>();
         b = Database.getBuilding(building_id);
         for(Room r: b.getRooms()){
             roomNames.add(r.getRoomName());
@@ -101,39 +88,5 @@ public class EditBuildingActivity extends AppCompatActivity {
     public void learnBuilding(View v){
         Database.getData("learn", building_id);
     }
-
-    public void locateInBuidling(View v){
-        toMeasure = true;
-        wifiManager.startScan();
-
-    }
-
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (toMeasure) {
-                List<ScanResult> found = wifiManager.getScanResults();
-                String[] RPIDs = new String[found.size()];
-                Double[] values = new Double[found.size()];
-
-                for (ScanResult sr : found) {
-                    Log.d("FOUND: ", "" + sr.BSSID + ": " + sr.level);
-                    RPIDs[found.indexOf(sr)] = sr.BSSID;
-                    values[found.indexOf(sr)] = (double) sr.level;
-                }
-                String foundRoomID = Database.classify(new RPMeasurement(RPIDs, values, null),
-                                                        building_id);
-                for(Room r:b.getRooms()){
-                    if(r.getId().equals(foundRoomID)){
-                        ((TextView)findViewById(R.id.building_located_room))
-                                .setText(r.getRoomName());
-                        break;
-                    }
-                }
-
-                toMeasure = false;
-            }
-        }
-    };
 
 }
