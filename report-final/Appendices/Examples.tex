@@ -1,0 +1,166 @@
+\chapter{Example Files}
+
+\section{domain.pddl}
+\begin{lstlisting}
+(define (domain museum)
+(:requirements :typing :durative-actions :fluents)
+(:types
+    exhibit person - object
+)
+(:predicates
+    (at ?p - person ?e - exhibit)
+    (path ?e1 ?e2 - exhibit)
+    (want-to-see ?e - exhibit)
+    (visited ?e - exhibit)
+    (open)
+)
+(:functions
+    (time-to-walk ?e1 ?e2 - exhibit)
+    (time-to-see ?e - exhibit)
+    (excitement ?e - exhibit)
+    (seen)
+)
+
+(:durative-action walk
+  :parameters
+   (?p - person
+    ?e1 ?e2 - exhibit)
+  :duration (= ?duration (time-to-walk ?e1 ?e2))
+  :condition
+   (and (over all (path ?e1 ?e2)) (at start (at ?p ?e1)) (over all (open)))
+  :effect
+   (and (at start (not (at ?p ?e1))) (at end (at ?p ?e2))))
+
+(:durative-action view
+  :parameters
+   (?p - person
+    ?e - exhibit)
+  :duration (= ?duration (time-to-see ?e))
+  :condition
+   (and (over all (at ?p ?e)) (at start (want-to-see ?e)) (over all (open)))
+  :effect
+   (and (at start (not (want-to-see ?e))) (at start (increase (seen) (excitement ?e))))
+)
+
+
+)
+
+\end{lstlisting}
+\newpage
+
+\section{problem.pddl}
+\begin{lstlisting}
+(define (problem simplemuseum)
+(:domain museum)
+(:objects
+    visitor - person
+    e0 e1 e2 - exhibit
+)
+(:init
+(want-to-see e0)
+(want-to-see e1)
+(want-to-see e2)
+(path e0 e1) (path e1 e0)
+(= (time-to-walk e0 e1) 0)
+(= (time-to-walk e1 e0) 0)
+(path e0 e2) (path e2 e0)
+(= (time-to-walk e0 e2) 0)
+(= (time-to-walk e2 e0) 0)
+(path e1 e2) (path e2 e1)
+(= (time-to-walk e1 e2) 0)
+(= (time-to-walk e2 e1) 0)
+(= (time-to-see e0) 16)
+(= (time-to-see e1) 12)
+(= (time-to-see e2) 0)
+(at visitor e0)
+(= (seen) 0)
+(= (excitement e0) 1)
+(= (excitement e1) 1)
+(= (excitement e2) 1)
+(open)
+(at 10000 (not (open)))
+)
+(:goal (and
+;(visited e0)
+;(visited e1)
+;(visited e2)
+)
+)
+(:metric maximize (seen))
+)
+\end{lstlisting}
+\newpage
+
+\section{learning.arff}
+\begin{lstlisting}
+@relation room
+
+@attribute 54:22:f8:17:9a:db NUMERIC
+@attribute 00:91:f9:4b:44:e0 NUMERIC
+@attribute e2:91:f9:4b:44:e0 NUMERIC
+@attribute c0:3e:0f:85:ab:9d NUMERIC
+@attribute 00:91:f9:4b:44:e1 NUMERIC
+@attribute 22:91:f9:4b:44:e1 NUMERIC
+@attribute 2c:39:96:b4:c3:a6 NUMERIC
+@attribute 44:e9:dd:6d:36:83 NUMERIC
+@attribute 5c:7d:5e:0e:4b:cf NUMERIC
+@attribute c2:91:f9:4b:44:e0 NUMERIC
+@attribute class {5713ab468794d11d17c53d59,5713aa0e8794d11d17c53d57,5713aa6b8794d11d17c53d58,5713abae8794d11d17c53d5a}
+@data
+-47.0,-66.0,-60.0,-54.0,-76.0,-76.0,-86.0,-80.0,-67.0,-64.0,5713ab468794d11d17c53d59
+-47.0,-66.0,-60.0,-48.0,-78.0,-78.0,-80.0,-84.0,-67.0,-64.0,5713ab468794d11d17c53d59
+-45.0,-64.0,-63.0,-56.0,-88.0,-87.0,-88.0,-81.0,-79.0,-64.0,5713aa0e8794d11d17c53d57
+-42.0,-71.0,-66.0,-52.0,-86.0,-86.0,-84.0,-83.0,-63.0,-69.0,5713aa0e8794d11d17c53d57
+-47.0,-77.0,-74.0,-61.0,-90.0,0.0,-77.0,-79.0,-69.0,-73.0,5713aa6b8794d11d17c53d58
+-54.0,-76.0,-74.0,-60.0,-90.0,0.0,-77.0,-74.0,-72.0,-73.0,5713aa6b8794d11d17c53d58
+-28.0,-72.0,-67.0,-60.0,-90.0,-90.0,-73.0,0.0,-47.0,-73.0,5713abae8794d11d17c53d5a
+-35.0,-70.0,-70.0,-59.0,-91.0,-90.0,-71.0,-87.0,-54.0,-73.0,5713abae8794d11d17c53d5a
+
+\end{lstlisting}
+\newpage
+
+\section{unclassified.arff}
+\begin{lstlisting}
+@relation room
+
+@attribute 54:22:f8:17:9a:db NUMERIC
+@attribute 00:91:f9:4b:44:e0 NUMERIC
+@attribute e2:91:f9:4b:44:e0 NUMERIC
+@attribute c0:3e:0f:85:ab:9d NUMERIC
+@attribute 00:91:f9:4b:44:e1 NUMERIC
+@attribute 22:91:f9:4b:44:e1 NUMERIC
+@attribute 2c:39:96:b4:c3:a6 NUMERIC
+@attribute 44:e9:dd:6d:36:83 NUMERIC
+@attribute 5c:7d:5e:0e:4b:cf NUMERIC
+@attribute c2:91:f9:4b:44:e0 NUMERIC
+@attribute class {5713ab468794d11d17c53d59,5713aa0e8794d11d17c53d57,5713aa6b8794d11d17c53d58,5713abae8794d11d17c53d5a}
+@data
+-41.0,-71.0,-67.0,-52.0,-86.0,-86.0,-86.0,-82.0,-63.0,-69.0,?
+
+
+\end{lstlisting}
+\newpage
+
+\section{RPs.data}
+\begin{lstlisting}
+54:22:f8:17:9a:db
+00:91:f9:4b:44:e0
+e2:91:f9:4b:44:e0
+c0:3e:0f:85:ab:9d
+00:91:f9:4b:44:e1
+22:91:f9:4b:44:e1
+2c:39:96:b4:c3:a6
+44:e9:dd:6d:36:83
+5c:7d:5e:0e:4b:cf
+c2:91:f9:4b:44:e0
+\end{lstlisting}
+\newpage
+
+\section{rooms.data}
+\begin{lstlisting}
+5713ab468794d11d17c53d59
+5713aa0e8794d11d17c53d57
+5713aa6b8794d11d17c53d58
+5713abae8794d11d17c53d5a
+\end{lstlisting}
+\newpage
