@@ -157,7 +157,7 @@ router.route("/buildings")
         db.width = req.body.width;
         db.length = req.body.length;
         db.est_time = req.body.est_time;
-        db.N_avg = 0;
+        db.N_avg = 1;
         db.building_id = req.params.id; 
         db.save(function(err){
             if(err) {
