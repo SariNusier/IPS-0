@@ -19,7 +19,7 @@ class Room(models.Model):
 	name = models.CharField(max_length = 500)
 	geoLocation = models.PolygonField()
 	floor = models.IntegerField()
-	buiding = models.ForeignKey(Building, on_delete=models.CASCADE,related_name="rooms" )
+	building = models.ForeignKey(Building, on_delete=models.CASCADE,related_name="rooms" )
 
 class Exhibit(models.Model):
 	name = models.CharField(max_length = 500)
