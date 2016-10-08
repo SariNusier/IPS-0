@@ -163,6 +163,32 @@ def museums():
     return jsonify({"added":False})
 
 
+@app.route('/museum/<id>', methods=['GET'])
+def museum(id):
+    if request.method == "GET":
+        m = Museum.objects.get(id = id)
+        museum = serializers.serialize("python",Museum.objects.filter(id = id))
+        museum = museum[0]
+        for key,val in museum.items():
+            if key == "pk":
+                key = "id"
+                aux = val
+            if key == "fields":
+                for k, v in museum[key].items():
+                    museum[k] = v
+        # RunTime Error over .items(), fixed using var aux
+        museum["id"] = aux
+        del museum["pk"]
+        del museum["fields"]
+        buildings = m.buildings.all()
+        museum["buildings"] = serializers.serialize("python",buildings)
+
+        # TODO  - rooms for buildings and exhibits
+        # print(m.buildings.all())
+
+
+    return jsonify(museum)
+
 
 
 
