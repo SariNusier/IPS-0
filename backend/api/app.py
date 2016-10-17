@@ -151,20 +151,6 @@ def museums():
     return jsonify({"added":False})
 
 
-# def strPolyToList(item):
-# 	# [[2,3],[4,5],[2,3],[4,5]]
-# 	if item:
-# 		item = item.split(";")[1][10:-2]
-# 		item = item.split(",")
-# 		polyList = [poly.strip().split(" ") for poly in item]
-# 		# map to float
-# 		results = []
-# 		for poly in polyList:
-# 			results.append(dict(map(float,poly)))
-# 		return results
-# 	return ""
-
-
 def strPolyToObject(item):
 	# [[2,3],[4,5],[2,3],[4,5]]
 	if item:
@@ -172,14 +158,9 @@ def strPolyToObject(item):
 		item = item.split(",")
 		polyList = [poly.strip().split(" ") for poly in item]
 		polyObject = {}
-		# {"points":[{"x":0,"y":1},{"x":0,"y":1}]}
 		polyObject["points"] = []
 		for poly in polyList:
 			polyObject["points"].append({"x":float(poly[0]),"y":float(poly[1])})
-		# map to float
-		# results = []
-		# for poly in polyList:
-		# 	results.append(dict(map(float,poly)))
 		return polyObject
 	return ""
 
@@ -209,20 +190,7 @@ def museum(id):
 		buildings = m.buildings.all()
 		museum["buildings"] = serializers.serialize("python",buildings)
 		museum["buildings"] = fixModel(museum,"buildings")
-  #   	#removed "fields" key 
-		# fields = {}
 		for building in museum["buildings"]:
-		# # 	fields = building["fields"]
-		# # 	building["id"] = building["pk"]
-		# # 	del building["fields"]
-		# # 	del building["pk"]
-		# # 	for key,val in fields.items():
-		# # 	#fixing polygons
-		# # 		if key == "geoLocation":
-		# # 			building[key] = strPolyToList(val)
-		# # 		else:
-		# # 			building[key] = val
-
 		# 	# rooms
 			building["rooms"] = serializers.serialize("python",Room.objects.filter(building_id = building["id"]))
 			building["rooms"] = fixModel(building,"rooms")
