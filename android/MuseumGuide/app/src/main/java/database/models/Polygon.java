@@ -11,7 +11,7 @@ import utilities.Point;
 //TODO: Implement
 public class Polygon implements Serializable{
 
-    private ArrayList<Point> points;
+    private Point[] points;
 
     public static boolean verifyPolygon(Point[] points) {
         for (int i = 1; i < points.length; i++) {
@@ -26,34 +26,34 @@ public class Polygon implements Serializable{
     public Polygon(Point[] points) throws InvalidPolygonException {
         if(!verifyPolygon(points))
             throw new InvalidPolygonException();
-        this.points = new ArrayList<>(Arrays.asList(points));
+        this.points = points;
     }
 
     public Point[] getPoints() {
-        return this.points.toArray(new Point[points.size()]);
+        return this.points;
     }
 
     public void setPoints(Point[] points) throws InvalidPolygonException {
         if(!verifyPolygon(points))
             throw new InvalidPolygonException();
-        this.points = new ArrayList<>(Arrays.asList(points));
+        this.points = points;
     }
 
     public Point getPoint(int index) throws IndexOutOfBoundsException {
-        if (index < 0 || index >= this.points.size())
+        if (index < 0 || index >= this.points.length)
             throw new IndexOutOfBoundsException();
-        return this.points.get(index);
+        return this.points[index];
     }
 
     public double getArea() {
         double area = 0;
-        int length = points.size();
+        int length = points.length;
         for (int i = 0; i < length - 1; i++) {
-            area += points.get(i).getX() * points.get(i + 1).getY() -
-                    points.get(i + 1).getX() * points.get(i).getY();
+            area += points[i].getX() * points[i + 1].getY() -
+                    points[i + 1].getX() * points[i].getY();
         }
-        area += points.get(points.size() - 1).getX() * points.get(0).getY() -
-                points.get(0).getX() * points.get(points.size() - 1).getY();
+        area += points[length - 1].getX() * points[0].getY() -
+                points[0].getX() * points[length - 1].getY();
         return area / 2;
     }
 }

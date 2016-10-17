@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import database.models.Building;
 import database.models.Museum;
 import database.utilities.DatabaseAPI;
+import exceptions.IndexOutOfBoundsException;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -20,7 +21,7 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 
-public class EntryActivity extends AppCompatActivity implements Callback<ArrayList<Museum>> {
+public class EntryActivity extends AppCompatActivity implements Callback<Museum> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,22 +35,29 @@ public class EntryActivity extends AppCompatActivity implements Callback<ArrayLi
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         DatabaseAPI dataBaseApi = retrofit.create(DatabaseAPI.class);
-        Call<ArrayList<Museum>> call = dataBaseApi.loadMuseums();
+        Call<Museum> call = dataBaseApi.loadMuseumById(3);
         call.enqueue(this);
     }
 
     @Override
-    public void onResponse(Response<ArrayList<Museum>> response, Retrofit retrofit) {
+    public void onResponse(Response<Museum> response, Retrofit retrofit) {
 
-        for(Museum m:response.body()){
-            String toPrint = m.getId()+" "+m.getName()+" "+m.getAddress()+" "+m.getDescription() +
-                    " " + m.getWebsite() + " " + m.getBuildings();
-            Log.d("RESPONSE", toPrint);
+            Museum m = response.body();
+        String toPrint = null;
+        try {
+            toPrint = m.getId()+" "+m.getName()+" "+m.getAddress()+" "+m.getDescription() +
+                    " " + m.getWebsite() + " " + m.getBuildings()[0].getName() + " "+
+                    m.getBuildings()[0].getGeoLocation().getPoint(3).getY();
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
         }
+        Log.d("RESPONSE", toPrint);
+
     }
 
     @Override
     public void onFailure(Throwable t) {
         Toast.makeText(EntryActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        Log.d("ERROR:", t.getMessage());
     }
 }
