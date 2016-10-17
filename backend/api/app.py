@@ -118,11 +118,17 @@ def museums():
             museum = Museum(name = data["name"], description = data["description"], address = data["address"], phone = data["phone"], website = website)
             museum.save()
             for building in data["buildings"]:
-                geoLocation = Polygon(getGeoLocation(building))
+                try:
+                    geoLocation = Polygon(getGeoLocation(building))
+                except:
+                    return "Invalid Polygon"
                 b = Building(name = building["name"],geoLocation = geoLocation, museum_id = museum.id)
                 b.save()
                 for room in building["rooms"]:
-                    geoLocation = Polygon(getGeoLocation(room))
+                    try:
+                        geoLocation = Polygon(getGeoLocation(room))
+                    except:
+                        return "InvalidPolygon"
                     r = Room(name = room["name"], geoLocation = geoLocation, floor = room["floor"], building_id = b.id)
                     r.save()
                     for exhibit in room["exhibits"]:
