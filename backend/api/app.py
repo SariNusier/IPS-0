@@ -4,6 +4,7 @@ from functools import wraps
 import os, sys
 from django.db import connection
 import time
+import copy
 import json
 from django.core import serializers
 from django.core.validators import URLValidator
@@ -153,9 +154,15 @@ def museums():
 def strPolyToList(item):
 	# [[2,3],[4,5],[2,3],[4,5]]
 	if item:
-		item = item.split(";")[1][1:-1]
+		item = item.split(";")[1][10:-2]
 		item = item.split(",")
-		polyList = [poly.replace(" ","").split(" ") for poly in item]
+		polyList = [poly.strip().split(" ") for poly in item]
+		# map to float
+		results = []
+		for poly in polyList:
+			results.append(list(map(float,poly)))
+		return results
+	return ""
 
 
 
@@ -183,31 +190,47 @@ def museum(id):
 		del museum["fields"]
 		buildings = m.buildings.all()
 		museum["buildings"] = serializers.serialize("python",buildings)
-    # {
-    #   "fields": {
-    #     "geoLocation": "SRID=4326;POLYGON ((10 10, 10 20, 20 20, 20 15, 10 10))", 
-    #     "museum": 7, 
-    #     "name": "BUILDING_0"
-    #   }, 
-    #   "model": "museumGuide.building", 
-    #   "pk": 3
-    # }
-    	#removed fields key 
+
+    	#removed "fields" key 
 		fields = {}
 		for building in museum["buildings"]:
 			fields = building["fields"]
+			building["id"] = building["pk"]
 			del building["fields"]
+			del building["pk"]
 			for key,val in fields.items():
-				building[key] = val
+			#fixing polygons
+				if key == "geoLocation":
+					building[key] = strPolyToList(val)
+				else:
+					building[key] = val
 
-		#fixing polygons
+			# rooms
+			building["rooms"] = serializers.serialize("python",Room.objects.filter(building_id = building["id"]))
+			building["rooms"] = fixModel(building,"rooms")
+
+
 
 		# TODO  - rooms for buildings and exhibits
-		print(m.buildings.all())
+		# print(m.buildings.all())
 
 
 	return jsonify(museum)
 
+def fixModel(item,point):
+	item  = copy.deepcopy(item)
+	fields = {}
+	for val in item[point]:
+		fields = val["fields"]
+		val["id"] = val["pk"]
+		del val["fields"]
+		del val["pk"]
+		for key,value in fields.items():
+			if key == "geoLocation":
+				item[point] = strPolyToList(value)
+			else:
+				item[point] = value
+	return item
 
 
 
