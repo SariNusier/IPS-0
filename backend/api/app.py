@@ -46,19 +46,6 @@ def websiteFix(website):
     else:
         return False
 
-# @app.route('/price', methods=['POST'])
-# def price():
-#     if request.method == 'POST':
-#         link = request.form['link'].strip()
-#         newLink = websiteFix(link)
-#         if newLink:
-#             price,title = getFromSteam(link)
-#             return render_template("price.html", price = price, title = title)
-#         else:
-#             return render_template("notvalid.html", link = link)
-#     return redirect(url_for('notFound'))
-
-
 # {  
 #    "name":"MUSEUM_NAME",
 #    "description":"MUSEUM_DESC",
@@ -163,47 +150,75 @@ def museums():
     return jsonify({"added":False})
 
 
+def strPolyToList(item):
+	# [[2,3],[4,5],[2,3],[4,5]]
+	if item:
+		item = item.split(";")[1][1:-1]
+		item = item.split(",")
+		polyList = [poly.replace(" ","").split(" ") for poly in item]
+
+
+
+
 @app.route('/museum/<id>', methods=['GET'])
 def museum(id):
-    if request.method == "GET":
-        m = Museum.objects.get(id = id)
-        museum = serializers.serialize("python",Museum.objects.filter(id = id))
-        museum = museum[0]
-        for key,val in museum.items():
-            if key == "pk":
-                key = "id"
-                aux = val
-            if key == "fields":
-                for k, v in museum[key].items():
-                    museum[k] = v
-        # RunTime Error over .items(), fixed using var aux
-        museum["id"] = aux
-        del museum["pk"]
-        del museum["fields"]
-        buildings = m.buildings.all()
-        museum["buildings"] = serializers.serialize("python",buildings)
+	if request.method == "GET":
+		m = Museum.objects.get(id = id)
+		museum = serializers.serialize("python",Museum.objects.filter(id = id))
+		# museum = serializers.serialize("python",Museum.objects.filter(id = id)[0].buildings.all())
+		museum = museum[0]
+		for key,val in museum.items():
+			if key == "pk":
+				key = "id"
+				aux = val
+			if key == "fields":
+				for k, v in museum[key].items():
+					museum[k] = v
+		# RunTime Error over .items(), fixed using var aux
+		museum["id"] = aux
+		del museum["pk"]
+		del museum["fields"]
+		buildings = m.buildings.all()
+		museum["buildings"] = serializers.serialize("python",buildings)
+    # {
+    #   "fields": {
+    #     "geoLocation": "SRID=4326;POLYGON ((10 10, 10 20, 20 20, 20 15, 10 10))", 
+    #     "museum": 7, 
+    #     "name": "BUILDING_0"
+    #   }, 
+    #   "model": "museumGuide.building", 
+    #   "pk": 3
+    # }
+    	#removed fields key 
+		fields = {}
+		for building in museum["buildings"]:
+			fields = building["fields"]
+			del building["fields"]
+			for key,val in fields.items():
+				building[key] = val
 
-        # TODO  - rooms for buildings and exhibits
-        # print(m.buildings.all())
+		#fixing polygons
+
+		# TODO  - rooms for buildings and exhibits
+		print(m.buildings.all())
 
 
-    return jsonify(museum)
+	return jsonify(museum)
 
 
 
 
 @app.route('/', methods=['GET','POST'])
 def home():
-    return render_template("home.html")
+    return "Not found"
 
 @app.route('/404', methods=['GET','POST'])
 def notFound():
-    return render_template("error.html")
+    return redirect(url_for("page_not_found"))
 
 @app.errorhandler(404)
 def page_not_found(e):
-    resp = make_response(render_template('error.html'), 404)
-    return resp
+	return "Not found"
 
 if __name__ == '__main__':
     app.debug = True
