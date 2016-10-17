@@ -151,19 +151,37 @@ def museums():
     return jsonify({"added":False})
 
 
-def strPolyToList(item):
+# def strPolyToList(item):
+# 	# [[2,3],[4,5],[2,3],[4,5]]
+# 	if item:
+# 		item = item.split(";")[1][10:-2]
+# 		item = item.split(",")
+# 		polyList = [poly.strip().split(" ") for poly in item]
+# 		# map to float
+# 		results = []
+# 		for poly in polyList:
+# 			results.append(dict(map(float,poly)))
+# 		return results
+# 	return ""
+
+
+def strPolyToObject(item):
 	# [[2,3],[4,5],[2,3],[4,5]]
 	if item:
 		item = item.split(";")[1][10:-2]
 		item = item.split(",")
 		polyList = [poly.strip().split(" ") for poly in item]
-		# map to float
-		results = []
+		polyObject = {}
+		# {"points":[{"x":0,"y":1},{"x":0,"y":1}]}
+		polyObject["points"] = []
 		for poly in polyList:
-			results.append(list(map(float,poly)))
-		return results
+			polyObject["points"].append({"x":float(poly[0]),"y":float(poly[1])})
+		# map to float
+		# results = []
+		# for poly in polyList:
+		# 	results.append(dict(map(float,poly)))
+		return polyObject
 	return ""
-
 
 
 
@@ -228,7 +246,7 @@ def fixModel(item,point):
 		del val["pk"]
 		for key,value in fields.items():
 			if key == "geoLocation":
-				val[key] = strPolyToList(value)
+				val[key] = strPolyToObject(value)
 			else:
 				val[key] = value
 	# print(new)
