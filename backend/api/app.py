@@ -163,7 +163,10 @@ def strPolyToList(item):
 @app.route('/museum/<id>', methods=['GET'])
 def museum(id):
 	if request.method == "GET":
-		m = Museum.objects.get(id = id)
+		try:
+			m = Museum.objects.get(id = id)
+		except:
+			return "Id not found"
 		museum = serializers.serialize("python",Museum.objects.filter(id = id))
 		# museum = serializers.serialize("python",Museum.objects.filter(id = id)[0].buildings.all())
 		museum = museum[0]
