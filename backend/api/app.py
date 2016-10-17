@@ -190,22 +190,22 @@ def museum(id):
 		del museum["fields"]
 		buildings = m.buildings.all()
 		museum["buildings"] = serializers.serialize("python",buildings)
-
-    	#removed "fields" key 
-		fields = {}
+		museum["buildings"] = fixModel(museum,"buildings")
+  #   	#removed "fields" key 
+		# fields = {}
 		for building in museum["buildings"]:
-			fields = building["fields"]
-			building["id"] = building["pk"]
-			del building["fields"]
-			del building["pk"]
-			for key,val in fields.items():
-			#fixing polygons
-				if key == "geoLocation":
-					building[key] = strPolyToList(val)
-				else:
-					building[key] = val
+		# # 	fields = building["fields"]
+		# # 	building["id"] = building["pk"]
+		# # 	del building["fields"]
+		# # 	del building["pk"]
+		# # 	for key,val in fields.items():
+		# # 	#fixing polygons
+		# # 		if key == "geoLocation":
+		# # 			building[key] = strPolyToList(val)
+		# # 		else:
+		# # 			building[key] = val
 
-			# rooms
+		# 	# rooms
 			building["rooms"] = serializers.serialize("python",Room.objects.filter(building_id = building["id"]))
 			building["rooms"] = fixModel(building,"rooms")
 
@@ -218,19 +218,21 @@ def museum(id):
 	return jsonify(museum)
 
 def fixModel(item,point):
-	item  = copy.deepcopy(item)
-	fields = {}
-	for val in item[point]:
+	new = item[point]
+	new = copy.deepcopy(new)
+	for val in new:
+		fields = {}
 		fields = val["fields"]
 		val["id"] = val["pk"]
 		del val["fields"]
 		del val["pk"]
 		for key,value in fields.items():
 			if key == "geoLocation":
-				item[point] = strPolyToList(value)
+				val[key] = strPolyToList(value)
 			else:
-				item[point] = value
-	return item
+				val[key] = value
+	# print(new)
+	return new
 
 
 
