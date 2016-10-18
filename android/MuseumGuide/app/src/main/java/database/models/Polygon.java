@@ -8,7 +8,7 @@ import exceptions.IndexOutOfBoundsException;
 import exceptions.InvalidPolygonException;
 import utilities.Point;
 
-//TODO: Implement
+
 public class Polygon implements Serializable{
 
     private Point[] points;
