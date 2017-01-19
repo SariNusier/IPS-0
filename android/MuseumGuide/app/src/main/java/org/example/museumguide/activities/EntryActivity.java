@@ -21,7 +21,7 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 
-public class EntryActivity extends AppCompatActivity implements Callback<Museum> {
+public class EntryActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,28 +36,30 @@ public class EntryActivity extends AppCompatActivity implements Callback<Museum>
                 .build();
         DatabaseAPI dataBaseApi = retrofit.create(DatabaseAPI.class);
         Call<Museum> call = dataBaseApi.loadMuseumById(3);
-        call.enqueue(this);
+        call.enqueue(MuseumAPICallBack);
+
     }
 
-    @Override
-    public void onResponse(Response<Museum> response, Retrofit retrofit) {
+    private class MuseumAPICallBack implements Callback<Museum>{
 
+        @Override
+        public void onResponse(Response<Museum> response, Retrofit retrofit) {
             Museum m = response.body();
-        String toPrint = null;
-        try {
-            toPrint = m.getId()+" "+m.getName()+" "+m.getAddress()+" "+m.getDescription() +
-                    " " + m.getWebsite() + " " + m.getBuildings()[0].getName() + " "+
-                    m.getBuildings()[0].getGeoLocation().getPoint(3).getY();
-        } catch (IndexOutOfBoundsException e) {
-            e.printStackTrace();
+            String toPrint = null;
+            try {
+                toPrint = m.getId()+" "+m.getName()+" "+m.getAddress()+" "+m.getDescription() +
+                        " " + m.getWebsite() + " " + m.getBuildings()[0].getName() + " "+
+                        m.getBuildings()[0].getGeoLocation().getPoint(3).getY();
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            Log.d("RESPONSE", toPrint);
         }
-        Log.d("RESPONSE", toPrint);
 
-    }
-
-    @Override
-    public void onFailure(Throwable t) {
-        Toast.makeText(EntryActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-        Log.d("ERROR:", t.getMessage());
+        @Override
+        public void onFailure(Throwable t) {
+            Toast.makeText(EntryActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            Log.d("ERROR:", t.getMessage());
+        }
     }
 }
